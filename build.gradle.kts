@@ -1,6 +1,5 @@
 plugins {
     kotlin("jvm") apply false
-    application
 }
 
 group = "com.otus.otuskotlin.marketplace"
