@@ -3,10 +3,12 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
-}
-
-plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
+    plugins {
+        val kotlinVersion: String by settings
+        kotlin("jvm") version kotlinVersion
+    }
 }
 
 rootProject.name = "otuskotlin-marketplace-202312"
+
+include("module-1-lesson-1")
