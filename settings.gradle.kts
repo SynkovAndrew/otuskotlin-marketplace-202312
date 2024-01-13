@@ -11,4 +11,7 @@ pluginManagement {
 
 rootProject.name = "otuskotlin-marketplace-202312"
 
-include("module-1-lesson-1")
+include(
+    "module-1-lesson-1",
+    "module-1-lesson-2"
+)
