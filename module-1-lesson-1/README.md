@@ -1,0 +1,1 @@
+Initial module with main function and simple test
