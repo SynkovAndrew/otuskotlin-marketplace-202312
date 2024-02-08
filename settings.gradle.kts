@@ -17,4 +17,5 @@ include(
     "module-1-lesson-3-functions",
     "module-1-lesson-4-oop",
     "module-1-lesson-5-dsl",
+    "module-2-lesson-6-coroutines",
 )
