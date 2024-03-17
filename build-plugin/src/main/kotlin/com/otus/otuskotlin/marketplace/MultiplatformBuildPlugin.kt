@@ -19,7 +19,7 @@ internal class MultiplatformBuildPlugin : Plugin<Project> {
 
             extensions.configure<KotlinMultiplatformExtension> {
                 jvm { }
-                macosX64("macos") {
+                macosX64("macosX64") {
                     binaries {
                         framework {
                             baseName = "Demo"
