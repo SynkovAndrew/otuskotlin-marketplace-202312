@@ -1,6 +1,5 @@
 plugins {
     id("com.otus.otuskotlin.marketplace.build-jvm") apply false
-    id("com.otus.otuskotlin.marketplace.build-multiplatform") apply false
 }
 
 allprojects {

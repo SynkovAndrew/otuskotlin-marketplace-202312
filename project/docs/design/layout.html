@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Helper</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Material UI inspired styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        header {
+            background-color: #171919;
+            color: #ffffff;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+        }
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        nav ul li {
+            flex: 1;
+            margin-right: 20px;
+        }
+        nav ul li:last-child {
+            margin-right: 0;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        nav ul li a:hover {
+            color: #eeeeee;
+        }
+        main {
+            padding: 20px;
+        }
+        .stock-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 10px;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        .stock-list li {
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .stock-name, .stock-type, .stock-price {
+            text-align: center;
+            font-weight: bold;
+        }
+        .stock-price {
+            color: #1976d2;
+        }
+        .stock-type {
+            font-style: italic;
+            color: #666666;
+        }
+        .stock-list .header {
+            background-color: #2c2f2f;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a href="#">Stocks</a></li>
+            <li><a href="#">Predictions</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <section id="homepage">
+        <ul class="stock-list">
+            <li class="header stock-name">Name</li>
+            <li class="header stock-type">Type</li>
+            <li class="header stock-price">Price</li>
+            <li class="stock-name">Apple Inc.</li>
+            <li class="stock-type">Share</li>
+            <li class="stock-price">$145.92</li>
+            <li class="stock-name">Amazon.com Inc.</li>
+            <li class="stock-type">Share</li>
+            <li class="stock-price">$3,170.06</li>
+            <li class="stock-name">Tesla Inc.</li>
+            <li class="stock-type">Bond</li>
+            <li class="stock-price">$684.90</li>
+            <li class="stock-name">Microsoft Corporation</li>
+            <li class="stock-type">Share</li>
+            <li class="stock-price">$292.95</li>
+            <li class="stock-name">Alphabet Inc. (Google)</li>
+            <li class="stock-type">Share</li>
+            <li class="stock-price">$2,204.72</li>
+            <li class="stock-name">Facebook, Inc.</li>
+            <li class="stock-type">Share</li>
+            <li class="stock-price">$316.83</li>
+            <li class="stock-name">Johnson & Johnson</li>
+            <li class="stock-type">Share</li>
+            <li class="stock-price">$168.44</li>
+            <li class="stock-name">Visa Inc.</li>
+            <li class="stock-type">Share</li>
+            <li class="stock-price">$214.68</li>
+            <li class="stock-name">Walmart Inc.</li>
+            <li class="stock-type">Share</li>
+            <li class="stock-price">$138.09</li>
+            <li class="stock-name">Procter & Gamble Co.</li>
+            <li class="stock-type">Share</li>
+            <li class="stock-price">$134.07</li>
+            <li class="stock-name">Mastercard Incorporated</li>
+            <li class="stock-type">Share</li>
+            <li class="stock-price">$377.45</li>
+            <li class="stock-name">Bank of America Corporation</li>
+            <li class="stock-type">Share</li>
+            <li class="stock-price">$37.85</li>
+            <li class="stock-name">The Coca-Cola Company</li>
+            <li class="stock-type">Share</li>
+            <li class="stock-price">$53.79</li>
+            <li class="stock-name">Pfizer Inc.</li>
+            <li class="stock-type">Share</li>
+            <li class="stock-price">$35.80</li>
+            <li class="stock-name">Intel Corporation</li>
+            <li class="stock-type">Share</li>
+            <li class="stock-price">$66.76</li>
+            <li class="stock-name">Cisco Systems, Inc.</li>
+            <li class="stock-type">Share</li>
+            <li class="stock-price">$52.73</li>
+            <!-- Add more stocks here -->
+        </ul>
+    </section>
+</main>
+</body>
+</html>

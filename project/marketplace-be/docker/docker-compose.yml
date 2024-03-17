@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  marketplace-be:
+    depends_on:
+      - fluent-bit
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: marketplace-be
+    image: marketplace-be
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./volumes/marketplace-be/logback.xml:/home/logback.xml
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.1
+    ports:
+      - "8484:8080"
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    command:
+      - start-dev
+      - --import-realm
+    volumes:
+      - ./volumes/keycloak:/opt/keycloak/data/import
+
+  fluent-bit:
+    image: fluent/fluent-bit
+    depends_on:
+      - opensearch
+    ports:
+      - "24224:24224"
+    volumes:
+      - ./volumes/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - ./volumes/fluent-bit/parsers.conf:/fluent-bit/etc/parsers.conf
+
+  opensearch:
+    image: opensearchproject/opensearch:latest
+    environment:
+      - "bootstrap.memory_lock=true"
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "DISABLE_INSTALL_DEMO_CONFIG=true"
+      - "DISABLE_SECURITY_PLUGIN=true"
+      - "discovery.type=single-node"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data
+
+  dashboards:
+    image: opensearchproject/opensearch-dashboards:latest
+    ports:
+      - "5601:5601"
+    expose:
+      - "5601"
+    environment:
+      - 'OPENSEARCH_HOSTS=["http://opensearch:9200"]'
+      - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true"
+    depends_on:
+      - opensearch
+
+volumes:
+  opensearch-data:

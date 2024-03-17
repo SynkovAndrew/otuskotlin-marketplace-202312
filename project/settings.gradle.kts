@@ -12,7 +12,6 @@ pluginManagement {
     includeBuild("../build-plugin")
     plugins {
         id("com.otus.otuskotlin.marketplace.build-jvm") apply false
-        id("com.otus.otuskotlin.marketplace.build-multiplatform") apply false
     }
     repositories {
         mavenCentral()
@@ -21,5 +20,5 @@ pluginManagement {
 }
 
 include(
-    "multiplatform-sample",
+    "marketplace-be"
 )

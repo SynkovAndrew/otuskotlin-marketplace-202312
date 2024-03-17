@@ -1,0 +1,27 @@
+{
+  "realm" : "marketplace",
+  "users" : [ {
+    "id" : "e7d9ea5f-155c-4bfa-bc70-4b2618d48d60",
+    "username" : "merketplace-be",
+    "firstName" : "merketplace",
+    "lastName" : "merketplace",
+    "email" : "merketplace@mail.com",
+    "emailVerified" : true,
+    "createdTimestamp" : 1710407722351,
+    "enabled" : true,
+    "totp" : false,
+    "credentials" : [ {
+      "id" : "6c8396c6-bf0a-4dfd-b1ef-2959b60c8137",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1710407737289,
+      "secretData" : "{\"value\":\"EiFcstX39dgmc/JApR0QCs5x9htxtLLQ0B21Elm7YTWgnILIOIX958y7Juq2n0ewvIZYce/R7XcxGBg5N+hmUQ==\",\"salt\":\"0wuu/RLuPoraYLKGoMZQjw==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":210000,\"algorithm\":\"pbkdf2-sha512\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-marketplace" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  } ]
+}
