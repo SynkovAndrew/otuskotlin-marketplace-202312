@@ -11,8 +11,8 @@ dependencyResolutionManagement {
 pluginManagement {
     includeBuild("../build-plugin")
     plugins {
-        id("com.otus.otuskotlin.marketplace.build-jvm") apply false
-        id("com.otus.otuskotlin.marketplace.build-multiplatform") apply false
+        id("com.otus.otuskotlin.build.build-jvm") apply false
+        id("com.otus.otuskotlin.build.build-multiplatform") apply false
     }
     repositories {
         mavenCentral()

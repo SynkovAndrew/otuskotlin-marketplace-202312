@@ -13,10 +13,10 @@
 
 1. Id - unique identifier
 2. StockId - stock which price is represented
-3. Price - current price
-4. Timestamp - date and time 
+3. Price - price at the moment of time
+4. Timestamp - this moment of time
 
 ## Endpoints
 
-1. Find all stocks with pagination
-2. Find all price records by StockId
+1. CRUD + Search for Stocks
+2. CRUD + Search for Price Records

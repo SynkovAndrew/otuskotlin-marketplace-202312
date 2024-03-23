@@ -1,3 +1,3 @@
 plugins {
-   id("com.otus.otuskotlin.marketplace.build-multiplatform")
+   id("com.otus.otuskotlin.build.build-multiplatform")
 }

@@ -1,5 +1,5 @@
 plugins {
-    id("com.otus.otuskotlin.marketplace.build-jvm") apply false
+    id("com.otus.otuskotlin.build.build-jvm") apply false
 }
 
 allprojects {
@@ -7,6 +7,6 @@ allprojects {
         mavenCentral()
         gradlePluginPortal()
     }
-    group = "com.otus.otuskotlin.marketplace"
+    group = "com.otus.otuskotlin.stocktrack"
     version = "0.0.1"
 }

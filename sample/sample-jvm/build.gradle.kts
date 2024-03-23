@@ -1,5 +1,5 @@
 plugins {
-    id("com.otus.otuskotlin.marketplace.build-jvm")
+    id("com.otus.otuskotlin.build.build-jvm")
 }
 
 dependencies {
@@ -7,7 +7,7 @@ dependencies {
 }
 
 buildJvm {
-    mainClass = "com.otus.otuskotlin.marketplace.MainAppClassKt"
+    mainClass = "com.otus.otuskotlin.sample.MainAppClassKt"
     jarName = "app"
 }
 
