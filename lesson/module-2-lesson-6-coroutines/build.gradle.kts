@@ -11,7 +11,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("com.otus.otuskotlin.marketplace.MainKt")
+    mainClass.set("com.otus.otuskotlin.lesson.MainKt")
 }
 
 tasks.test {
