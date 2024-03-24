@@ -1,0 +1,5 @@
+SearchStocksFilter:
+  type: object
+  properties:
+    searchString:
+      type: string

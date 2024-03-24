@@ -7,7 +7,6 @@
 1. Id - unique identifier
 2. Name - name shown to user
 3. Type - category of stock (Bond, Share, etc.)
-4. Price - current price
 
 ### PriceRecord
 

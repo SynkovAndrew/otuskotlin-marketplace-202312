@@ -1,5 +1,6 @@
 package com.otus.otuskotlin.stocktrack.plugins
 
+import com.otus.otuskotlin.stocktrack.api.v1.models.FindStockResponse
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
@@ -40,6 +41,7 @@ fun Application.configureRouting() {
 }
 
 private fun stocksStub(): List<StockJsonBean> {
+    FindStockResponse("aaa", )
     return listOf(
         StockJsonBean(
             id = UUID.randomUUID().toString(),

@@ -1,0 +1,214 @@
+openapi: 3.1.0
+info:
+  title: "StockTr"
+  description: Stock tracking and predicting
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://localhost:8090/v1
+tags:
+  - name: stock
+paths:
+  /stock/create:
+    post:
+      tags:
+        - stock
+      operationId: createStock
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStockRequest'
+        required: true
+      responses:
+        200:
+          description: Operation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateStockResponse'
+
+  /stock/find:
+    post:
+      tags:
+        - stock
+      operationId: findStock
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindStockRequest'
+        required: true
+      responses:
+        200:
+          description: Operation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FindStockResponse'
+
+  /stock/update:
+    post:
+      tags:
+        - stock
+      operationId: updateStock
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateStockRequest'
+        required: true
+      responses:
+        200:
+          description: Operation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateStockResponse'
+
+  /stock/delete:
+    post:
+      tags:
+        - stock
+      operationId: deleteStock
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteStockRequest'
+        required: true
+      responses:
+        200:
+          description: Operation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteStockResponse'
+
+  /stock/search:
+    post:
+      tags:
+        - stock
+      operationId: searchStocks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchStocksRequest'
+        required: true
+      responses:
+        200:
+          description: Operation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchStocksResponse'
+
+components:
+  schemas:
+    Request:
+      type: object
+      description: Base interface for all requests
+      properties:
+        type:
+          type: string
+          description: field for understanding certain request type (kind of inheritor)
+          example: create
+      discriminator:
+        propertyName: type
+        mapping:
+          create: '#/components/schemas/CreateStockRequest'
+          find: '#/components/schemas/FindStockRequest'
+          update: '#/components/schemas/UpdateStockRequest'
+          delete: '#/components/schemas/DeleteStockRequest'
+          search: '#/components/schemas/SearchStocksRequest'
+
+    Response:
+      type: object
+      description: Base interface for all responses
+      properties:
+        type:
+          type: string
+          description: field for understanding certain response type (kind of inheritor)
+          example: search
+        result:
+          $ref: 'infrastructure.schemas.openapi.yaml#/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: 'infrastructure.schemas.openapi.yaml#/Error'
+      discriminator:
+        propertyName: type
+        mapping:
+          create: '#/components/schemas/CreateStockResponse'
+          read: '#/components/schemas/FindStockResponse'
+          update: '#/components/schemas/UpdateStockResponse'
+          delete: '#/components/schemas/DeleteStockResponse'
+          search: '#/components/schemas/SearchStocksResponse'
+
+    CreateStockRequest:
+      allOf:
+        - $ref: 'stock/stock-entities.schemas.openapi.yaml#/BaseStock'
+        - type: object
+          properties:
+            stock:
+              $ref: 'stock/create-stock.schemas.openapi.yaml#/CreateStockBody'
+
+    FindStockRequest:
+      allOf:
+        - $ref: '#/components/schemas/Request'
+        - type: object
+          properties:
+            stock:
+              $ref: 'stock/find-stock.schemas.openapi.yaml#/FindStockBody'
+
+    UpdateStockRequest:
+      allOf:
+        - $ref: '#/components/schemas/Request'
+        - type: object
+          properties:
+            ad:
+              $ref: 'stock/update-stock.schemas.openapi.yaml#/UpdateStockBody'
+
+    DeleteStockRequest:
+      allOf:
+        - $ref: '#/components/schemas/Request'
+        - type: object
+          properties:
+            ad:
+              $ref: 'stock/delete-stock.schemas.openapi.yaml#/DeleteStockBody'
+
+    SearchStocksRequest:
+      allOf:
+        - $ref: '#/components/schemas/Request'
+        - type: object
+          properties:
+            filter:
+              $ref: 'stock/search-stock.schemas.openapi.yaml#/SearchStocksFilter'
+
+    CreateStockResponse:
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - $ref: 'stock/stock-entities.schemas.openapi.yaml#/StockResponseSingle'
+
+    FindStockResponse:
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - $ref: 'stock/stock-entities.schemas.openapi.yaml#/StockResponseSingle'
+
+    UpdateStockResponse:
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - $ref: 'stock/stock-entities.schemas.openapi.yaml#/StockResponseSingle'
+
+    DeleteStockResponse:
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - $ref: 'stock/stock-entities.schemas.openapi.yaml#/StockResponseSingle'
+
+    SearchStocksResponse:
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - $ref: 'stock/stock-entities.schemas.openapi.yaml#/StockResponseMultiple'

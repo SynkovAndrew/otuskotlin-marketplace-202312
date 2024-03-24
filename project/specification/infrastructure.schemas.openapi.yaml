@@ -1,0 +1,20 @@
+UserId:
+  type: string
+
+Error:
+  type: object
+  properties:
+    code:
+      type: string
+    group:
+      type: string
+    field:
+      type: string
+    message:
+      type: string
+
+ResponseResult:
+  type: string
+  enum:
+    - success
+    - error

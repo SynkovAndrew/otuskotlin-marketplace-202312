@@ -1,0 +1,9 @@
+UpdateStockBody:
+  allOf:
+    - $ref: 'stock-entities.schemas.openapi.yaml#/BaseStock'
+    - type: object
+      properties:
+        id:
+          $ref: 'stock-entities.schemas.openapi.yaml#/StockId'
+        lock:
+          $ref: 'stock-entities.schemas.openapi.yaml#/StockLock'
