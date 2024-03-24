@@ -108,6 +108,128 @@ paths:
 
 components:
   schemas:
+    UserId:
+      type: string
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
+
+    StockType:
+      type: string
+      enum:
+        - SHARE
+        - BOND
+
+    StockId:
+      type: object
+      properties:
+        value:
+          type: string
+          format: uuid
+
+    StockPermission:
+      type: string
+      enum:
+        - find
+        - update
+        - delete
+
+    StockLock:
+      type: string
+      description: Optimistic lock version
+
+    BaseStock:
+      type: object
+      description: Base object for create and update ops
+      properties:
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/StockType'
+
+    StockResponseBody:
+      allOf:
+        - $ref: '#/components/schemas/BaseStock'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/StockId'
+            userId:
+              $ref: '#/components/schemas/UserId'
+            lock:
+              $ref: '#/components/schemas/StockLock'
+            permissions:
+              type: array
+              uniqueItems: true
+              items:
+                $ref: '#/components/schemas/StockPermission'
+
+    StockResponseSingle:
+      allOf:
+        - type: object
+          description: Response with single item
+          properties:
+            stock:
+              $ref: '#/components/schemas/StockResponseBody'
+
+    StockResponseMultiple:
+      allOf:
+        - type: object
+          description: Response with multiple item
+          properties:
+            stocks:
+              type: array
+              items:
+                $ref: '#/components/schemas/StockResponseBody'
+
+    CreateStockBody:
+      allOf:
+        - $ref: '#/components/schemas/BaseStock'
+
+    DeleteStockBody:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/StockId'
+            lock:
+              $ref: '#/components/schemas/StockLock'
+
+    FindStockBody:
+      allOf:
+        - $ref: '#/components/schemas/StockId'
+
+    SearchStocksFilter:
+      type: object
+      properties:
+        searchString:
+          type: string
+
+    UpdateStockBody:
+      allOf:
+        - $ref: '#/components/schemas/BaseStock'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/StockId'
+            lock:
+              $ref: '#/components/schemas/StockLock'
+
     Request:
       type: object
       description: Base interface for all requests
@@ -134,27 +256,27 @@ components:
           description: field for understanding certain response type (kind of inheritor)
           example: search
         result:
-          $ref: 'infrastructure.schemas.openapi.yaml#/ResponseResult'
+          $ref: '#/components/schemas/ResponseResult'
         errors:
           type: array
           items:
-            $ref: 'infrastructure.schemas.openapi.yaml#/Error'
+            $ref: '#/components/schemas/Error'
       discriminator:
         propertyName: type
         mapping:
           create: '#/components/schemas/CreateStockResponse'
-          read: '#/components/schemas/FindStockResponse'
+          find: '#/components/schemas/FindStockResponse'
           update: '#/components/schemas/UpdateStockResponse'
           delete: '#/components/schemas/DeleteStockResponse'
           search: '#/components/schemas/SearchStocksResponse'
 
     CreateStockRequest:
       allOf:
-        - $ref: 'stock/stock-entities.schemas.openapi.yaml#/BaseStock'
+        - $ref: '#/components/schemas/BaseStock'
         - type: object
           properties:
             stock:
-              $ref: 'stock/create-stock.schemas.openapi.yaml#/CreateStockBody'
+              $ref: '#/components/schemas/CreateStockBody'
 
     FindStockRequest:
       allOf:
@@ -162,7 +284,7 @@ components:
         - type: object
           properties:
             stock:
-              $ref: 'stock/find-stock.schemas.openapi.yaml#/FindStockBody'
+              $ref: '#/components/schemas/FindStockBody'
 
     UpdateStockRequest:
       allOf:
@@ -170,7 +292,7 @@ components:
         - type: object
           properties:
             ad:
-              $ref: 'stock/update-stock.schemas.openapi.yaml#/UpdateStockBody'
+              $ref: '#/components/schemas/UpdateStockBody'
 
     DeleteStockRequest:
       allOf:
@@ -178,7 +300,7 @@ components:
         - type: object
           properties:
             ad:
-              $ref: 'stock/delete-stock.schemas.openapi.yaml#/DeleteStockBody'
+              $ref: '#/components/schemas/DeleteStockBody'
 
     SearchStocksRequest:
       allOf:
@@ -186,29 +308,29 @@ components:
         - type: object
           properties:
             filter:
-              $ref: 'stock/search-stock.schemas.openapi.yaml#/SearchStocksFilter'
+              $ref: '#/components/schemas/SearchStocksFilter'
 
     CreateStockResponse:
       allOf:
         - $ref: '#/components/schemas/Response'
-        - $ref: 'stock/stock-entities.schemas.openapi.yaml#/StockResponseSingle'
+        - $ref: '#/components/schemas/StockResponseSingle'
 
     FindStockResponse:
       allOf:
         - $ref: '#/components/schemas/Response'
-        - $ref: 'stock/stock-entities.schemas.openapi.yaml#/StockResponseSingle'
+        - $ref: '#/components/schemas/StockResponseSingle'
 
     UpdateStockResponse:
       allOf:
         - $ref: '#/components/schemas/Response'
-        - $ref: 'stock/stock-entities.schemas.openapi.yaml#/StockResponseSingle'
+        - $ref: '#/components/schemas/StockResponseSingle'
 
     DeleteStockResponse:
       allOf:
         - $ref: '#/components/schemas/Response'
-        - $ref: 'stock/stock-entities.schemas.openapi.yaml#/StockResponseSingle'
+        - $ref: '#/components/schemas/StockResponseSingle'
 
     SearchStocksResponse:
       allOf:
         - $ref: '#/components/schemas/Response'
-        - $ref: 'stock/stock-entities.schemas.openapi.yaml#/StockResponseMultiple'
+        - $ref: '#/components/schemas/StockResponseMultiple'

@@ -37,8 +37,7 @@ openApiGenerate {
     apiPackage = "$openapiGroup.api"
     modelPackage = "$openapiGroup.models"
     invokerPackage = "$openapiGroup.invoker"
-    //inputSpec = "$projectDir/../specification/stock.${openApiVersion}.openapi.yaml"
-    inputSpecRootDirectory = "$projectDir/../specification"
+    inputSpec = "$projectDir/../specification/stock.${openApiVersion}.openapi.yaml"
 
     globalProperties.apply {
         put("models", "")

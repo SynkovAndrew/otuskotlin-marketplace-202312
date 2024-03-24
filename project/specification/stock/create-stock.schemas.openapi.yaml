@@ -1,3 +1,0 @@
-CreateStockBody:
-  allOf:
-    - $ref: 'stock-entities.schemas.openapi.yaml#/BaseStock'

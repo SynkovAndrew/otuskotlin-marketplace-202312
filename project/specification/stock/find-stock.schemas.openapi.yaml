@@ -1,3 +1,0 @@
-FindStockBody:
-  allOf:
-    - $ref: 'stock-entities.schemas.openapi.yaml#/StockId'
