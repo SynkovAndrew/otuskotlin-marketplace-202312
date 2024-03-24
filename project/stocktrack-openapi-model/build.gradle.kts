@@ -1,0 +1,50 @@
+plugins {
+    id("com.otus.otuskotlin.build.build-jvm")
+    alias(libs.plugins.openapi.generator)
+}
+
+dependencies {
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.0")
+    testImplementation(kotlin("test"))
+}
+
+sourceSets {
+    main {
+        kotlin.srcDir("${projectDir}/build/generate-resources/main/src/main/kotlin")
+    }
+}
+
+val openApiVersion = "v1"
+val specificationPath = "$projectDir/../specification/stock.${openApiVersion}.openapi.yaml"
+
+openApiGenerate {
+    val openapiGroup = "${rootProject.group}.api.$openApiVersion"
+    generatorName = "kotlin"
+    packageName = openapiGroup
+    apiPackage = "$openapiGroup.api"
+    modelPackage = "$openapiGroup.models"
+    invokerPackage = "$openapiGroup.invoker"
+    inputSpec = specificationPath
+
+    globalProperties.apply {
+        put("models", "")
+        put("modelDocs", "false")
+    }
+    configOptions.set(
+        mapOf(
+            "library" to "jvm-ktor",
+            "dateLibrary" to "java8",
+            "enumPropertyNaming" to "UPPERCASE",
+            "serializationLibrary" to "jackson",
+            "collectionType" to "list"
+        )
+    )
+}
+
+openApiValidate {
+    inputSpec = specificationPath
+}
+
+tasks.test {
+    useJUnitPlatform()
+}

@@ -1,336 +1,347 @@
-openapi: 3.1.0
+openapi: "3.0.3"
 info:
   title: "StockTr"
-  description: Stock tracking and predicting
+  description: "Stock tracking and predicting"
   license:
-    name: Apache 2.0
-    url: https://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.0.0
+    name: "Apache 2.0"
+    url: "https://www.apache.org/licenses/LICENSE-2.0.html"
+  version: "1.0.0"
 servers:
-  - url: http://localhost:8090/v1
+  - url: "http://localhost:8090/v1"
 tags:
-  - name: stock
+  - name: "stock"
 paths:
   /stock/create:
     post:
       tags:
-        - stock
-      operationId: createStock
+        - "stock"
+      operationId: "createStock"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateStockRequest'
+              $ref: "#/components/schemas/CreateStockRequest"
         required: true
       responses:
-        200:
-          description: Operation result
+        "200":
+          description: "Operation result"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateStockResponse'
-
+                $ref: "#/components/schemas/CreateStockResponse"
   /stock/find:
     post:
       tags:
-        - stock
-      operationId: findStock
+        - "stock"
+      operationId: "findStock"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FindStockRequest'
+              $ref: "#/components/schemas/FindStockRequest"
         required: true
       responses:
-        200:
-          description: Operation result
+        "200":
+          description: "Operation result"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FindStockResponse'
-
+                $ref: "#/components/schemas/FindStockResponse"
   /stock/update:
     post:
       tags:
-        - stock
-      operationId: updateStock
+        - "stock"
+      operationId: "updateStock"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateStockRequest'
+              $ref: "#/components/schemas/UpdateStockRequest"
         required: true
       responses:
-        200:
-          description: Operation result
+        "200":
+          description: "Operation result"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateStockResponse'
-
+                $ref: "#/components/schemas/UpdateStockResponse"
   /stock/delete:
     post:
       tags:
-        - stock
-      operationId: deleteStock
+        - "stock"
+      operationId: "deleteStock"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DeleteStockRequest'
+              $ref: "#/components/schemas/DeleteStockRequest"
         required: true
       responses:
-        200:
-          description: Operation result
+        "200":
+          description: "Operation result"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DeleteStockResponse'
-
+                $ref: "#/components/schemas/DeleteStockResponse"
   /stock/search:
     post:
       tags:
-        - stock
-      operationId: searchStocks
+        - "stock"
+      operationId: "searchStocks"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SearchStocksRequest'
+              $ref: "#/components/schemas/SearchStocksRequest"
         required: true
       responses:
-        200:
-          description: Operation result
+        "200":
+          description: "Operation result"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SearchStocksResponse'
-
+                $ref: "#/components/schemas/SearchStocksResponse"
 components:
   schemas:
     UserId:
-      type: string
-
+      type: "string"
     Error:
-      type: object
+      type: "object"
       properties:
         code:
-          type: string
+          type: "string"
         group:
-          type: string
+          type: "string"
         field:
-          type: string
+          type: "string"
         message:
-          type: string
-
+          type: "string"
+      required:
+        - "code"
+        - "group"
+        - "field"
+        - "message"
     ResponseResult:
-      type: string
+      type: "string"
       enum:
-        - success
-        - error
-
-    StockType:
-      type: string
+        - "success"
+        - "error"
+    StockCategory:
+      type: "string"
       enum:
-        - SHARE
-        - BOND
-
+        - "SHARE"
+        - "BOND"
     StockId:
-      type: object
+      type: "object"
       properties:
-        value:
-          type: string
-          format: uuid
-
+        uuid:
+          type: "string"
+          format: "uuid"
+      required:
+        - "uuid"
     StockPermission:
-      type: string
+      type: "string"
       enum:
-        - find
-        - update
-        - delete
-
+        - "find"
+        - "update"
+        - "delete"
     StockLock:
-      type: string
-      description: Optimistic lock version
-
+      type: "string"
+      description: "Optimistic lock version"
     BaseStock:
-      type: object
-      description: Base object for create and update ops
+      type: "object"
+      description: "Base object for create and update ops"
       properties:
         name:
-          type: string
-        type:
-          $ref: '#/components/schemas/StockType'
-
+          type: "string"
+        category:
+          $ref: "#/components/schemas/StockCategory"
+      required:
+        - "name"
+        - "category"
     StockResponseBody:
       allOf:
-        - $ref: '#/components/schemas/BaseStock'
-        - type: object
+        - $ref: "#/components/schemas/BaseStock"
+        - type: "object"
           properties:
             id:
-              $ref: '#/components/schemas/StockId'
+              $ref: "#/components/schemas/StockId"
             userId:
-              $ref: '#/components/schemas/UserId'
+              $ref: "#/components/schemas/UserId"
             lock:
-              $ref: '#/components/schemas/StockLock'
+              $ref: "#/components/schemas/StockLock"
             permissions:
-              type: array
+              type: "array"
               uniqueItems: true
               items:
-                $ref: '#/components/schemas/StockPermission'
-
+                $ref: "#/components/schemas/StockPermission"
+          required:
+            - "id"
+            - "userId"
+            - "lock"
+            - "permissions"
     StockResponseSingle:
       allOf:
-        - type: object
-          description: Response with single item
+        - type: "object"
+          description: "Response with single item"
           properties:
             stock:
-              $ref: '#/components/schemas/StockResponseBody'
-
+              $ref: "#/components/schemas/StockResponseBody"
+          required:
+            - "stock"
     StockResponseMultiple:
       allOf:
-        - type: object
-          description: Response with multiple item
+        - type: "object"
+          description: "Response with multiple item"
           properties:
             stocks:
-              type: array
+              type: "array"
               items:
-                $ref: '#/components/schemas/StockResponseBody'
-
+                $ref: "#/components/schemas/StockResponseBody"
+          required:
+            - "stocks"
     CreateStockBody:
       allOf:
-        - $ref: '#/components/schemas/BaseStock'
-
+        - $ref: "#/components/schemas/BaseStock"
     DeleteStockBody:
       allOf:
-        - type: object
+        - type: "object"
           properties:
             id:
-              $ref: '#/components/schemas/StockId'
+              $ref: "#/components/schemas/StockId"
             lock:
-              $ref: '#/components/schemas/StockLock'
-
+              $ref: "#/components/schemas/StockLock"
+          required:
+            - "id"
+            - "lock"
     FindStockBody:
       allOf:
-        - $ref: '#/components/schemas/StockId'
-
+        - $ref: "#/components/schemas/StockId"
     SearchStocksFilter:
-      type: object
+      type: "object"
       properties:
         searchString:
-          type: string
-
+          type: "string"
+      required:
+        - "searchString"
     UpdateStockBody:
       allOf:
-        - $ref: '#/components/schemas/BaseStock'
-        - type: object
+        - $ref: "#/components/schemas/BaseStock"
+        - type: "object"
           properties:
             id:
-              $ref: '#/components/schemas/StockId'
+              $ref: "#/components/schemas/StockId"
             lock:
-              $ref: '#/components/schemas/StockLock'
-
+              $ref: "#/components/schemas/StockLock"
+          required:
+            - "id"
+            - "lock"
     Request:
-      type: object
-      description: Base interface for all requests
+      type: "object"
+      description: "Base interface for all requests"
       properties:
         type:
-          type: string
-          description: field for understanding certain request type (kind of inheritor)
-          example: create
+          type: "string"
+          description: "field for understanding certain request type (kind of inheritor)"
+          example: "create"
+      required:
+        - "type"
       discriminator:
-        propertyName: type
+        propertyName: "type"
         mapping:
-          create: '#/components/schemas/CreateStockRequest'
-          find: '#/components/schemas/FindStockRequest'
-          update: '#/components/schemas/UpdateStockRequest'
-          delete: '#/components/schemas/DeleteStockRequest'
-          search: '#/components/schemas/SearchStocksRequest'
-
+          create: "#/components/schemas/CreateStockRequest"
+          find: "#/components/schemas/FindStockRequest"
+          update: "#/components/schemas/UpdateStockRequest"
+          delete: "#/components/schemas/DeleteStockRequest"
+          search: "#/components/schemas/SearchStocksRequest"
     Response:
-      type: object
-      description: Base interface for all responses
+      type: "object"
+      description: "Base interface for all responses"
       properties:
         type:
-          type: string
-          description: field for understanding certain response type (kind of inheritor)
-          example: search
+          type: "string"
+          description: "field for understanding certain response type (kind of inheritor)"
+          example: "search"
         result:
-          $ref: '#/components/schemas/ResponseResult'
+          $ref: "#/components/schemas/ResponseResult"
         errors:
-          type: array
+          type: "array"
           items:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
+      required:
+        - "type"
+        - "result"
+        - "errors"
       discriminator:
-        propertyName: type
+        propertyName: "type"
         mapping:
-          create: '#/components/schemas/CreateStockResponse'
-          find: '#/components/schemas/FindStockResponse'
-          update: '#/components/schemas/UpdateStockResponse'
-          delete: '#/components/schemas/DeleteStockResponse'
-          search: '#/components/schemas/SearchStocksResponse'
-
+          create: "#/components/schemas/CreateStockResponse"
+          find: "#/components/schemas/FindStockResponse"
+          update: "#/components/schemas/UpdateStockResponse"
+          delete: "#/components/schemas/DeleteStockResponse"
+          search: "#/components/schemas/SearchStocksResponse"
     CreateStockRequest:
       allOf:
-        - $ref: '#/components/schemas/BaseStock'
-        - type: object
+        - $ref: "#/components/schemas/BaseStock"
+        - type: "object"
           properties:
             stock:
-              $ref: '#/components/schemas/CreateStockBody'
-
+              $ref: "#/components/schemas/CreateStockBody"
+          required:
+            - "stock"
     FindStockRequest:
       allOf:
-        - $ref: '#/components/schemas/Request'
-        - type: object
+        - $ref: "#/components/schemas/Request"
+        - type: "object"
           properties:
             stock:
-              $ref: '#/components/schemas/FindStockBody'
-
+              $ref: "#/components/schemas/FindStockBody"
+          required:
+            - "stock"
     UpdateStockRequest:
       allOf:
-        - $ref: '#/components/schemas/Request'
-        - type: object
+        - $ref: "#/components/schemas/Request"
+        - type: "object"
           properties:
-            ad:
-              $ref: '#/components/schemas/UpdateStockBody'
-
+            stock:
+              $ref: "#/components/schemas/UpdateStockBody"
+          required:
+            - "stock"
     DeleteStockRequest:
       allOf:
-        - $ref: '#/components/schemas/Request'
-        - type: object
+        - $ref: "#/components/schemas/Request"
+        - type: "object"
           properties:
-            ad:
-              $ref: '#/components/schemas/DeleteStockBody'
-
+            stock:
+              $ref: "#/components/schemas/DeleteStockBody"
+          required:
+            - "stock"
     SearchStocksRequest:
       allOf:
-        - $ref: '#/components/schemas/Request'
-        - type: object
+        - $ref: "#/components/schemas/Request"
+        - type: "object"
           properties:
             filter:
-              $ref: '#/components/schemas/SearchStocksFilter'
-
+              $ref: "#/components/schemas/SearchStocksFilter"
+          required:
+            - "filter"
     CreateStockResponse:
       allOf:
-        - $ref: '#/components/schemas/Response'
-        - $ref: '#/components/schemas/StockResponseSingle'
-
+        - $ref: "#/components/schemas/Response"
+        - $ref: "#/components/schemas/StockResponseSingle"
     FindStockResponse:
       allOf:
-        - $ref: '#/components/schemas/Response'
-        - $ref: '#/components/schemas/StockResponseSingle'
-
+        - $ref: "#/components/schemas/Response"
+        - $ref: "#/components/schemas/StockResponseSingle"
     UpdateStockResponse:
       allOf:
-        - $ref: '#/components/schemas/Response'
-        - $ref: '#/components/schemas/StockResponseSingle'
-
+        - $ref: "#/components/schemas/Response"
+        - $ref: "#/components/schemas/StockResponseSingle"
     DeleteStockResponse:
       allOf:
-        - $ref: '#/components/schemas/Response'
-        - $ref: '#/components/schemas/StockResponseSingle'
-
+        - $ref: "#/components/schemas/Response"
+        - $ref: "#/components/schemas/StockResponseSingle"
     SearchStocksResponse:
       allOf:
-        - $ref: '#/components/schemas/Response'
-        - $ref: '#/components/schemas/StockResponseMultiple'
+        - $ref: "#/components/schemas/Response"
+        - $ref: "#/components/schemas/StockResponseMultiple"
