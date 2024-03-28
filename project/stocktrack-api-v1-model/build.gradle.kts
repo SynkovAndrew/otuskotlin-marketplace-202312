@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.0")
+    implementation(libs.jackson)
     testImplementation(kotlin("test"))
 }
 
@@ -15,7 +15,7 @@ sourceSets {
 }
 
 val openApiVersion = "v1"
-val specificationPath = "$projectDir/../specification/stock.${openApiVersion}.openapi.yaml"
+val specificationPath = "$projectDir/../openapi/${openApiVersion}/stock.api.yaml"
 
 openApiGenerate {
     val openapiGroup = "${rootProject.group}.api.$openApiVersion"

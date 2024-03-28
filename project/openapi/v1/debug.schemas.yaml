@@ -1,0 +1,32 @@
+components:
+  schemas:
+    DebugMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+    DebugStub:
+      type: string
+      enum:
+        - success
+        - notFound
+        - badRequest
+        - databaseError
+    Debug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/DebugMode'
+        stub:
+          $ref: '#/components/schemas/DebugStub'
+      required:
+        - mode
+        - stub
+    DebugRequest:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/Debug'
+      required:
+        - debug

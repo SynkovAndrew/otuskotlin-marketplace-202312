@@ -1,0 +1,135 @@
+components:
+  schemas:
+    UserId:
+      type: "string"
+    Error:
+      type: "object"
+      properties:
+        code:
+          type: "string"
+        group:
+          type: "string"
+        field:
+          type: "string"
+        message:
+          type: "string"
+      required:
+        - "code"
+        - "group"
+        - "field"
+        - "message"
+    ResponseResult:
+      type: "string"
+      enum:
+        - "success"
+        - "error"
+    StockCategory:
+      type: "string"
+      enum:
+        - "SHARE"
+        - "BOND"
+    StockId:
+      type: "object"
+      properties:
+        uuid:
+          type: "string"
+          format: "uuid"
+      required:
+        - "uuid"
+    StockPermission:
+      type: "string"
+      enum:
+        - "find"
+        - "update"
+        - "delete"
+    StockLock:
+      type: "string"
+      description: "Optimistic lock version"
+    BaseStock:
+      type: "object"
+      description: "Base object for create and update ops"
+      properties:
+        name:
+          type: "string"
+        category:
+          $ref: "#/components/schemas/StockCategory"
+      required:
+        - "name"
+        - "category"
+    StockResponseBody:
+      allOf:
+        - $ref: "#/components/schemas/BaseStock"
+        - type: "object"
+          properties:
+            id:
+              $ref: "#/components/schemas/StockId"
+            userId:
+              $ref: "#/components/schemas/UserId"
+            lock:
+              $ref: "#/components/schemas/StockLock"
+            permissions:
+              type: "array"
+              uniqueItems: true
+              items:
+                $ref: "#/components/schemas/StockPermission"
+          required:
+            - "id"
+            - "userId"
+            - "lock"
+            - "permissions"
+    SingleStockResponse:
+      allOf:
+        - type: "object"
+          description: "Response with single item"
+          properties:
+            stock:
+              $ref: "#/components/schemas/StockResponseBody"
+          required:
+            - "stock"
+    MultipleStockResponse:
+      allOf:
+        - type: "object"
+          description: "Response with multiple item"
+          properties:
+            stocks:
+              type: "array"
+              items:
+                $ref: "#/components/schemas/StockResponseBody"
+          required:
+            - "stocks"
+    CreateStockBody:
+      allOf:
+        - $ref: "#/components/schemas/BaseStock"
+    DeleteStockBody:
+      allOf:
+        - type: "object"
+          properties:
+            id:
+              $ref: "#/components/schemas/StockId"
+            lock:
+              $ref: "#/components/schemas/StockLock"
+          required:
+            - "id"
+            - "lock"
+    FindStockBody:
+      allOf:
+        - $ref: "#/components/schemas/StockId"
+    SearchStocksFilter:
+      type: "object"
+      properties:
+        searchString:
+          type: "string"
+      required:
+        - "searchString"
+    UpdateStockBody:
+      allOf:
+        - $ref: "#/components/schemas/BaseStock"
+        - type: "object"
+          properties:
+            id:
+              $ref: "#/components/schemas/StockId"
+            lock:
+              $ref: "#/components/schemas/StockLock"
+          required:
+            - "id"
+            - "lock"
