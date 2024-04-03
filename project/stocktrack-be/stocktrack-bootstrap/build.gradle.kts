@@ -4,15 +4,6 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-allprojects {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-    }
-    group = "com.otus.otuskotlin.stocktrack"
-    version = "0.0.1"
-}
-
 dependencies {
     implementation(libs.logback)
     implementation(libs.kotlin.json)
