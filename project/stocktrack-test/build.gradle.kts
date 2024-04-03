@@ -7,18 +7,17 @@ plugins {
 dependencies {
     implementation(project(":stocktrack-api-v1-model"))
     implementation(project(":stocktrack-internal-model"))
-    implementation("ch.qos.logback:logback-classic:1.5.3")
+    implementation(libs.logback)
 
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)
-    implementation("io.ktor:ktor-serialization-jackson:2.3.9")
-    implementation("io.ktor:ktor-client-content-negotiation:2.3.9")
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.jackson)
 
     testImplementation(kotlin("test"))
     testImplementation(libs.coroutines.core)
-    testImplementation("org.assertj:assertj-core:3.25.3")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.10.2")
+    testImplementation(libs.assertj)
+    testImplementation(libs.junit.jupiter)
 }
 
 tasks.test {

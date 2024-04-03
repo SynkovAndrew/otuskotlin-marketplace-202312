@@ -1,6 +1,5 @@
 package com.otus.otuskotlin.stocktrack.stock
 
-import com.otus.otuskotlin.stocktrack.StockClient
 import com.otus.otuskotlin.stocktrack.api.v1.models.CreateStockBody
 import com.otus.otuskotlin.stocktrack.api.v1.models.CreateStockRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.CreateStockResponse

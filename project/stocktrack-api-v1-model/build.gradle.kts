@@ -5,8 +5,7 @@ plugins {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-serialization-jackson:2.3.9")
-
+    implementation(libs.ktor.serialization.jackson)
     testImplementation(kotlin("test"))
 }
 
