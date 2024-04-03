@@ -1,15 +1,15 @@
-rootProject.name = "project"
+rootProject.name = "stocktrack-test"
 
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            from(files("../gradle/libs.versions.toml"))
+            from(files("../../gradle/libs.versions.toml"))
         }
     }
 }
 
 pluginManagement {
-    includeBuild("../build-plugin")
+    includeBuild("../../build-plugin")
     plugins {
         id("com.otus.otuskotlin.build.build-jvm") apply false
     }
@@ -20,8 +20,5 @@ pluginManagement {
 }
 
 include(
-    "stocktrack-bootstrap",
-    "stocktrack-api-v1-model",
-    "stocktrack-api-v1-mapper",
-    "stocktrack-internal-model"
+    "stocktrack-e2e-test",
 )

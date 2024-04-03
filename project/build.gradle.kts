@@ -1,7 +1,3 @@
-plugins {
-    id("com.otus.otuskotlin.build.build-jvm") apply false
-}
-
 allprojects {
     repositories {
         mavenCentral()

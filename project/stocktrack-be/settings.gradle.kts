@@ -3,13 +3,13 @@ rootProject.name = "stocktrack-be"
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            from(files("../gradle/libs.versions.toml"))
+            from(files("../../gradle/libs.versions.toml"))
         }
     }
 }
 
 pluginManagement {
-    includeBuild("../build-plugin")
+    includeBuild("../../build-plugin")
     plugins {
         id("com.otus.otuskotlin.build.build-jvm") apply false
     }
