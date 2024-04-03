@@ -26,7 +26,6 @@ buildJvm {
     jarName = "stocktrack-be"
 }
 
-
 tasks.test {
     useJUnitPlatform()
 }
