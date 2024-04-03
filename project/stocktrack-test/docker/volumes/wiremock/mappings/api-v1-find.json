@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/api/v1/stock/find",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{ \"type\": \"find\" }",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "type": "find",
+      "result": "success",
+      "errors": [],
+      "body": {
+        "id": {
+          "value": "234"
+        },
+        "name": "Test Stock 234",
+        "category": "BOND",
+        "permissions": [
+          "read",
+          "write"
+        ]
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "transformers": [
+      "response-template"
+    ]
+  }
+}

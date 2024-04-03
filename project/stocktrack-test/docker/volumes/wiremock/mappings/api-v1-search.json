@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/api/v1/stock/search",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{ \"type\": \"search\" }",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "type": "search",
+      "result": "success",
+      "errors": [],
+      "body": [
+        {
+          "id": {
+            "value": "1"
+          },
+          "name": "Test Stock 1",
+          "category": "SHARE",
+          "permissions": [
+            "read",
+            "write"
+          ]
+        },
+        {
+          "id": {
+            "value": "2"
+          },
+          "name": "Test Stock 2",
+          "category": "BOND",
+          "permissions": [
+            "read",
+            "write"
+          ]
+        }
+      ]
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "transformers": [
+      "response-template"
+    ]
+  }
+}

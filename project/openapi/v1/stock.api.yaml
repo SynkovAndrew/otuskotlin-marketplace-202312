@@ -1,0 +1,219 @@
+openapi: "3.0.3"
+info:
+  title: "StockTr"
+  description: "Stock tracking and predicting"
+  license:
+    name: "Apache 2.0"
+    url: "https://www.apache.org/licenses/LICENSE-2.0.html"
+  version: "1.0.0"
+servers:
+  - url: "http://localhost:8090"
+tags:
+  - name: "stock"
+paths:
+  /api/v1/stock/create:
+    post:
+      tags:
+        - "stock"
+      operationId: "createStock"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateStockRequest"
+        required: true
+      responses:
+        "200":
+          description: "Operation result"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateStockResponse"
+  /api/v1/stock/find:
+    post:
+      tags:
+        - "stock"
+      operationId: "findStock"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FindStockRequest"
+        required: true
+      responses:
+        "200":
+          description: "Operation result"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FindStockResponse"
+  /api/v1/stock/update:
+    post:
+      tags:
+        - "stock"
+      operationId: "updateStock"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateStockRequest"
+        required: true
+      responses:
+        "200":
+          description: "Operation result"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateStockResponse"
+  /api/v1/stock/delete:
+    post:
+      tags:
+        - "stock"
+      operationId: "deleteStock"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteStockRequest"
+        required: true
+      responses:
+        "200":
+          description: "Operation result"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteStockResponse"
+  /api/v1/stock/search:
+    post:
+      tags:
+        - "stock"
+      operationId: "searchStocks"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchStocksRequest"
+        required: true
+      responses:
+        "200":
+          description: "Operation result"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchStocksResponse"
+components:
+  schemas:
+    Request:
+      type: "object"
+      description: "Base interface for all requests"
+      properties:
+        type:
+          type: "string"
+          description: "field for understanding certain request type (kind of inheritor)"
+          example: "create"
+      required:
+        - "type"
+      discriminator:
+        propertyName: "type"
+        mapping:
+          create: "#/components/schemas/CreateStockRequest"
+          find: "#/components/schemas/FindStockRequest"
+          update: "#/components/schemas/UpdateStockRequest"
+          delete: "#/components/schemas/DeleteStockRequest"
+          search: "#/components/schemas/SearchStocksRequest"
+    Response:
+      type: "object"
+      description: "Base interface for all responses"
+      properties:
+        type:
+          type: "string"
+          description: "field for understanding certain response type (kind of inheritor)"
+          example: "search"
+        result:
+          $ref: "stock.schemas.yaml#/components/schemas/ResponseResult"
+        errors:
+          type: "array"
+          items:
+            $ref: "stock.schemas.yaml#/components/schemas/Error"
+      required:
+        - "type"
+        - "result"
+        - "errors"
+      discriminator:
+        propertyName: "type"
+        mapping:
+          create: "#/components/schemas/CreateStockResponse"
+          find: "#/components/schemas/FindStockResponse"
+          update: "#/components/schemas/UpdateStockResponse"
+          delete: "#/components/schemas/DeleteStockResponse"
+          search: "#/components/schemas/SearchStocksResponse"
+    CreateStockRequest:
+      allOf:
+        - $ref: '#/components/schemas/Request'
+        - $ref: 'debug.schemas.yaml#/components/schemas/DebugRequest'
+        - type: "object"
+          properties:
+            body:
+              $ref: "stock.schemas.yaml#/components/schemas/CreateStockBody"
+          required:
+            - "body"
+    FindStockRequest:
+      allOf:
+        - $ref: "#/components/schemas/Request"
+        - $ref: 'debug.schemas.yaml#/components/schemas/DebugRequest'
+        - type: "object"
+          properties:
+            body:
+              $ref: "stock.schemas.yaml#/components/schemas/FindStockBody"
+          required:
+            - "body"
+    UpdateStockRequest:
+      allOf:
+        - $ref: "#/components/schemas/Request"
+        - $ref: 'debug.schemas.yaml#/components/schemas/DebugRequest'
+        - type: "object"
+          properties:
+            body:
+              $ref: "stock.schemas.yaml#/components/schemas/UpdateStockBody"
+          required:
+            - "body"
+    DeleteStockRequest:
+      allOf:
+        - $ref: "#/components/schemas/Request"
+        - $ref: 'debug.schemas.yaml#/components/schemas/DebugRequest'
+        - type: "object"
+          properties:
+            body:
+              $ref: "stock.schemas.yaml#/components/schemas/DeleteStockBody"
+          required:
+            - "body"
+    SearchStocksRequest:
+      allOf:
+        - $ref: "#/components/schemas/Request"
+        - $ref: 'debug.schemas.yaml#/components/schemas/DebugRequest'
+        - type: "object"
+          properties:
+            filter:
+              $ref: "stock.schemas.yaml#/components/schemas/SearchStocksFilter"
+          required:
+            - "filter"
+    CreateStockResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - $ref: "stock.schemas.yaml#/components/schemas/SingleStockResponse"
+    FindStockResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - $ref: "stock.schemas.yaml#/components/schemas/SingleStockResponse"
+    UpdateStockResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - $ref: "stock.schemas.yaml#/components/schemas/SingleStockResponse"
+    DeleteStockResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - $ref: "stock.schemas.yaml#/components/schemas/SingleStockResponse"
+    SearchStocksResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - $ref: "stock.schemas.yaml#/components/schemas/MultipleStockResponse"

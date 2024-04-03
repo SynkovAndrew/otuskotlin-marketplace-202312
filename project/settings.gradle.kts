@@ -20,5 +20,9 @@ pluginManagement {
 }
 
 include(
-    "stocktrack-be"
+    "stocktrack-be",
+    "stocktrack-api-v1-model",
+    "stocktrack-api-v1-mapper",
+    "stocktrack-internal-model",
+    "stocktrack-test",
 )
