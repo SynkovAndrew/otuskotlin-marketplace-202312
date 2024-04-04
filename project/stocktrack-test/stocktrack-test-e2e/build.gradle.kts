@@ -4,18 +4,9 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-allprojects {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-    }
-    group = "com.otus.otuskotlin.stocktrack"
-    version = "0.0.1"
-}
-
 dependencies {
-  //  implementation("com.otus.otuskotlin.stocktrack:stocktrack-api-v1-model")
-  //  implementation("com.otus.otuskotlin.stocktrack:stocktrack-internal-model")
+    implementation("com.otus.otuskotlin.stocktrack:stocktrack-api-v1-model")
+    implementation("com.otus.otuskotlin.stocktrack:stocktrack-internal-model")
     implementation(libs.logback)
 
     implementation(libs.ktor.client.core)

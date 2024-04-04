@@ -16,7 +16,7 @@ sourceSets {
 }
 
 val openApiVersion = "v1"
-val specificationPath = "$projectDir/../openapi/${openApiVersion}/stock.api.yaml"
+val specificationPath = "$projectDir/../../openapi/${openApiVersion}/stock.api.yaml"
 
 openApiGenerate {
     val openapiGroup = "${rootProject.group}.api.$openApiVersion"
@@ -24,7 +24,6 @@ openApiGenerate {
     packageName = openapiGroup
     apiPackage = "$openapiGroup.api"
     modelPackage = "$openapiGroup.models"
-    invokerPackage = "$openapiGroup.invoker"
     inputSpec = specificationPath
 
     globalProperties.apply {

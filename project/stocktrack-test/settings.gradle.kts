@@ -1,5 +1,9 @@
 rootProject.name = "stocktrack-test"
 
+include(
+    "stocktrack-test-e2e"
+)
+
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
@@ -18,7 +22,3 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-
-include(
-    "stocktrack-e2e-test",
-)
