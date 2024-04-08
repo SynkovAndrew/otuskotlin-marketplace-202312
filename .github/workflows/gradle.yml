@@ -24,6 +24,9 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5
 
+    - name: Generate openapi models
+      run: ./gradlew :project:stocktrack-be:stocktrack-api-v1-model:clean :project:stocktrack-be:stocktrack-api-v1-model:openApiGenerate
+
     - name: Build & Test stocktrack-api-v1-mapper module
       run: ./gradlew :project:stocktrack-be:stocktrack-api-v1-mapper:clean :project:stocktrack-be:stocktrack-api-v1-mapper:classes :project:stocktrack-be:stocktrack-api-v1-mapper:test
 
