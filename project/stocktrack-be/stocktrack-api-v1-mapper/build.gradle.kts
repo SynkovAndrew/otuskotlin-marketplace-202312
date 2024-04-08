@@ -9,3 +9,11 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation("org.assertj:assertj-core:3.25.3")
 }
+
+tasks.test {
+    useJUnitPlatform()
+
+    testLogging {
+        events("passed", "failed")
+    }
+}

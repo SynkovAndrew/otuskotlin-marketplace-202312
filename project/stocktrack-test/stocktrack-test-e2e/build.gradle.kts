@@ -22,9 +22,15 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+
+    testLogging {
+        events("passed", "failed")
+    }
+
+    dependsOn(tasks.composeUp)
+    finalizedBy(tasks.composeDown)
 }
 
 dockerCompose {
     dockerComposeWorkingDirectory = project.file("./docker")
-    isRequiredBy(tasks.test)
 }

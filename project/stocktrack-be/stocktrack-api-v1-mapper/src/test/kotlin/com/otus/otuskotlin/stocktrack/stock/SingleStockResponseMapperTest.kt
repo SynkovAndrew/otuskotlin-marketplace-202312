@@ -50,7 +50,7 @@ class SingleStockResponseMapperTest {
             command = Command.CREATE,
             state = State.RUNNING,
             errors = listOf(
-                com.otus.otuskotlin.stocktrack.model.Error(
+                com.otus.otuskotlin.stocktrack.model.ErrorDescription(
                     code = "BAD_REQUEST",
                     group = "GROUP",
                     field = "FIELD",

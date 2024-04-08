@@ -24,6 +24,13 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5
 
-    - name: Build with Gradle
-      run: ./gradlew :project:stocktrack-test:clean :project:stocktrack-test:build
+    - name: Build & Test stocktrack-api-v1-mapper module
+      run: ./gradlew :project:stocktrack-be:stocktrack-api-v1-mapper:clean \
+        :project:stocktrack-be:stocktrack-api-v1-mapper:classes \
+        :project:stocktrack-be:stocktrack-api-v1-mapper:test
+
+    - name: Build & Test stocktrack-test-e2e module
+      run: ./gradlew :project:stocktrack-test:stocktrack-test-e2e:clean \
+        :project:stocktrack-test:stocktrack-test-e2e:classes \
+        :project:stocktrack-test:stocktrack-test-e2e:test
 

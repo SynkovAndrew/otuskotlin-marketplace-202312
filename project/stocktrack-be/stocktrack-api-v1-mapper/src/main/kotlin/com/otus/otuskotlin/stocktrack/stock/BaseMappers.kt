@@ -2,7 +2,7 @@ package com.otus.otuskotlin.stocktrack.stock
 
 import com.otus.otuskotlin.stocktrack.api.v1.models.ResponseResult
 import com.otus.otuskotlin.stocktrack.api.v1.models.StockResponseBody
-import com.otus.otuskotlin.stocktrack.model.Error
+import com.otus.otuskotlin.stocktrack.model.ErrorDescription
 import com.otus.otuskotlin.stocktrack.model.State
 import com.otus.otuskotlin.stocktrack.model.Stock
 
@@ -26,7 +26,7 @@ fun State.toTransportModel(): ResponseResult {
     }
 }
 
-fun Error.toTransportModel(): com.otus.otuskotlin.stocktrack.api.v1.models.Error {
+fun ErrorDescription.toTransportModel(): com.otus.otuskotlin.stocktrack.api.v1.models.Error {
     return com.otus.otuskotlin.stocktrack.api.v1.models.Error(
         code = code,
         group = group,

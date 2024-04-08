@@ -1,6 +1,6 @@
 package com.otus.otuskotlin.stocktrack.model
 
-data class Error(
+data class ErrorDescription(
     val code: String,
     val group: String,
     val field: String,
