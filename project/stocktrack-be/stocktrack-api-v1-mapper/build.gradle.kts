@@ -7,7 +7,7 @@ dependencies {
     implementation(project(":stocktrack-internal-model"))
 
     testImplementation(kotlin("test"))
-    testImplementation("org.assertj:assertj-core:3.25.3")
+    testImplementation(libs.assertj)
 }
 
 tasks.test {
