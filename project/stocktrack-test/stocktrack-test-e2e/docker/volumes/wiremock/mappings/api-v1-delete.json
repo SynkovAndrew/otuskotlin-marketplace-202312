@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/api/v1/stock/delete",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{ \"type\": \"delete\" }",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "type": "delete",
+      "result": "success",
+      "errors": [],
+      "body": {
+        "id": {
+          "value": "{{ jsonPath request.body '$.body.id.value' }}"
+        },
+        "name": "Test Stock",
+        "category": "SHARE",
+        "lock": "{{ jsonPath request.body '$.body.lock' }}",
+        "permissions": [
+          "read",
+          "write"
+        ]
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "transformers": [
+      "response-template"
+    ]
+  }
+}

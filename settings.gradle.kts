@@ -1,4 +1,4 @@
-rootProject.name = "otuskotlin-marketplace-202312"
+rootProject.name = "otuskotlin-stocktrack-2023-12"
 
 includeBuild("lesson")
 includeBuild("sample")

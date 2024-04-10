@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/api/v1/stock/create",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{ \"type\": \"create\" }",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "type": "create",
+      "result": "success",
+      "errors": [],
+      "body": {
+        "id": {
+          "value": "{{ randomValue type='UUID' }}"
+        },
+        "name": "{{ jsonPath request.body '$.body.name' }}",
+        "category": "{{ jsonPath request.body '$.body.category' }}",
+        "permissions": [
+          "read",
+          "write"
+        ]
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "transformers": [
+      "response-template"
+    ]
+  }
+}

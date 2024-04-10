@@ -19,3 +19,7 @@ include(
     "module-2-lesson-8-multiplatform",
     "module-2-lesson-9-interoperability"
 )
+
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+}

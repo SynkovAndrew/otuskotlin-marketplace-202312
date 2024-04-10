@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/api/v1/stock/update",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{ \"type\": \"update\" }",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "type": "update",
+      "result": "success",
+      "errors": [],
+      "body": {
+        "id": {
+          "value": "{{ jsonPath request.body '$.body.id.value' }}"
+        },
+        "name": "{{ jsonPath request.body '$.body.name' }}",
+        "category": "{{ jsonPath request.body '$.body.category' }}",
+        "lock": "{{ jsonPath request.body '$.body.lock' }}",
+        "permissions": [
+          "read",
+          "write"
+        ]
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "transformers": [
+      "response-template"
+    ]
+  }
+}
