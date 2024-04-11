@@ -1,5 +1,7 @@
 package com.otus.otuskotlin.stocktrack.plugins
 
+import com.otus.otuskotlin.stocktrack.LoggerWrapper
+import com.otus.otuskotlin.stocktrack.logbackLoggerWrapper
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
@@ -9,7 +11,9 @@ import io.ktor.server.routing.get
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
+
 fun Application.configureRouting() {
+    val logger: LoggerWrapper = logbackLoggerWrapper(this::class)
     routing {
         authenticate("jwtAuth") {
             get("/jwt") {
@@ -19,12 +23,6 @@ fun Application.configureRouting() {
 
                 call.respondText("$username! Token expires in $expiresAt ms. ${principal.payload.subject}")
             }
-
-/*            route("/api/v1") {
-                get("/products") {
-                    call.respond(stocksStub())
-                }
-            }*/
         }
 
         route("/api/v1") {
@@ -35,6 +33,7 @@ fun Application.configureRouting() {
 
         get("/hi") {
             call.respondText("Hey! Hello World!")
+            logger.info("Hello world", 234, mapOf("retro" to 10))
         }
     }
 }
