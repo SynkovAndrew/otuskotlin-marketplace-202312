@@ -4,6 +4,7 @@ include(
     "stocktrack-bootstrap",
     "stocktrack-api-v1-model",
     "stocktrack-api-v1-mapper",
+    "stocktrack-log-v1-mapper",
     "stocktrack-internal-model"
 )
 

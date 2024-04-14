@@ -5,8 +5,11 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":stocktrack-log-v1-mapper"))
+    implementation(project(":stocktrack-internal-model"))
     implementation("com.otus.otuskotlin.stocktrack:stocktrack-log-core")
     implementation("com.otus.otuskotlin.stocktrack:stocktrack-log-logback")
+    implementation("com.otus.otuskotlin.stocktrack:stocktrack-log-model")
     implementation(libs.logback)
     implementation(libs.kotlin.json)
     implementation("io.ktor:ktor-server-content-negotiation-jvm")

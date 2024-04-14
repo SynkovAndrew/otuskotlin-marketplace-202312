@@ -1,7 +1,13 @@
 package com.otus.otuskotlin.stocktrack.plugins
 
 import com.otus.otuskotlin.stocktrack.LoggerWrapper
+import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.logbackLoggerWrapper
+import com.otus.otuskotlin.stocktrack.model.Command
+import com.otus.otuskotlin.stocktrack.model.State
+import com.otus.otuskotlin.stocktrack.model.Stock
+import com.otus.otuskotlin.stocktrack.model.StockPermission
+import com.otus.otuskotlin.stocktrack.toLog
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
@@ -9,6 +15,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.routing.get
 import kotlinx.serialization.Serializable
+import java.time.Instant
 import java.util.UUID
 
 
@@ -32,8 +39,22 @@ fun Application.configureRouting() {
         }
 
         get("/hi") {
+            val singleStockResponseContext = SingleStockResponseContext(
+                command = Command.CREATE,
+                request = Stock(
+                    name = "Test",
+                    category = Stock.Category.BOND,
+                    permissions = setOf(StockPermission.READ)
+                ),
+                state = State.RUNNING,
+                startedAt = Instant.now()
+            )
             call.respondText("Hey! Hello World!")
-            logger.info("Hello world", 234, mapOf("retro" to 10))
+            logger.info(
+                "Hello world",
+                singleStockResponseContext.toLog("12345"),
+                mapOf("retro" to 10)
+            )
         }
     }
 }

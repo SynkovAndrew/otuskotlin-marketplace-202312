@@ -16,7 +16,7 @@ sourceSets {
 }
 
 val openApiVersion = "v1"
-val specificationPath = "$projectDir/../../openapi/api/${openApiVersion}/stock.api.yaml"
+val specificationPath = "$projectDir/../../openapi/log/${openApiVersion}/log.api.yaml"
 
 openApiGenerate {
     val openapiGroup = "${rootProject.group}.api.$openApiVersion"
@@ -35,8 +35,8 @@ openApiGenerate {
             "library" to "jvm-ktor",
             "dateLibrary" to "java8",
             "enumPropertyNaming" to "UPPERCASE",
-            "serializationLibrary" to "jackson",
-            "collectionType" to "list"
+            "collectionType" to "list",
+            "serializationLibrary" to "jackson"
         )
     )
 }

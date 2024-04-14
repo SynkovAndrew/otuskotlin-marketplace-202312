@@ -1,8 +1,10 @@
 rootProject.name = "stocktrack-log"
 
 include(
+    "stocktrack-log-model",
     "stocktrack-log-core",
     "stocktrack-log-logback",
+    "stocktrack-log-socket",
 )
 
 dependencyResolutionManagement {
