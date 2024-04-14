@@ -1,7 +1,7 @@
 rootProject.name = "stocktrack-be"
 
 include(
-    "stocktrack-bootstrap",
+    "stocktrack-bootstrap-ktor",
     "stocktrack-api-v1-model",
     "stocktrack-api-v1-mapper",
     "stocktrack-log-v1-mapper",
