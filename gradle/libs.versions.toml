@@ -5,7 +5,7 @@ okhttp-version = "4.12.0"
 jackson-version = "2.17.0"
 kotlix-datetime-version = "0.5.0"
 kotlinx-serialization-version = "1.6.3"
-logback-version = "1.5.4"
+logback-version = "1.5.6"
 kotlin-json-version = "1.6.3"
 openapi-generator-version = "7.3.0"
 docker-compose-version = "0.17.6"
@@ -32,7 +32,7 @@ logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback-ve
 logback-appenders = { module = "com.sndyuk:logback-more-appenders", version = "1.8.8" }
 fluentd = { module = "org.fluentd:fluent-logger", version = "0.3.4" }
 logback-logstash = { module = "net.logstash.logback:logstash-logback-encoder", version = "7.4" }
-slf4j-api = { module = "org.slf4j:slf4j-api", version = "2.0.12" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version = "2.0.13" }
 kotlin-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin-json-version" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter-version" }
 assertj = { module = "org.assertj:assertj-core", version.ref = "assertj-version" }

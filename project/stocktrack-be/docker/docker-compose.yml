@@ -11,7 +11,7 @@ services:
         tag: stocktrack-be
     image: stocktrack-be
     ports:
-      - "8080:8080"
+      - "8080:8090"
     volumes:
       - ./volumes/stocktrack-be/logback.xml:/home/logback.xml
 
@@ -34,6 +34,8 @@ services:
       - opensearch
     ports:
       - "24224:24224"
+    expose:
+      - "24224"
     volumes:
       - ./volumes/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
       - ./volumes/fluent-bit/parsers.conf:/fluent-bit/etc/parsers.conf

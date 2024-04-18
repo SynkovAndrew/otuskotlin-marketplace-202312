@@ -10,8 +10,7 @@
     </appender>
 
     <appender name="FLUENT" class="ch.qos.logback.more.appenders.DataFluentAppender">
-        <tag>stock-track-service-tag</tag>
-        <remoteHost>localhost</remoteHost>
+        <remoteHost>127.0.0.1</remoteHost>
         <port>24224</port>
     </appender>
 

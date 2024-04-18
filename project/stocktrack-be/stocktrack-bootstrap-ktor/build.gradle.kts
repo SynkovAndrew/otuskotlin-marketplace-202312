@@ -12,9 +12,6 @@ dependencies {
     implementation("com.otus.otuskotlin.stocktrack:stocktrack-log-logback")
     implementation("com.otus.otuskotlin.stocktrack:stocktrack-log-model")
 
-    implementation(libs.logback)
-    implementation(libs.logback.appenders)
-    implementation(libs.fluentd)
     implementation(libs.kotlin.json)
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")

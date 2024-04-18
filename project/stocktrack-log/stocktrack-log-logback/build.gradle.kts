@@ -9,4 +9,6 @@ dependencies {
     implementation(libs.slf4j.api)
     implementation(libs.logback)
     implementation(libs.logback.logstash)
+    implementation(libs.logback.appenders)
+    implementation(libs.fluentd)
 }
