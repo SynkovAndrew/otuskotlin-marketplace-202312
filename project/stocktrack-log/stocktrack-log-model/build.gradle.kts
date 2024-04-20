@@ -5,9 +5,7 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.kotlinx.datetime)
-    implementation(libs.kotlinx.serialization.core)
-    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.ktor.serialization.jackson)
     testImplementation(kotlin("test"))
 }
 
@@ -38,8 +36,8 @@ openApiGenerate {
             "dateLibrary" to "java8",
             "enumPropertyNaming" to "UPPERCASE",
             "collectionType" to "list",
-            "serializationLibrary" to "kotlinx_serialization"
-        )
+            "serializationLibrary" to "jackson"
+            )
     )
 }
 

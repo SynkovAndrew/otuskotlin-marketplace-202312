@@ -8,13 +8,17 @@ dependencies {
     implementation(project(":stocktrack-log-v1-mapper"))
     implementation(project(":stocktrack-internal-model"))
 
+    implementation(project(":stocktrack-api-v1-model"))
+    implementation(project(":stocktrack-api-v1-mapper"))
+
     implementation("com.otus.otuskotlin.stocktrack:stocktrack-log-core")
     implementation("com.otus.otuskotlin.stocktrack:stocktrack-log-logback")
     implementation("com.otus.otuskotlin.stocktrack:stocktrack-log-model")
 
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.0")
     implementation(libs.kotlin.json)
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
-    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
+    implementation("io.ktor:ktor-serialization-jackson")
     implementation("io.ktor:ktor-server-core-jvm")
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("io.ktor:ktor-server-auth")

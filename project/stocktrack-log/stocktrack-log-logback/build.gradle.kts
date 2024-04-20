@@ -7,8 +7,10 @@ dependencies {
 
     implementation(kotlin("stdlib"))
     implementation(libs.slf4j.api)
+
     implementation(libs.logback)
     implementation(libs.logback.logstash)
-    implementation(libs.logback.appenders)
-    implementation(libs.fluentd)
+
+//    implementation(libs.logback.appenders)
+//    implementation(libs.fluentd)
 }

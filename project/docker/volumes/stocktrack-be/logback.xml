@@ -10,7 +10,7 @@
     </appender>
 
     <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>localhost:4560</destination>
+        <destination>logstash:4560</destination>
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
                 <timestamp/>
@@ -22,7 +22,7 @@
                 <pattern> <!-- we can add some custom fields to be sent with all the log entries. make filtering easier in Logstash-->
                     <pattern>
                         {
-                            "component": "stocktrack-be-ktor"
+                        "component": "stocktrack-be"
                         }
                     </pattern>
                 </pattern>

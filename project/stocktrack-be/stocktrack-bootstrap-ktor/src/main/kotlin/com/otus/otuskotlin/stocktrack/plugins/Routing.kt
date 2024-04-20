@@ -32,12 +32,6 @@ fun Application.configureRouting() {
             }
         }
 
-        route("/api/v1") {
-            get("/stocks") {
-                call.respond(stocksStub())
-            }
-        }
-
         get("/hi") {
             val singleStockResponseContext = SingleStockResponseContext(
                 command = Command.CREATE,
@@ -50,6 +44,7 @@ fun Application.configureRouting() {
                 startedAt = Instant.now()
             )
             call.respondText("Hey! Hello World!")
+        //    call.application.log.info("Hey! Hello World!")
             logger.info(
                 "Hello world",
                 singleStockResponseContext.toLog("12345"),

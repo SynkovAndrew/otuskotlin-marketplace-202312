@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  stocktrack-be:
+    image: stocktrack-be
+    ports:
+      - "8080:8090"
+    volumes:
+      - ./volumes/stocktrack-be/logback.xml:/home/logback.xml
+    networks:
+      - elk
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.1
+    ports:
+      - "8484:8080"
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    command:
+      - start-dev
+      - --import-realm
+    volumes:
+      - ./volumes/keycloak:/opt/keycloak/data/import
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: arm64v8/elasticsearch:7.17.20
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data/
+      - ./volumes/elk/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    environment:
+      - discovery.type=single-node
+      - http.host=0.0.0.0
+      - transport.host=0.0.0.0
+      - xpack.security.enabled=false
+      - xpack.monitoring.enabled=false
+      - cluster.name=elasticsearch
+      - bootstrap.memory_lock=true
+    networks:
+      - elk
+
+  logstash:
+    container_name: logstash
+    image: arm64v8/logstash:7.17.20
+    ports:
+      - "4560:4560"
+      - "9600:9600"
+    volumes:
+      - ./volumes/elk/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./volumes/elk/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - logstash_data:/usr/share/logstash/data
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: arm64v8/kibana:7.17.20
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    volumes:
+      - ./volumes/elk/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - kibana_data:/usr/share/kibana/data
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+networks:
+  elk:
+    driver: bridge
+
+volumes:
+  elasticsearch_data:
+  logstash_data:
+  kibana_data:
