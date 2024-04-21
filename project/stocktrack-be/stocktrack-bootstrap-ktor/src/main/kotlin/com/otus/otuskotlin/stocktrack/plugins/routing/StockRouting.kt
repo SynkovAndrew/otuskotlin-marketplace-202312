@@ -4,7 +4,6 @@ import com.otus.otuskotlin.stocktrack.api.v1.models.CreateStockRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.DeleteStockRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.FindStockRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.SearchStocksRequest
-import com.otus.otuskotlin.stocktrack.api.v1.models.StockId
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockRequest
 import com.otus.otuskotlin.stocktrack.model.State
 import com.otus.otuskotlin.stocktrack.model.Stock
@@ -24,8 +23,7 @@ fun Application.configureStockRoutes() {
                 call.receive<FindStockRequest>()
                     .fromTransportModel()
                     .let { context ->
-                        StubStockProvider.provide()
-                            .firstOrNull { context.request.id == it.id }
+                        StubStockRepository.findById(context.request.id)
                             ?.let {
                                 context.copy(
                                     state = State.RUNNING,
@@ -41,6 +39,12 @@ fun Application.configureStockRoutes() {
                 call.respond(
                     call.receive<CreateStockRequest>()
                         .fromTransportModel()
+                        .let {
+                            it.copy(
+                                state = State.RUNNING,
+                                response = it.request
+                            )
+                        }
                         .toTransportModel()
                 )
             }
@@ -49,7 +53,17 @@ fun Application.configureStockRoutes() {
                 call.respond(
                     call.receive<DeleteStockRequest>()
                         .fromTransportModel()
-                        .toTransportModel()
+                        .let { context ->
+                            StubStockRepository.findById(context.request.id)
+                                ?.let {
+                                    context.copy(
+                                        state = State.RUNNING,
+                                        response = it
+                                    )
+                                }
+                                ?.let { call.respond(it.toTransportModel()) }
+                                ?: call.respond(HttpStatusCode.NotFound)
+                        }
                 )
             }
 
@@ -57,7 +71,20 @@ fun Application.configureStockRoutes() {
                 call.respond(
                     call.receive<UpdateStockRequest>()
                         .fromTransportModel()
-                        .toTransportModel()
+                        .let { context ->
+                            StubStockRepository.findById(context.request.id)
+                                ?.let {
+                                    context.copy(
+                                        state = State.RUNNING,
+                                        response = it.copy(
+                                            name = context.request.name,
+                                            category = context.request.category
+                                        )
+                                    )
+                                }
+                                ?.let { call.respond(it.toTransportModel()) }
+                                ?: call.respond(HttpStatusCode.NotFound)
+                        }
                 )
             }
 
@@ -65,7 +92,17 @@ fun Application.configureStockRoutes() {
                 call.respond(
                     call.receive<SearchStocksRequest>()
                         .fromTransportModel()
-                        .copy(response = StubStockProvider.provide())
+                        .let { context ->
+                            context.copy(
+                                state = State.RUNNING,
+                                response = StubStockRepository.findAll()
+                                    .filter { stock ->
+                                        context.request.searchString
+                                            ?.let { stock.name.contains(it, true) }
+                                            ?: true
+                                    }
+                            )
+                        }
                         .toTransportModel()
                 )
             }
@@ -73,27 +110,33 @@ fun Application.configureStockRoutes() {
     }
 }
 
-object StubStockProvider {
-    fun provide(): List<Stock> {
-        return listOf(
-            Stock(
-                id = Stock.Id(value = "1"),
-                name = "Gazprom",
-                category = Stock.Category.SHARE,
-                permissions = setOf(StockPermission.READ)
-            ),
-            Stock(
-                id = Stock.Id(value = "2"),
-                name = "Rosbank",
-                category = Stock.Category.BOND,
-                permissions = setOf(StockPermission.READ)
-            ),
-            Stock(
-                id = Stock.Id(value = "3"),
-                name = "Vk",
-                category = Stock.Category.SHARE,
-                permissions = setOf(StockPermission.READ)
-            )
+object StubStockRepository {
+    private val stocks = listOf(
+        Stock(
+            id = Stock.Id(value = "1"),
+            name = "Gazprom",
+            category = Stock.Category.SHARE,
+            permissions = setOf(StockPermission.READ)
+        ),
+        Stock(
+            id = Stock.Id(value = "2"),
+            name = "Rosbank",
+            category = Stock.Category.BOND,
+            permissions = setOf(StockPermission.READ)
+        ),
+        Stock(
+            id = Stock.Id(value = "3"),
+            name = "Vk",
+            category = Stock.Category.SHARE,
+            permissions = setOf(StockPermission.READ)
         )
+    )
+
+    fun findAll(): List<Stock> {
+        return stocks
+    }
+
+    fun findById(stockId: Stock.Id): Stock? {
+        return stocks.firstOrNull { stockId == it.id }
     }
 }
