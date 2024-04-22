@@ -15,10 +15,11 @@ dependencies {
     implementation("com.otus.otuskotlin.stocktrack:stocktrack-log-logback")
     implementation("com.otus.otuskotlin.stocktrack:stocktrack-log-model")
 
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.0")
     implementation(libs.kotlin.json)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.serialization.core)
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
-    implementation("io.ktor:ktor-serialization-jackson")
+    implementation("io.ktor:ktor-serialization-kotlinx-json")
     implementation("io.ktor:ktor-server-core-jvm")
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("io.ktor:ktor-server-auth")
@@ -27,6 +28,7 @@ dependencies {
     implementation("io.ktor:ktor-server-auth")
     implementation("io.ktor:ktor-server-auth-jwt")
     implementation("io.ktor:ktor-server-cors")
+
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation(kotlin("test"))
 }

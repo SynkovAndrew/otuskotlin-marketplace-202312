@@ -18,7 +18,7 @@ fun SearchStocksRequest.fromTransportModel(): SearchStocksResponseContext {
 
 fun SearchStocksResponseContext.toTransportModel() : SearchStocksResponse {
     return SearchStocksResponse(
-        type = command.value,
+        responseType = command.value,
         result = state.toTransportModel(),
         body = response.map { it.toTransportModel() },
         errors = errors.map { it.toTransportModel() },

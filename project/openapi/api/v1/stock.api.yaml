@@ -107,14 +107,14 @@ components:
       type: "object"
       description: "Base interface for all requests"
       properties:
-        type:
+        requestType:
           type: "string"
           description: "field for understanding certain request type (kind of inheritor)"
           example: "create"
       required:
-        - "type"
+        - "requestType"
       discriminator:
-        propertyName: "type"
+        propertyName: "requestType"
         mapping:
           create: "#/components/schemas/CreateStockRequest"
           find: "#/components/schemas/FindStockRequest"
@@ -125,7 +125,7 @@ components:
       type: "object"
       description: "Base interface for all responses"
       properties:
-        type:
+        responseType:
           type: "string"
           description: "field for understanding certain response type (kind of inheritor)"
           example: "search"
@@ -136,11 +136,11 @@ components:
           items:
             $ref: "stock.schemas.yaml#/components/schemas/Error"
       required:
-        - "type"
+        - "responseType"
         - "result"
         - "errors"
       discriminator:
-        propertyName: "type"
+        propertyName: "responseType"
         mapping:
           create: "#/components/schemas/CreateStockResponse"
           find: "#/components/schemas/FindStockResponse"

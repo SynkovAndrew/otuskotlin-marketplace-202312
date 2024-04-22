@@ -1,22 +1,31 @@
 plugins {
-    id("com.otus.otuskotlin.build.build-jvm")
+    id("com.otus.otuskotlin.build.build-multiplatform")
     alias(libs.plugins.openapi.generator)
     alias(libs.plugins.kotlin.serialization)
 }
 
-dependencies {
-    implementation(libs.ktor.serialization.jackson)
-    testImplementation(kotlin("test"))
-}
+kotlin {
+    sourceSets {
+        val commonMain by getting {
+            kotlin.srcDir("${projectDir}/build/generated/src/commonMain")
 
-sourceSets {
-    main {
-        kotlin.srcDir("${projectDir}/build/generate-resources/main/src/main/kotlin")
+            dependencies {
+                implementation(libs.kotlinx.serialization.core)
+                implementation(libs.kotlinx.serialization.json)
+            }
+
+        }
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+
+        }
     }
 }
 
 val openApiVersion = "v1"
-val specificationPath = "$projectDir/../../openapi/api/${openApiVersion}/stock.api.yaml"
+val specificationPath = "${projectDir.path}/../../openapi/api/${openApiVersion}/stock.api.yaml"
 
 openApiGenerate {
     val openapiGroup = "${rootProject.group}.api.$openApiVersion"
@@ -25,6 +34,9 @@ openApiGenerate {
     apiPackage = "$openapiGroup.api"
     modelPackage = "$openapiGroup.models"
     inputSpec = specificationPath
+    library = "multiplatform"
+    outputDir = "${projectDir.path}/build/generated"
+    templateDir = "${projectDir.path}/mustache"
 
     globalProperties.apply {
         put("models", "")
@@ -32,10 +44,8 @@ openApiGenerate {
     }
     configOptions.set(
         mapOf(
-            "library" to "jvm-ktor",
-            "dateLibrary" to "java8",
+            "dateLibrary" to "kotlinx-datetime",
             "enumPropertyNaming" to "UPPERCASE",
-            "serializationLibrary" to "jackson",
             "collectionType" to "list"
         )
     )
@@ -48,7 +58,7 @@ openApiValidate {
 tasks.openApiGenerate {
     dependsOn(tasks.clean)
 }
-
+/*
 tasks.test {
     useJUnitPlatform()
-}
+}*/

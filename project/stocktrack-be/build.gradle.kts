@@ -1,3 +1,8 @@
+plugins {
+    id("com.otus.otuskotlin.build.build-jvm") apply false
+    id("com.otus.otuskotlin.build.build-multiplatform") apply false
+}
+
 allprojects {
     repositories {
         mavenCentral()

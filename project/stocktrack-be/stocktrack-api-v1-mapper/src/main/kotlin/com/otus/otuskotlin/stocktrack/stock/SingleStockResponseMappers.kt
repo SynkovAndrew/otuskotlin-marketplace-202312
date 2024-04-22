@@ -55,28 +55,28 @@ fun Request.fromTransportModel(): SingleStockResponseContext {
 fun SingleStockResponseContext.toTransportModel(): Response {
     return when (command) {
         Command.CREATE -> CreateStockResponse(
-            type = command.value,
+            responseType = command.value,
             result = state.toTransportModel(),
             body = response.toTransportModel(),
             errors = errors.map { it.toTransportModel() }
         )
 
         Command.UPDATE -> UpdateStockResponse(
-            type = command.value,
+            responseType = command.value,
             result = state.toTransportModel(),
             body = response.toTransportModel(),
             errors = errors.map { it.toTransportModel() }
         )
 
         Command.DELETE -> DeleteStockResponse(
-            type = command.value,
+            responseType = command.value,
             result = state.toTransportModel(),
             body = response.toTransportModel(),
             errors = errors.map { it.toTransportModel() }
         )
 
         Command.FIND -> FindStockResponse(
-            type = command.value,
+            responseType = command.value,
             result = state.toTransportModel(),
             body = response.toTransportModel(),
             errors = errors.map { it.toTransportModel() }
