@@ -22,20 +22,14 @@ internal abstract class PushDockerImageTask : DefaultTask() {
     @TaskAction
     fun run() {
         with(project) {
-            println("docker login ...")
-            println(System.getenv("DOCKER_USERNAME"))
-            println(System.getenv("DOCKER_PASSWORD"))
-            println("...")
             runCommand(
                 buildString {
-                    append("echo ${System.getenv("DOCKER_PASSWORD")} | ")
+                    append("echo ${property("dockerPassword")} | ")
                     append("docker login ")
-                    append("-u ${System.getenv("DOCKER_USERNAME")} ")
+                    append("-u ${property("dockerUsername")} ")
                     append("--password-stdin")
                 }
             )
-            println("docker push ...")
-
             runCommand("docker image push ${dockerRepositoryOwner.get()}/${jarName.get()}:latest")
         }
     }
