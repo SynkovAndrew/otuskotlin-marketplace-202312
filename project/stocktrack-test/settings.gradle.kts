@@ -1,7 +1,8 @@
 rootProject.name = "stocktrack-test"
 
 include(
-    "stocktrack-test-e2e"
+    "stocktrack-test-e2e",
+    "stocktrack-test-integration-ktor",
 )
 
 dependencyResolutionManagement {

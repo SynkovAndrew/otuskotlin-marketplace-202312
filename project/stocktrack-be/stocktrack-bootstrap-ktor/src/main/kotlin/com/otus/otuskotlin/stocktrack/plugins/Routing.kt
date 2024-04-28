@@ -53,30 +53,3 @@ fun Application.configureRouting() {
         }
     }
 }
-
-private fun stocksStub(): List<StockJsonBean> {
-    return listOf(
-        StockJsonBean(
-            id = UUID.randomUUID().toString(),
-            name = "Gazprom",
-            value = 11.3
-        ),
-        StockJsonBean(
-            id = UUID.randomUUID().toString(),
-            name = "Alpha Bank",
-            value = 5.3
-        ),
-        StockJsonBean(
-            id = UUID.randomUUID().toString(),
-            name = "Yandex",
-            value = 21.3
-        )
-    )
-}
-
-@Serializable
-data class StockJsonBean(
-    val id: String,
-    val name: String,
-    val value: Double
-)
