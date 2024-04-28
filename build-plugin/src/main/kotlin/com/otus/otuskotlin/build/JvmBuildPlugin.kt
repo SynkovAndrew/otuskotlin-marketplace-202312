@@ -13,6 +13,7 @@ import org.gradle.kotlin.dsl.register
 interface BuildJvmExtension {
     val mainClass: Property<String>
     val jarName: Property<String>
+    val dockerImageGroup: Property<String>
 }
 
 internal class JvmBuildPlugin : Plugin<Project> {
@@ -31,6 +32,10 @@ internal class JvmBuildPlugin : Plugin<Project> {
             tasks.register<BuildDockerImageTask>(BUILD_DOCKER_IMAGE) {
                 jarName.set(buildJvmExtension.jarName)
             }
+     /*       tasks.register<PushDockerImageTask>(PUSH_DOCKER_IMAGE) {
+                jarName.set(buildJvmExtension.jarName)
+                dockerImageGroup.set(buildJvmExtension.dockerImageGroup)
+            }*/
         }
     }
 
