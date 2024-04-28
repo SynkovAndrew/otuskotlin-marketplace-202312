@@ -31,6 +31,7 @@ internal class JvmBuildPlugin : Plugin<Project> {
 
             tasks.register<BuildDockerImageTask>(BUILD_DOCKER_IMAGE) {
                 jarName.set(buildJvmExtension.jarName)
+                dockerRepositoryOwner.set(buildJvmExtension.dockerRepositoryOwner)
             }
             tasks.register<PushDockerImageTask>(PUSH_DOCKER_IMAGE) {
                 jarName.set(buildJvmExtension.jarName)
