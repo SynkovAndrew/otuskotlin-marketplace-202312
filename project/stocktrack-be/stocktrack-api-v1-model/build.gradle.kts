@@ -58,7 +58,7 @@ openApiValidate {
 tasks.openApiGenerate {
     dependsOn(tasks.clean)
 }
-/*
-tasks.test {
-    useJUnitPlatform()
-}*/
+
+tasks.compileKotlinJvm {
+    dependsOn(openApiGenerate)
+}
