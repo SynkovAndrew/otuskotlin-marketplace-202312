@@ -60,5 +60,5 @@ tasks.openApiGenerate {
 }
 
 tasks.compileKotlinJvm {
-    dependsOn(openApiGenerate)
+    dependsOn(tasks.openApiGenerate)
 }
