@@ -183,6 +183,31 @@ class StockRoutingTest {
     }
 
     @Test
+    fun `failed to update not existing stock`() {
+        testApplication {
+            application { modules() }
+
+            val response = configuredHttpClient().post {
+                url("/api/v1/stock/update")
+                contentType(ContentType.Application.Json)
+                setBody(
+                    UpdateStockRequest(
+                        requestType = "find",
+                        debug = Debug(mode = DebugMode.PROD, stub = DebugStub.SUCCESS),
+                        body = UpdateStockBody(
+                            id = StockId(value = "12"),
+                            name = "Uzim Co",
+                            category = StockCategory.SHARE,
+                            lock = "lock-2"
+                        )
+                    )
+                )
+            }
+            assertEquals(HttpStatusCode.NotFound, response.status)
+        }
+    }
+
+    @Test
     fun `delete stock successfully`() {
         testApplication {
             application { modules() }
