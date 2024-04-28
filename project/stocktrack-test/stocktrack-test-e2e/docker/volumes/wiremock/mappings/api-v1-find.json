@@ -4,7 +4,7 @@
     "url": "/api/v1/stock/find",
     "bodyPatterns": [
       {
-        "equalToJson": "{ \"type\": \"find\" }",
+        "equalToJson": "{ \"requestType\": \"find\" }",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }
@@ -13,7 +13,7 @@
   "response": {
     "status": 200,
     "jsonBody": {
-      "type": "find",
+      "responseType": "find",
       "result": "success",
       "errors": [],
       "body": {

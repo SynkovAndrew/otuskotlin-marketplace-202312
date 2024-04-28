@@ -8,7 +8,6 @@ dependencies {
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)
     implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.serialization.jackson)
 
     testImplementation("com.otus.otuskotlin.stocktrack:stocktrack-api-v1-model")
     testImplementation("com.otus.otuskotlin.stocktrack:stocktrack-bootstrap-ktor")
