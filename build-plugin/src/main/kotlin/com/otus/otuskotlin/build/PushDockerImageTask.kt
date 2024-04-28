@@ -12,7 +12,7 @@ internal abstract class PushDockerImageTask : DefaultTask() {
     abstract val jarName: Property<String>
 
     @get:Input
-    abstract val dockerImageGroup: Property<String>
+    abstract val dockerRepositoryOwner: Property<String>
 
     init {
         group = BUILD_GROUP
@@ -22,7 +22,7 @@ internal abstract class PushDockerImageTask : DefaultTask() {
     @TaskAction
     fun run() {
         with(project) {
-            runCommand("docker image push ${dockerImageGroup}/${jarName}")
+            runCommand("docker image push ${dockerRepositoryOwner.get()}/${jarName.get()}:latest")
         }
     }
 }

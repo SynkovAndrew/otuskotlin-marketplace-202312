@@ -13,6 +13,9 @@ internal abstract class BuildDockerImageTask : DefaultTask() {
     @get:Input
     abstract val jarName: Property<String>
 
+    @get:Input
+    abstract val dockerRepositoryOwner: Property<String>
+
     init {
         group = BUILD_GROUP
         dependsOn.add(BUILD_JVM)
@@ -23,9 +26,13 @@ internal abstract class BuildDockerImageTask : DefaultTask() {
         createDockerfile()
 
         with(project) {
-            println("... command ...")
-            runCommand("docker ps")
-         //   runCommand("docker build -t ${jarName.get()} $buildDirectory --file Dockerfile --tag ${jarName.get()}")
+            runCommand(
+                buildString {
+                    append("docker build -t ${jarName.get()} $buildDirectory")
+                    append(" --file $buildDirectory/Dockerfile")
+                    append(" --tag ${dockerRepositoryOwner.get()}/${jarName.get()}:latest")
+                }
+            )
         }
     }
 
