@@ -35,7 +35,7 @@ class StockApiModelsSerializationTest {
         runBlocking {
             val response = stockClient.createStock(
                 CreateStockRequest(
-                    type = "create",
+                    requestType = "create",
                     debug = Debug(mode = DebugMode.PROD, stub = DebugStub.SUCCESS),
                     body = CreateStockBody(
                         name = "Test Stock",
@@ -49,7 +49,7 @@ class StockApiModelsSerializationTest {
                 .ignoringFields("body.id")
                 .isEqualTo(
                     CreateStockResponse(
-                        type = "create",
+                        responseType = "create",
                         result = ResponseResult.SUCCESS,
                         errors = emptyList(),
                         body = StockResponseBody(
@@ -68,7 +68,7 @@ class StockApiModelsSerializationTest {
         runBlocking {
             val response = stockClient.updateStock(
                 UpdateStockRequest(
-                    type = "update",
+                    requestType = "update",
                     debug = Debug(mode = DebugMode.PROD, stub = DebugStub.SUCCESS),
                     body = UpdateStockBody(
                         id = StockId(value = "234"),
@@ -83,7 +83,7 @@ class StockApiModelsSerializationTest {
                 .usingRecursiveComparison()
                 .isEqualTo(
                     UpdateStockResponse(
-                        type = "update",
+                        responseType = "update",
                         result = ResponseResult.SUCCESS,
                         errors = emptyList(),
                         body = StockResponseBody(
@@ -103,7 +103,7 @@ class StockApiModelsSerializationTest {
         runBlocking {
             val response = stockClient.deleteStock(
                 DeleteStockRequest(
-                    type = "delete",
+                    requestType = "delete",
                     debug = Debug(mode = DebugMode.PROD, stub = DebugStub.SUCCESS),
                     body = DeleteStockBody(
                         id = StockId(value = "234"),
@@ -116,7 +116,7 @@ class StockApiModelsSerializationTest {
                 .usingRecursiveComparison()
                 .isEqualTo(
                     DeleteStockResponse(
-                        type = "delete",
+                        responseType = "delete",
                         result = ResponseResult.SUCCESS,
                         errors = emptyList(),
                         body = StockResponseBody(
@@ -136,7 +136,7 @@ class StockApiModelsSerializationTest {
         runBlocking {
             val response = stockClient.findStock(
                 FindStockRequest(
-                    type = "find",
+                    requestType = "find",
                     debug = Debug(mode = DebugMode.PROD, stub = DebugStub.SUCCESS),
                     body = FindStockBody(
                         id = StockId(value = "234")
@@ -148,7 +148,7 @@ class StockApiModelsSerializationTest {
                 .usingRecursiveComparison()
                 .isEqualTo(
                     FindStockResponse(
-                        type = "find",
+                        responseType = "find",
                         result = ResponseResult.SUCCESS,
                         errors = emptyList(),
                         body = StockResponseBody(
@@ -167,7 +167,7 @@ class StockApiModelsSerializationTest {
         runBlocking {
             val response = stockClient.searchStocks(
                 SearchStocksRequest(
-                    type = "search",
+                    requestType = "search",
                     debug = Debug(mode = DebugMode.PROD, stub = DebugStub.SUCCESS),
                     filter = SearchStocksFilter("12345")
                 )
@@ -178,7 +178,7 @@ class StockApiModelsSerializationTest {
                 .ignoringCollectionOrder()
                 .isEqualTo(
                     SearchStocksResponse(
-                        type = "search",
+                        responseType = "search",
                         result = ResponseResult.SUCCESS,
                         errors = emptyList(),
                         body = listOf(
