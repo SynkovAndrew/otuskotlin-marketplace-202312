@@ -31,5 +31,5 @@ jobs:
       run: ./gradlew :project:stocktrack-test:stocktrack-test-e2e:clean :project:stocktrack-test:stocktrack-test-e2e:classes :project:stocktrack-test:stocktrack-test-e2e:test
 
     - name: Build & Run Ktor integration tests
-      run: ./gradlew :project:stocktrack-test:stocktrack-test-integration-ktor:clean :project:stocktrack-test:stocktrack-test-integration-ktor:classes :project:stocktrack-test:stocktrack-test-integration-ktor:test
+      run: ./gradlew :project:stocktrack-be:stocktrack-api-v1-model:openApiGenerate :project:stocktrack-test:stocktrack-test-integration-ktor:clean :project:stocktrack-test:stocktrack-test-integration-ktor:classes :project:stocktrack-test:stocktrack-test-integration-ktor:test
 
