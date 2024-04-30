@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     implementation("com.otus.otuskotlin.stocktrack:stocktrack-log-model")
-    implementation(project(":stocktrack-api-v1-model"))
+    implementation(project(":stocktrack-api-v1-model-kotlin"))
     implementation(project(":stocktrack-internal-model"))
 
     testImplementation(kotlin("test"))

@@ -3,7 +3,8 @@ rootProject.name = "stocktrack-backend"
 include(
     "stocktrack-bootstrap-ktor",
     "stocktrack-bootstrap-spring",
-    "stocktrack-api-v1-model",
+    "stocktrack-api-v1-model-kotlin",
+    "stocktrack-api-v1-model-jackson",
     "stocktrack-api-v1-mapper",
     "stocktrack-log-v1-mapper",
     "stocktrack-internal-model"

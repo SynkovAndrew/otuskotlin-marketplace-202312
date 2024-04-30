@@ -26,7 +26,7 @@ jobs:
       run: ./gradlew :project:stocktrack-log:stocktrack-log-model:clean :project:stocktrack-log:stocktrack-log-model:openApiGenerate
 
     - name: Generate api models
-      run: ./gradlew :project:stocktrack-be:stocktrack-api-v1-model:clean :project:stocktrack-be:stocktrack-api-v1-model:openApiGenerate
+      run: ./gradlew :project:stocktrack-be:stocktrack-api-v1-model-kotlin:clean :project:stocktrack-be:stocktrack-api-v1-model-kotlin:openApiGenerate
 
     - name: Build & Test api mapper module
       run: ./gradlew :project:stocktrack-be:stocktrack-api-v1-mapper:clean :project:stocktrack-be:stocktrack-api-v1-mapper:classes :project:stocktrack-be:stocktrack-api-v1-mapper:test

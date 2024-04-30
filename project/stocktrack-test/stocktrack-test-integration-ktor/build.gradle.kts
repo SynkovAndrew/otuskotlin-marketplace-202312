@@ -9,7 +9,7 @@ dependencies {
     implementation(libs.ktor.client.cio)
     implementation(libs.ktor.client.content.negotiation)
 
-    testImplementation("com.otus.otuskotlin.stocktrack:stocktrack-api-v1-model")
+    testImplementation("com.otus.otuskotlin.stocktrack:stocktrack-api-v1-model-kotlin")
     testImplementation("com.otus.otuskotlin.stocktrack:stocktrack-bootstrap-ktor")
 
     testImplementation(kotlin("test"))
