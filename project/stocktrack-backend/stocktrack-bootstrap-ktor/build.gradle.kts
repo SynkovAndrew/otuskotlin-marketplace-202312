@@ -35,7 +35,7 @@ dependencies {
 
 buildJvm {
     mainClass = "com.otus.otuskotlin.stocktrack.StockTrackApplicationKt"
-    jarName = "stocktrack-be"
+    jarName = "stocktrack-backend"
     dockerRepositoryOwner = "andrewsynkov"
 }
 

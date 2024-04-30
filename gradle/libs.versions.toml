@@ -12,6 +12,7 @@ docker-compose-version = "0.17.6"
 ktor-version = "2.3.9"
 junit-jupiter-version = "5.10.2"
 assertj-version = "3.25.3"
+spring-boot-version = "3.2.0"
 
 [libraries]
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor-version" }
@@ -45,3 +46,6 @@ ktor = { id = "io.ktor.plugin", version.ref = "ktor-version" }
 openapi-generator = { id = "org.openapi.generator", version.ref = "openapi-generator-version" }
 docker-compose = { id = "com.avast.gradle.docker-compose", version.ref = "docker-compose-version" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot-version" }
+spring-dependencies = { id = "io.spring.dependency-management", version = "1.1.4" }
+spring-kotlin = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin-version" }
