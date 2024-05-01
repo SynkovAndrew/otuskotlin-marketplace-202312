@@ -3,11 +3,8 @@ plugins {
 }
 
 dependencies {
-    implementation("com.otus.otuskotlin.stocktrack:stocktrack-api-v1-model-kotlin")
     implementation(project(":stocktrack-core-model"))
-
-    testImplementation(kotlin("test"))
-    testImplementation(libs.assertj)
+    implementation(project(":stocktrack-core"))
 }
 
 tasks.test {

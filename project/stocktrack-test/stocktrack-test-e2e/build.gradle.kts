@@ -6,7 +6,7 @@ plugins {
 
 dependencies {
     implementation("com.otus.otuskotlin.stocktrack:stocktrack-api-v1-model-kotlin")
-    implementation("com.otus.otuskotlin.stocktrack:stocktrack-internal-model")
+    implementation("com.otus.otuskotlin.stocktrack:stocktrack-core-model")
     implementation(libs.logback)
 
     implementation(libs.ktor.client.core)

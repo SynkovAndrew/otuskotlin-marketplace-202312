@@ -1,5 +1,6 @@
 package com.otus.otuskotlin.stocktrack
 
+import com.otus.otuskotlin.stocktrack.configuration.KtorApplicationSettings
 import com.otus.otuskotlin.stocktrack.plugins.configureAuthentication
 import com.otus.otuskotlin.stocktrack.plugins.configureRouting
 import com.otus.otuskotlin.stocktrack.plugins.configureSerialization
@@ -15,9 +16,19 @@ fun main() {
 }
 
 fun Application.modules() {
+    val loggerProvider = LoggerProvider { logbackLoggerWrapper(it) }
+    val coreSettings = CoreSettings(loggerProvider = loggerProvider)
+    val singleStockResponseProcessor = SingleStockResponseProcessor(coreSettings = coreSettings)
+    val searchStocksResponseProcessor = SearchStocksResponseProcessor(coreSettings = coreSettings)
+    val applicationSettings = KtorApplicationSettings(
+        coreSettings = coreSettings,
+        singleStockResponseProcessor = singleStockResponseProcessor,
+        searchStocksResponseProcessor = searchStocksResponseProcessor
+    )
+
     configureAuthentication()
     configureSerialization()
     configureRouting()
-    configureStockRoutes()
+    configureStockRoutes(applicationSettings)
     configureWeb()
 }

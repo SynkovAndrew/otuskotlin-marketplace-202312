@@ -7,7 +7,10 @@ include(
     "stocktrack-api-v1-model-jackson",
     "stocktrack-api-v1-mapper",
     "stocktrack-log-v1-mapper",
-    "stocktrack-internal-model"
+    "stocktrack-core",
+    "stocktrack-core-model",
+    "stocktrack-business",
+    "stocktrack-application-api",
 )
 
 dependencyResolutionManagement {

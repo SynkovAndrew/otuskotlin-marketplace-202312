@@ -7,10 +7,12 @@ plugins {
 
 dependencies {
     implementation(project(":stocktrack-log-v1-mapper"))
-    implementation(project(":stocktrack-internal-model"))
-
+    implementation(project(":stocktrack-business"))
+    implementation(project(":stocktrack-core"))
+    implementation(project(":stocktrack-core-model"))
     implementation(project(":stocktrack-api-v1-model-jackson"))
     implementation(project(":stocktrack-api-v1-mapper"))
+    implementation(project(":stocktrack-application-api"))
 
     implementation("com.otus.otuskotlin.stocktrack:stocktrack-log-core")
     implementation("com.otus.otuskotlin.stocktrack:stocktrack-log-logback")
