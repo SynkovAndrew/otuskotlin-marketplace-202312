@@ -11,6 +11,7 @@ include(
     "stocktrack-core-model",
     "stocktrack-business",
     "stocktrack-application-api",
+    "stocktrack-transport-kafka",
 )
 
 dependencyResolutionManagement {
