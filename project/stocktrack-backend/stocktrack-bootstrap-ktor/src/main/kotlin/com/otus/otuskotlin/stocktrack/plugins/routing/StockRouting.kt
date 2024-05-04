@@ -8,6 +8,7 @@ import com.otus.otuskotlin.stocktrack.api.v1.models.FindStockRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.Request
 import com.otus.otuskotlin.stocktrack.api.v1.models.SearchStocksRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockRequest
+import com.otus.otuskotlin.stocktrack.processSingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.stock.fromTransportModel
 import com.otus.otuskotlin.stocktrack.stock.toTransportModel
 import io.ktor.http.*
@@ -15,17 +16,38 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlin.reflect.KClass
 
 fun Application.configureStockRoutes(applicationSettings: ApplicationSettings) {
     routing {
         route("/api/v1/stock") {
-            post("find") { call.processRequestWithSingleStockResponse<FindStockRequest>(applicationSettings) }
+            post("find") {
+                call.processRequestWithSingleStockResponse<FindStockRequest>(
+                    applicationSettings,
+                    this@configureStockRoutes::class
+                )
+            }
 
-            post("/create") { call.processRequestWithSingleStockResponse<CreateStockRequest>(applicationSettings) }
+            post("/create") {
+                call.processRequestWithSingleStockResponse<CreateStockRequest>(
+                    applicationSettings,
+                    this@configureStockRoutes::class
+                )
+            }
 
-            post("/delete") { call.processRequestWithSingleStockResponse<DeleteStockRequest>(applicationSettings) }
+            post("/delete") {
+                call.processRequestWithSingleStockResponse<DeleteStockRequest>(
+                    applicationSettings,
+                    this@configureStockRoutes::class
+                )
+            }
 
-            post("/update") { call.processRequestWithSingleStockResponse<UpdateStockRequest>(applicationSettings) }
+            post("/update") {
+                call.processRequestWithSingleStockResponse<UpdateStockRequest>(
+                    applicationSettings,
+                    this@configureStockRoutes::class
+                )
+            }
             post("/search") {
                 call.receive<SearchStocksRequest>()
                     .fromTransportModel()
@@ -42,14 +64,14 @@ fun Application.configureStockRoutes(applicationSettings: ApplicationSettings) {
 }
 
 suspend inline fun <reified T : Request> ApplicationCall.processRequestWithSingleStockResponse(
-    applicationSettings: ApplicationSettings
-){
+    applicationSettings: ApplicationSettings,
+    invokedFrom: KClass<*>
+) {
     receive<T>()
         .fromTransportModel()
         .let { context ->
             withExceptionHandling(this) {
-                applicationSettings.singleStockResponseProcessor
-                    .execute(context)
+                applicationSettings.processSingleStockResponseContext(context, invokedFrom)
             }
         }
         ?.let { this.respond(it.toTransportModel()) }
