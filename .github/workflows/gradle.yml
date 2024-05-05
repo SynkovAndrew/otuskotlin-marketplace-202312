@@ -26,10 +26,10 @@ jobs:
       run: ./gradlew :project:stocktrack-log:stocktrack-log-model:clean :project:stocktrack-log:stocktrack-log-model:openApiGenerate
 
     - name: Generate api models
-      run: ./gradlew :project:stocktrack-be:stocktrack-api-v1-model-kotlin:clean :project:stocktrack-be:stocktrack-api-v1-model-kotlin:openApiGenerate
+      run: ./gradlew :project:stocktrack-backend:stocktrack-api-v1-model-kotlin:clean :project:stocktrack-backend:stocktrack-api-v1-model-kotlin:openApiGenerate
 
     - name: Build & Test api mapper module
-      run: ./gradlew :project:stocktrack-be:stocktrack-api-v1-mapper:clean :project:stocktrack-be:stocktrack-api-v1-mapper:classes :project:stocktrack-be:stocktrack-api-v1-mapper:test
+      run: ./gradlew :project:stocktrack-backend:stocktrack-api-v1-mapper:clean :project:stocktrack-backend:stocktrack-api-v1-mapper:classes :project:stocktrack-backend:stocktrack-api-v1-mapper:test
 
     - name: Build & Run e2e tests
       run: ./gradlew :project:stocktrack-test:stocktrack-test-e2e:clean :project:stocktrack-test:stocktrack-test-e2e:classes :project:stocktrack-test:stocktrack-test-e2e:test
@@ -38,5 +38,5 @@ jobs:
       run: ./gradlew :project:stocktrack-test:stocktrack-test-integration-ktor:clean :project:stocktrack-test:stocktrack-test-integration-ktor:classes :project:stocktrack-test:stocktrack-test-integration-ktor:test
 
     - name: Build & Push Ktor docker image
-      run: ./gradlew :project:stocktrack-be:stocktrack-bootstrap-ktor:clean :project:stocktrack-be:stocktrack-bootstrap-ktor:pushDockerImage -PdockerUsername=${{ secrets.DOCKER_USERNAME }} -PdockerPassword=${{ secrets.DOCKER_PASSWORD }}
+      run: ./gradlew :project:stocktrack-backend:stocktrack-bootstrap-ktor:clean :project:stocktrack-backend:stocktrack-bootstrap-ktor:pushDockerImage -PdockerUsername=${{ secrets.DOCKER_USERNAME }} -PdockerPassword=${{ secrets.DOCKER_PASSWORD }}
 
