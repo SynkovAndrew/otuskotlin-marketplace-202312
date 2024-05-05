@@ -92,7 +92,7 @@ class StockRoutingTest {
                     )
                 )
             }
-            assertEquals(HttpStatusCode.NotFound, response.status)
+            assertEquals(HttpStatusCode.InternalServerError, response.status)
         }
     }
 
@@ -203,7 +203,7 @@ class StockRoutingTest {
                     )
                 )
             }
-            assertEquals(HttpStatusCode.NotFound, response.status)
+            assertEquals(HttpStatusCode.InternalServerError, response.status)
         }
     }
 

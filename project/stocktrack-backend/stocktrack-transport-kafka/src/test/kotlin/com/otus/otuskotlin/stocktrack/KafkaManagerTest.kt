@@ -17,12 +17,12 @@ import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import java.util.*
 import kotlin.test.Test
 
-class KafkaClientTest {
+class KafkaManagerTest {
     private val kafkaApplicationSettings: KafkaApplicationSettings = KafkaApplicationSettings()
     private val consumer = MockConsumer<String, String>(OffsetResetStrategy.EARLIEST)
     private val producer = MockProducer(true, StringSerializer(), StringSerializer())
     private val consumerStrategy = ConsumerStrategyImpl()
-    private val kafkaClient = KafkaClient(
+    private val kafkaManager = KafkaManager(
         kafkaApplicationSettings = kafkaApplicationSettings,
         consumer = consumer,
         producer = producer,
@@ -59,7 +59,7 @@ class KafkaClientTest {
                     incomingMessage
                 )
             )
-            kafkaClient.stop()
+            kafkaManager.stop()
         }
 
         val offsets: MutableMap<TopicPartition, Long> = mutableMapOf()
@@ -67,7 +67,7 @@ class KafkaClientTest {
         offsets[topicPartition] = 0L
         consumer.updateBeginningOffsets(offsets)
 
-        kafkaClient.start()
+        kafkaManager.start()
 
         val message = producer.history().first()
         val decoded: Response = Json.decodeFromString<Response>(message.value())

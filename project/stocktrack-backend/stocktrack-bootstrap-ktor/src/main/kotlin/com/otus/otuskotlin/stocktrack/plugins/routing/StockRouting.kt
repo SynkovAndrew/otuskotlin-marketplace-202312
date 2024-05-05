@@ -9,6 +9,7 @@ import com.otus.otuskotlin.stocktrack.api.v1.models.FindStockRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.Request
 import com.otus.otuskotlin.stocktrack.api.v1.models.SearchStocksRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockRequest
+import com.otus.otuskotlin.stocktrack.model.State
 import com.otus.otuskotlin.stocktrack.stock.fromTransportModel
 import com.otus.otuskotlin.stocktrack.stock.toTransportModel
 import io.ktor.http.*
@@ -57,9 +58,17 @@ suspend inline fun <reified T : Request> ApplicationCall.processRequestWithSingl
     receive<T>()
         .fromTransportModel()
         .let { context ->
-            withExceptionHandling(this) {
-                cqrsBus.processSingleStockResponseContext(context)
+            val result = cqrsBus.processSingleStockResponseContext(context)
+            when ( result.state) {
+                State.RUNNING,
+                State.FINISHED -> result
+                State.FAILED,
+                State.NONE -> {
+                    respond(HttpStatusCode.InternalServerError)
+                    null
+                }
             }
+
         }
         ?.let { this.respond(it.toTransportModel()) }
 }

@@ -9,7 +9,7 @@ import java.time.Duration
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicBoolean
 
-class KafkaClient(
+class KafkaManager(
     private val kafkaApplicationSettings: KafkaApplicationSettings,
     private val cqrsBus: CQRSBus = CQRSBus(settings = kafkaApplicationSettings),
     private val consumer: Consumer<String, String> = kafkaApplicationSettings.instantiateKafkaConsumer(),

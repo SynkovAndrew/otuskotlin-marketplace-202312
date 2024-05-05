@@ -7,12 +7,12 @@ import kotlin.concurrent.thread
 fun main() {
     val kafkaApplicationSettings = KafkaApplicationSettings()
     val producer = kafkaApplicationSettings.instantiateKafkaProducer()
-    val kafkaClient = KafkaClient(
+    val kafkaManager = KafkaManager(
         kafkaApplicationSettings = kafkaApplicationSettings,
         consumerStrategies = listOf(ConsumerStrategyImpl())
     )
     thread(start = true) {
-        kafkaClient.start()
+        kafkaManager.start()
     }
 
     thread(start = true) {
