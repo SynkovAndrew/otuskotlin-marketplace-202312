@@ -40,7 +40,7 @@
         </encoder>
     </appender>
 
-    <root level="debug">
+    <root level="info">
         <appender-ref ref="logstash"/>
         <appender-ref ref="stdout"/>
     </root>

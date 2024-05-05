@@ -1,14 +1,20 @@
 package com.otus.otuskotlin.stocktrack
 
 import org.apache.kafka.clients.producer.ProducerRecord
-import java.time.Duration
 import java.util.UUID
 import kotlin.concurrent.thread
 
 fun main() {
     val kafkaApplicationSettings = KafkaApplicationSettings()
     val producer = kafkaApplicationSettings.instantiateKafkaProducer()
-    KafkaClient(kafkaApplicationSettings, )
+    val kafkaClient = KafkaClient(
+        kafkaApplicationSettings = kafkaApplicationSettings,
+        consumerStrategies = listOf(ConsumerStrategyImpl())
+    )
+    thread(start = true) {
+        kafkaClient.start()
+    }
+
     thread(start = true) {
         (1..3).forEach {
             producer.send(
@@ -17,28 +23,19 @@ fun main() {
                     UUID.randomUUID().toString(),
                     """
                         {
-                            "requestType": "crate",
+                            "type": "com.otus.otuskotlin.stocktrack.api.v1.models.CreateStockRequest",
+                            "requestType": "create",
                             "debug": {
-                                "mode": "PROD",
-                                "stub": "SUCCESS"
-                            },
+                                "mode": "prod",
+                                "stub": "success"
+                            }
                             "body": {
-                                "name": "TEST STOCK $it",
+                                "name": "Test Stock",
                                 "category": "SHARE"
                             }
-                        }
-                    """.trimIndent()
+                        }""".trimIndent()
                     )
             )
         }
-    }
-
-    thread(start = true) {
-        kafkaConsumer.subscribe(listOf("test"))
-        kafkaConsumer
-            .poll(Duration.ofSeconds(10))
-            .forEach {
-                println("partition=${it.partition()} value=${it.value()}")
-            }
     }.join()
 }

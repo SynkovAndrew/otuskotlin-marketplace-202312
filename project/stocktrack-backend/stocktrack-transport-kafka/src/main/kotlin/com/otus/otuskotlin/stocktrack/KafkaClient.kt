@@ -1,8 +1,8 @@
 package com.otus.otuskotlin.stocktrack
 
 import kotlinx.coroutines.runBlocking
-import org.apache.kafka.clients.consumer.KafkaConsumer
-import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.consumer.Consumer
+import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
 import java.lang.IllegalStateException
 import java.time.Duration
@@ -11,8 +11,9 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class KafkaClient(
     private val kafkaApplicationSettings: KafkaApplicationSettings,
-    private val consumer: KafkaConsumer<String, String> = kafkaApplicationSettings.instantiateKafkaConsumer(),
-    private val producer: KafkaProducer<String, String> = kafkaApplicationSettings.instantiateKafkaProducer(),
+    private val cqrsBus: CQRSBus = CQRSBus(settings = kafkaApplicationSettings),
+    private val consumer: Consumer<String, String> = kafkaApplicationSettings.instantiateKafkaConsumer(),
+    private val producer: Producer<String, String> = kafkaApplicationSettings.instantiateKafkaProducer(),
     consumerStrategies: List<ConsumerStrategy>,
 ) {
     private val log: LoggerWrapper = kafkaApplicationSettings.coreSettings.loggerProvider.logger(this::class)
@@ -25,7 +26,13 @@ class KafkaClient(
                     .let { topic -> topic.input to (topic to it) }
             }
 
-    fun start() = runBlocking { startSuspend() }
+    fun start() {
+        runBlocking { startSuspend() }
+    }
+
+    fun stop() {
+        active.set(false)
+    }
 
     private suspend fun startSuspend() {
         active.set(true)
@@ -43,7 +50,7 @@ class KafkaClient(
                     ?: throw IllegalStateException("Unsupported topic ${record.topic()}")
 
                 val context = strategy.deserialize(record.value())
-                val result = kafkaApplicationSettings.processSingleStockResponseContext(context, this::class)
+                val result = cqrsBus.processSingleStockResponseContext(context)
                 val payload = strategy.serialize(result)
 
                 send(topic.output, payload)
@@ -52,9 +59,9 @@ class KafkaClient(
 
     }
 
-    private fun send(payload: String, topic: String) {
+    private fun send(topic: String, payload: String) {
         ProducerRecord(topic, UUID.randomUUID().toString(), payload)
-            .also { log.info("sending ${it.value()} to ${it.topic()}") }
             .also { producer.send(it) }
+            .also { log.info("${it.value()} send to topic ${it.topic()}") }
     }
 }
