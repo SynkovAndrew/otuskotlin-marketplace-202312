@@ -1,5 +1,10 @@
 package com.otus.otuskotlin.stocktrack
 
+import com.otus.otuskotlin.stocktrack.api.v1.models.CreateStockBody
+import com.otus.otuskotlin.stocktrack.api.v1.models.CreateStockRequest
+import com.otus.otuskotlin.stocktrack.api.v1.models.DebugMode
+import com.otus.otuskotlin.stocktrack.api.v1.models.DebugStub
+import com.otus.otuskotlin.stocktrack.api.v1.models.StockCategory
 import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.model.Command
 import com.otus.otuskotlin.stocktrack.model.Debug
@@ -13,6 +18,17 @@ class SerializationTest {
     @Test
     fun `serialize and deserialize`() {
         val consumerStrategy = ConsumerStrategyImpl()
+        val request = CreateStockRequest(
+            requestType = "create",
+            debug = com.otus.otuskotlin.stocktrack.api.v1.models.Debug(
+                mode = DebugMode.PROD,
+                stub = DebugStub.SUCCESS
+            ),
+            body = CreateStockBody(
+                name = "Test Stock",
+                category = StockCategory.SHARE
+            )
+        )
         val expected = SingleStockResponseContext(
             command = Command.CREATE,
             state = State.NONE,
@@ -27,21 +43,7 @@ class SerializationTest {
             )
         )
 
-        val contextJson = """
-            {
-                "type": "com.otus.otuskotlin.stocktrack.api.v1.models.CreateStockRequest",
-                "requestType": "create",
-                "debug": {
-                    "mode": "prod",
-                    "stub": "success"
-                }
-                "body": {
-                    "name": "Test Stock",
-                    "category": "SHARE"
-                }
-            }""".trimIndent()
-
-        val deserializedContext = consumerStrategy.deserialize(contextJson)
+        val deserializedContext = consumerStrategy.deserialize(request)
 
         assertThat(deserializedContext)
             .usingRecursiveComparison()

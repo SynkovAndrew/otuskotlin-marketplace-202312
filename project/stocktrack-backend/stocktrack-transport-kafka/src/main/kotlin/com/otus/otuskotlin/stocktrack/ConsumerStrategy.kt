@@ -27,9 +27,9 @@ interface ConsumerStrategy {
 
     fun topic(kafkaApplicationSettings: KafkaApplicationSettings): BidirectionalTopic
 
-    fun serialize(context: SingleStockResponseContext): String
+    fun serialize(context: SingleStockResponseContext): Response
 
-    fun deserialize(value: String): SingleStockResponseContext
+    fun deserialize(value: Request): SingleStockResponseContext
 }
 
 data class BidirectionalTopic(
@@ -65,14 +65,11 @@ class ConsumerStrategyImpl : ConsumerStrategy {
         )
     }
 
-    override fun serialize(context: SingleStockResponseContext): String {
+    override fun serialize(context: SingleStockResponseContext): Response {
         return context.toTransportModel()
-            .let { json.encodeToString(it) }
     }
 
-    override fun deserialize(value: String): SingleStockResponseContext {
-        return json
-            .decodeFromString<Request>(value)
-            .fromTransportModel()
+    override fun deserialize(value: Request): SingleStockResponseContext {
+        return value.fromTransportModel()
     }
 }
