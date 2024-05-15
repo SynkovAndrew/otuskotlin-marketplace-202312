@@ -1,0 +1,58 @@
+openapi: "3.0.3"
+info:
+  title: "StockTr"
+  description: "Stock tracking and predicting"
+  license:
+    name: "Apache 2.0"
+    url: "https://www.apache.org/licenses/LICENSE-2.0.html"
+  version: "1.0.0"
+paths: {}
+
+components:
+  schemas:
+    SingleStockResponseLog:
+      allOf:
+        - $ref: 'log.schemas.yaml#/components/schemas/BaseLog'
+        - type: object
+          properties:
+            requestId:
+              type: string
+            operation:
+              type: string
+              enum:
+                - create
+                - find
+                - update
+                - delete
+            requestBody:
+              $ref: "log.schemas.yaml#/components/schemas/StockLog"
+            responseBody:
+              $ref: "log.schemas.yaml#/components/schemas/StockLog"
+          required:
+            - requestId
+            - operation
+            - requestBody
+            - responseBody
+    MultipleStockResponseLog:
+      allOf:
+        - $ref: 'log.schemas.yaml#/components/schemas/BaseLog'
+        - type: object
+          properties:
+            requestId:
+              type: string
+            operation:
+              type: string
+              enum:
+                - search
+            requestBody:
+              $ref: "log.schemas.yaml#/components/schemas/StockFilterLog"
+            responseBody:
+              type: array
+              items:
+                $ref: "log.schemas.yaml#/components/schemas/StockLog"
+          required:
+            - requestId
+            - operation
+            - requestBody
+            - responseBody
+

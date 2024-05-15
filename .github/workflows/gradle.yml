@@ -8,25 +8,35 @@ on:
 
 jobs:
   build:
+    environment: main
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     
-    - name: Set up JDK 17
+    - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
-        java-version: '17'
+        java-version: '21'
         distribution: 'temurin'
 
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5
 
-    - name: Generate openapi models
-      run: ./gradlew :project:stocktrack-be:stocktrack-api-v1-model:clean :project:stocktrack-be:stocktrack-api-v1-model:openApiGenerate
+    - name: Generate log models
+      run: ./gradlew :project:stocktrack-log:stocktrack-log-model:clean :project:stocktrack-log:stocktrack-log-model:openApiGenerate
 
-    - name: Build & Test stocktrack-api-v1-mapper module
-      run: ./gradlew :project:stocktrack-be:stocktrack-api-v1-mapper:clean :project:stocktrack-be:stocktrack-api-v1-mapper:classes :project:stocktrack-be:stocktrack-api-v1-mapper:test
+    - name: Generate api models
+      run: ./gradlew :project:stocktrack-backend:stocktrack-api-v1-model-kotlin:clean :project:stocktrack-backend:stocktrack-api-v1-model-kotlin:openApiGenerate
 
-    - name: Build & Test stocktrack-test-e2e module
+    - name: Build & Test api mapper module
+      run: ./gradlew :project:stocktrack-backend:stocktrack-api-v1-mapper:clean :project:stocktrack-backend:stocktrack-api-v1-mapper:classes :project:stocktrack-backend:stocktrack-api-v1-mapper:test
+
+    - name: Build & Run e2e tests
       run: ./gradlew :project:stocktrack-test:stocktrack-test-e2e:clean :project:stocktrack-test:stocktrack-test-e2e:classes :project:stocktrack-test:stocktrack-test-e2e:test
+
+    - name: Build & Run Ktor integration tests
+      run: ./gradlew :project:stocktrack-test:stocktrack-test-integration-ktor:clean :project:stocktrack-test:stocktrack-test-integration-ktor:classes :project:stocktrack-test:stocktrack-test-integration-ktor:test
+
+    - name: Build & Push Ktor docker image
+      run: ./gradlew :project:stocktrack-backend:stocktrack-bootstrap-ktor:clean :project:stocktrack-backend:stocktrack-bootstrap-ktor:pushDockerImage -PdockerUsername=${{ secrets.DOCKER_USERNAME }} -PdockerPassword=${{ secrets.DOCKER_PASSWORD }}
 

@@ -1,0 +1,67 @@
+components:
+  schemas:
+    BaseLog:
+      description: "Base log model for all the services"
+      properties:
+        id:
+          type: "string"
+        timestamp:
+          type: "string"
+          format: "date-time"
+        source:
+          type: "string"
+        errors:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ErrorLog"
+      required:
+        - "id"
+        - "timestamp"
+        - "source"
+        - "errors"
+    StockLog:
+      description: "Log for stock"
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        name:
+          type: "string"
+        category:
+          type: "string"
+      required:
+        - "id"
+        - "name"
+        - "category"
+    StockFilterLog:
+      type: "object"
+      properties:
+        searchString:
+          type: "string"
+      required:
+        - "searchString"
+    ErrorLog:
+      title: "Log for error model"
+      type: "object"
+      properties:
+        code:
+          type: "string"
+        level:
+          $ref: "#/components/schemas/LogLevel"
+        field:
+          type: "string"
+        message:
+          type: "string"
+      required:
+        - "code"
+        - "level"
+        - "field"
+        - "message"
+    LogLevel:
+      type: "string"
+      enum:
+        - "error"
+        - "info"
+        - "warn"
+        - "debug"
+        - "trace"

@@ -13,9 +13,12 @@ internal abstract class BuildDockerImageTask : DefaultTask() {
     @get:Input
     abstract val jarName: Property<String>
 
+    @get:Input
+    abstract val dockerRepositoryOwner: Property<String>
+
     init {
         group = BUILD_GROUP
-        dependsOn(BUILD_JVM)
+        dependsOn.add(BUILD_JVM)
     }
 
     @TaskAction
@@ -23,7 +26,13 @@ internal abstract class BuildDockerImageTask : DefaultTask() {
         createDockerfile()
 
         with(project) {
-            runCommand("docker build -t ${jarName.get()} $buildDirectory")
+            runCommand(
+                buildString {
+                    append("docker build -t ${jarName.get()} $buildDirectory")
+                    append(" --file $buildDirectory/Dockerfile")
+                    append(" --tag ${dockerRepositoryOwner.get()}/${jarName.get()}:latest")
+                }
+            )
         }
     }
 
@@ -33,7 +42,7 @@ internal abstract class BuildDockerImageTask : DefaultTask() {
             .use {
                 it.println(
                     """
-                        FROM openjdk:17-jdk-slim
+                        FROM openjdk:21-jdk-slim
                         MAINTAINER Gradle Task \"$name\"
                         EXPOSE 8080
                         COPY ./${jarName.get()}.$JAR_FILE_EXTENSION /home/${jarName.get()}.$JAR_FILE_EXTENSION

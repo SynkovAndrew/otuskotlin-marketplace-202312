@@ -1,0 +1,47 @@
+<configuration>
+    <property name="FLUENT_BIT_HOST" value="${FLUENT_BIT_HOST:-127.0.0.1}"/>
+    <property name="FLUENT_BIT_PORT" value="${FLUENT_BIT_PORT:-24224}"/>
+    <property name="SERVICE_NAME" value="${SERVICE_NAME:-stock-track-service}"/>
+
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>logstash:4560</destination>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp/>
+                <version/> <!-- Logstash json format version, the @version field in the output-->
+                <mdc/> <!-- MDC variables on the Thread will be written as JSON fields-->
+                <context/> <!--Outputs entries from logback's context -->
+                <logLevel/>
+                <loggerName/>
+                <pattern> <!-- we can add some custom fields to be sent with all the log entries. make filtering easier in Logstash-->
+                    <pattern>
+                        {
+                        "component": "stocktrack-be"
+                        }
+                    </pattern>
+                </pattern>
+                <threadName/>
+                <message/>
+                <logstashMarkers/> <!-- Useful so we can add extra information for specific log lines as Markers-->
+                <arguments>
+
+                </arguments>
+                <stackTrace/>
+                <callerData/>
+                <stackTrace/>
+                <tags/>
+            </providers>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="logstash"/>
+        <appender-ref ref="stdout"/>
+    </root>
+</configuration>

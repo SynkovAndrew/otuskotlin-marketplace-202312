@@ -4,7 +4,7 @@
     "url": "/api/v1/stock/create",
     "bodyPatterns": [
       {
-        "equalToJson": "{ \"type\": \"create\" }",
+        "equalToJson": "{ \"requestType\": \"create\" }",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }
@@ -13,7 +13,7 @@
   "response": {
     "status": 200,
     "jsonBody": {
-      "type": "create",
+      "responseType": "create",
       "result": "success",
       "errors": [],
       "body": {

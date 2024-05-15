@@ -5,14 +5,14 @@ plugins {
 }
 
 dependencies {
-    implementation("com.otus.otuskotlin.stocktrack:stocktrack-api-v1-model")
-    implementation("com.otus.otuskotlin.stocktrack:stocktrack-internal-model")
+    implementation("com.otus.otuskotlin.stocktrack:stocktrack-api-v1-model-kotlin")
+    implementation("com.otus.otuskotlin.stocktrack:stocktrack-core-model")
     implementation(libs.logback)
 
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)
     implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.serialization.jackson)
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.9")
 
     testImplementation(kotlin("test"))
     testImplementation(libs.coroutines.core)
