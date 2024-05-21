@@ -1,7 +1,13 @@
 package com.otus.otuskotlin.stocktrack.cor
 
 @ChainDslMarker
-interface ProcessorDsl<T> {
+interface ExecutorDsl<T> {
+
+    fun build(): Executor<T>
+}
+
+@ChainDslMarker
+interface ProcessorDsl<T> : ExecutorDsl<T> {
     var name: String
 
     fun invokeOn(function: (T) -> Boolean)
@@ -10,15 +16,19 @@ interface ProcessorDsl<T> {
 
     fun handleException(function: (Throwable, T) -> T)
 
-    fun build(): Processor<T>
+    override fun build(): Processor<T>
 }
 
 @ChainDslMarker
-interface ChainDsl<T> {
+interface ChainDsl<T> : ExecutorDsl<T>{
+
+    fun invokeOn(function: T.() -> Boolean)
 
     fun processor(processor: ProcessorDsl<T>.() -> Unit)
 
-    fun build(): Chain<T>
+    fun chain(chain: ChainDsl<T>.() -> Unit)
+
+    override fun build(): Chain<T>
 }
 
 class ProcessorDslImpl<T>(override var name: String = "") : ProcessorDsl<T> {
@@ -49,14 +59,26 @@ class ProcessorDslImpl<T>(override var name: String = "") : ProcessorDsl<T> {
 }
 
 class ChainDslImpl<T> : ChainDsl<T> {
-    private var processors: MutableList<ProcessorDsl<T>> = mutableListOf()
+    private var invokeOn: (T) -> Boolean = { true }
+    private var executors: MutableList<ExecutorDsl<T>> = mutableListOf()
+
+    override fun invokeOn(function: (T) -> Boolean) {
+        this.invokeOn = function
+    }
 
     override fun processor(processor: ProcessorDsl<T>.() -> Unit) {
-        processors.add(ProcessorDslImpl<T>().apply(processor))
+        executors.add(ProcessorDslImpl<T>().apply(processor))
+    }
+
+    override fun chain(chain: ChainDsl<T>.() -> Unit) {
+        executors.add(ChainDslImpl<T>().apply(chain))
     }
 
     override fun build(): Chain<T> {
-        return ChainImpl(processors = processors.map { it.build() }.toList())
+        return ChainImpl(
+            invokeOn = invokeOn,
+            executors = executors.map { it.build() }.toList()
+        )
     }
 }
 

@@ -14,7 +14,7 @@ class CORTest {
                     name = "ignored"
                     invokeOn { false }
                     process {
-                        it.copy(result = "false")
+                        copy(result = "false")
                     }
                 }
                 processor {
@@ -23,13 +23,36 @@ class CORTest {
                     process {
                         throw RuntimeException("error")
                     }
-                    handleException { e, _ -> println(e) }
+                    handleException { e ->
+                        println(e)
+                        this
+                    }
                 }
                 processor {
                     name = "set result"
                     invokeOn { true }
                     process {
-                        it.copy(result = it.input)
+                        copy(result = input)
+                    }
+                }
+                chain {
+                    invokeOn { false }
+                    processor {
+                        name = "add result"
+                        invokeOn { true }
+                        process {
+                            copy(result = "$result 1111")
+                        }
+                    }
+                }
+                chain {
+                    invokeOn { true }
+                    processor {
+                        name = "add result"
+                        invokeOn { true }
+                        process {
+                            copy(result = "$result 3333")
+                        }
                     }
                 }
             }
@@ -37,7 +60,7 @@ class CORTest {
             val context = TestContext(input = "arg", "")
             val result = chain.execute(context)
 
-            assertEquals(TestContext(input = "arg", "arg"), result)
+            assertEquals(TestContext(input = "arg", "arg 3333"), result)
         }
     }
 }

@@ -11,12 +11,18 @@ class ProcessorImpl<T>(
 
     override suspend fun execute(context: T): T {
         return try {
-            context.takeIf { invokeOn(it) }
-                ?.let { process(it).also { println("\"$name\" executed") } }
+            context.takeIf { invokeOn(context) }
+                ?.let {
+                    println("\"$name\" executing ...")
+                    process(context)
+                        .also { println("\"$name\" executed") }
+                }
                 ?: context
         } catch (throwable: Throwable) {
             println("\"$name\" failed")
             handleException(throwable, context)
         }
     }
+
+    override fun invokeOn(context: T): Boolean = this.invokeOn.invoke(context)
 }

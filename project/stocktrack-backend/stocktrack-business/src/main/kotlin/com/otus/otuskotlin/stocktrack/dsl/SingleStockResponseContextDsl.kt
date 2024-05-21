@@ -16,18 +16,15 @@ fun ChainDsl<SingleStockResponseContext>.command(
         invokeOn { it.state == State.RUNNING && it.command == command }
 
         process {
-            process(it)
-                .copy(state = State.FINISHED)
+            it.process().copy(state = State.FINISHED)
         }
 
         handleException { throwable, context ->
             context.copy(
                 state = State.FAILED,
-                errors = listOf(
-                    ErrorDescription(
-                        message = throwable.message ?: "",
-                        throwable = throwable
-                    )
+                errors = context.errors + ErrorDescription(
+                    message = throwable.message ?: "",
+                    throwable = throwable
                 )
             )
         }

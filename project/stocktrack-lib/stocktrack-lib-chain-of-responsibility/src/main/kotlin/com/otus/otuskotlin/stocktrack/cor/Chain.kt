@@ -1,12 +1,21 @@
 package com.otus.otuskotlin.stocktrack.cor
 
-interface Chain<T>: Executor<T>
+interface Chain<T> : Executor<T>
 
 class ChainImpl<T>(
-    private val processors: List<Processor<T>>
-): Chain<T> {
+    private val invokeOn: (T) -> Boolean,
+    private val executors: List<Executor<T>>
+) : Chain<T> {
 
     override suspend fun execute(context: T): T {
-        return processors.fold(context) { acc, processor -> processor.execute(acc) }
+        return executors
+            .fold(context) { acc, executor ->
+                acc.takeIf { invokeOn(acc) }
+                    ?.let { executor.execute(acc)  }
+                    ?: acc
+            }
     }
+
+    override fun invokeOn(context: T): Boolean = this.invokeOn.invoke(context)
+
 }
