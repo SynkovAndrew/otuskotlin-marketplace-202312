@@ -16,7 +16,7 @@ class ProcessorImpl<T>(
                 ?: context
         } catch (throwable: Throwable) {
             println("\"$name\" failed")
-            context.also { handleException(throwable, it) }
+            handleException(throwable, context)
         }
     }
 }

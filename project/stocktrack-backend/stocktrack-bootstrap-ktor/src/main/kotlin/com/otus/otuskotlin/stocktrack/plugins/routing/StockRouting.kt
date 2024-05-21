@@ -59,7 +59,7 @@ suspend inline fun <reified T : Request> ApplicationCall.processRequestWithSingl
         .fromTransportModel()
         .let { context ->
             val result = cqrsBus.processSingleStockResponseContext(context)
-            when ( result.state) {
+            when (result.state) {
                 State.RUNNING,
                 State.FINISHED -> result
                 State.FAILED,
