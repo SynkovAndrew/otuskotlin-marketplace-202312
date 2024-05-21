@@ -9,7 +9,7 @@ class CORTest {
     @Test
     fun test() {
         runTest {
-            val chain = chainBuilder<TestContext> {
+            val chain : Chain<TestContext> = chainBuilder {
                 processor {
                     name = "ignored"
                     invokeOn { false }
@@ -32,7 +32,7 @@ class CORTest {
                         it.copy(result = it.input)
                     }
                 }
-            }.build()
+            }
 
             val context = TestContext(input = "arg", "")
             val result = chain.execute(context)

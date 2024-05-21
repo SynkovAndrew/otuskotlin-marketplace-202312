@@ -8,7 +8,7 @@ interface ProcessorDsl<T> {
 
     fun process(function: (T) -> T)
 
-    fun handleException(function: (Throwable, T) -> Unit)
+    fun handleException(function: (Throwable, T) -> T)
 
     fun build(): Processor<T>
 }
@@ -24,7 +24,7 @@ interface ChainDsl<T> {
 class ProcessorDslImpl<T>(override var name: String = "") : ProcessorDsl<T> {
     private var invokeOn: (T) -> Boolean = { true }
     private var process: (T) -> T = { it }
-    private var handleException: (Throwable, T) -> Unit = { throwable, _ -> throw throwable }
+    private var handleException: (Throwable, T) -> T = { throwable, _ -> throw throwable }
 
     override fun invokeOn(function: (T) -> Boolean) {
         this.invokeOn = function
@@ -34,12 +34,13 @@ class ProcessorDslImpl<T>(override var name: String = "") : ProcessorDsl<T> {
         this.process = function
     }
 
-    override fun handleException(function: (Throwable, T) -> Unit) {
+    override fun handleException(function: (Throwable, T) -> T) {
         this.handleException = function
     }
 
     override fun build(): Processor<T> {
         return ProcessorImpl(
+            name = name,
             process = process,
             invokeOn = invokeOn,
             handleException = handleException
@@ -59,8 +60,8 @@ class ChainDslImpl<T> : ChainDsl<T> {
     }
 }
 
-fun <T> chainBuilder(function: ChainDslImpl<T>.() -> Unit): ChainDslImpl<T> {
-    return ChainDslImpl<T>().apply(function)
+fun <T> chainBuilder(function: ChainDsl<T>.() -> Unit): Chain<T> {
+    return ChainDslImpl<T>().apply(function).build()
 }
 
 @DslMarker
