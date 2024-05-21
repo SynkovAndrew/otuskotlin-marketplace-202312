@@ -22,7 +22,7 @@ interface ProcessorDsl<T> : ExecutorDsl<T> {
 @ChainDslMarker
 interface ChainDsl<T> : ExecutorDsl<T>{
 
-    fun invokeOn(function: T.() -> Boolean)
+    fun invokeOn(function: (T) -> Boolean)
 
     fun processor(processor: ProcessorDsl<T>.() -> Unit)
 
