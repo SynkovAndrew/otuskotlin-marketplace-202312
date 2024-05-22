@@ -4,6 +4,8 @@ plugins {
 
 dependencies {
     implementation("com.otus.otuskotlin.stocktrack:stocktrack-lib-chain-of-responsibility")
+    implementation("com.otus.otuskotlin.stocktrack:stocktrack-log-core")
+    implementation("com.otus.otuskotlin.stocktrack:stocktrack-log-model")
 
     implementation(project(":stocktrack-core-model"))
     implementation(project(":stocktrack-core"))

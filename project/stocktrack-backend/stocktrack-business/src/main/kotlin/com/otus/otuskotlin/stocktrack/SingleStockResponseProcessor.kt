@@ -5,6 +5,10 @@ import com.otus.otuskotlin.stocktrack.cor.chainBuilder
 import com.otus.otuskotlin.stocktrack.dsl.command
 import com.otus.otuskotlin.stocktrack.dsl.commands
 import com.otus.otuskotlin.stocktrack.dsl.startProcessing
+import com.otus.otuskotlin.stocktrack.dsl.stubForDbErrorOnCreateCommand
+import com.otus.otuskotlin.stocktrack.dsl.stubForRequestedStubNotFound
+import com.otus.otuskotlin.stocktrack.dsl.stubForSucceededCreateCommand
+import com.otus.otuskotlin.stocktrack.dsl.stubs
 import com.otus.otuskotlin.stocktrack.model.Command
 
 class SingleStockResponseProcessor(val coreSettings: CoreSettings) {
@@ -35,6 +39,12 @@ class SingleStockResponseProcessor(val coreSettings: CoreSettings) {
                 command(Command.DELETE) {
                     copy(response = StubStockRepository.findById(context.request.id))
                 }
+            }
+
+            stubs {
+                stubForSucceededCreateCommand(coreSettings)
+                stubForDbErrorOnCreateCommand()
+                stubForRequestedStubNotFound()
             }
 
         }.execute(context)

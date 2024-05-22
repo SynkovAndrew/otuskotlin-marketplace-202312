@@ -57,20 +57,8 @@ suspend inline fun <reified T : Request> ApplicationCall.processRequestWithSingl
 ) {
     receive<T>()
         .fromTransportModel()
-        .let { context ->
-            val result = cqrsBus.processSingleStockResponseContext(context)
-            when (result.state) {
-                State.RUNNING,
-                State.FINISHED -> result
-                State.FAILED,
-                State.NONE -> {
-                    respond(HttpStatusCode.InternalServerError)
-                    null
-                }
-            }
-
-        }
-        ?.let { this.respond(it.toTransportModel()) }
+        .let { context -> cqrsBus.processSingleStockResponseContext(context) }
+        .let { this.respond(it.toTransportModel()) }
 }
 
 suspend fun <T> withExceptionHandling(call: ApplicationCall, block: suspend () -> T): T? {

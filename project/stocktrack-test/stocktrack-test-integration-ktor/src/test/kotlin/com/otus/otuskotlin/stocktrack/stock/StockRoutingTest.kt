@@ -290,16 +290,4 @@ class StockRoutingTest {
                 )
         }
     }
-
-    private fun ApplicationTestBuilder.configuredHttpClient(): HttpClient {
-        return createClient {
-            install(ContentNegotiation) {
-                json(Json {
-                    prettyPrint = true
-                    isLenient = true
-                    ignoreUnknownKeys = true
-                })
-            }
-        }
-    }
 }

@@ -9,9 +9,7 @@ object StockCategoryMapper : Mapper<Stock.Category, StockCategory> {
         return when(internalModel) {
             Stock.Category.BOND -> StockCategory.BOND
             Stock.Category.SHARE -> StockCategory.SHARE
-            Stock.Category.NONE -> throw IllegalArgumentException(
-                "There is no such a value $internalModel in StockCategory"
-            )
+            Stock.Category.NONE -> StockCategory.NONE
         }
     }
 
@@ -19,6 +17,7 @@ object StockCategoryMapper : Mapper<Stock.Category, StockCategory> {
         return when(apiModel) {
             StockCategory.BOND -> Stock.Category.BOND
             StockCategory.SHARE -> Stock.Category.SHARE
+            StockCategory.NONE -> Stock.Category.NONE
         }
     }
 }

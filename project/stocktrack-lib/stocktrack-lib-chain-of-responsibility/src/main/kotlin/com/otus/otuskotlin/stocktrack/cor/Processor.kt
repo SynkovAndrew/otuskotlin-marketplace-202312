@@ -4,7 +4,7 @@ interface Processor<T>: Executor<T>
 
 class ProcessorImpl<T>(
     private val name: String,
-    private val process: (T) -> T,
+    private val process: suspend (T) -> T,
     private val invokeOn: (T) -> Boolean,
     private val handleException: (Throwable, T) -> T
 ): Processor<T> {

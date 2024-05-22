@@ -12,7 +12,7 @@ interface ProcessorDsl<T> : ExecutorDsl<T> {
 
     fun invokeOn(function: (T) -> Boolean)
 
-    fun process(function: (T) -> T)
+    fun process(function: suspend (T) -> T)
 
     fun handleException(function: (Throwable, T) -> T)
 
@@ -33,14 +33,14 @@ interface ChainDsl<T> : ExecutorDsl<T>{
 
 class ProcessorDslImpl<T>(override var name: String = "") : ProcessorDsl<T> {
     private var invokeOn: (T) -> Boolean = { true }
-    private var process: (T) -> T = { it }
+    private var process: suspend (T) -> T = { it }
     private var handleException: (Throwable, T) -> T = { throwable, _ -> throw throwable }
 
     override fun invokeOn(function: (T) -> Boolean) {
         this.invokeOn = function
     }
 
-    override fun process(function: (T) -> T) {
+    override fun process(function: suspend (T) -> T) {
         this.process = function
     }
 

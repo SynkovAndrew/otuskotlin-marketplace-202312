@@ -33,7 +33,7 @@ fun ChainDsl<SearchStocksResponseContext>.command(
 
 fun ChainDsl<SearchStocksResponseContext>.startProcessing() {
     processor {
-        name = "START"
+        name = "startProcessing"
         invokeOn { it.state == State.NONE }
         process {
             it.copy(state = State.RUNNING)
