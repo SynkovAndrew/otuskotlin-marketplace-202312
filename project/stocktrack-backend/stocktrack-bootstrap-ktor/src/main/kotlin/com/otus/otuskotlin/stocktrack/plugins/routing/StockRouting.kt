@@ -1,7 +1,7 @@
 package com.otus.otuskotlin.stocktrack.plugins.routing
 
 import com.otus.otuskotlin.stocktrack.ApplicationSettings
-import com.otus.otuskotlin.stocktrack.CQRSBus
+import com.otus.otuskotlin.stocktrack.CommandBus
 import com.otus.otuskotlin.stocktrack.StubStockRepository
 import com.otus.otuskotlin.stocktrack.api.v1.models.CreateStockRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.DeleteStockRequest
@@ -9,7 +9,6 @@ import com.otus.otuskotlin.stocktrack.api.v1.models.FindStockRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.Request
 import com.otus.otuskotlin.stocktrack.api.v1.models.SearchStocksRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockRequest
-import com.otus.otuskotlin.stocktrack.model.State
 import com.otus.otuskotlin.stocktrack.stock.fromTransportModel
 import com.otus.otuskotlin.stocktrack.stock.toTransportModel
 import io.ktor.http.*
@@ -53,11 +52,11 @@ fun Application.configureStockRoutes(applicationSettings: ApplicationSettings) {
 
 suspend inline fun <reified T : Request> ApplicationCall.processRequestWithSingleStockResponse(
     applicationSettings: ApplicationSettings,
-    cqrsBus: CQRSBus = CQRSBus(applicationSettings)
+    commandBus: CommandBus = CommandBus(applicationSettings)
 ) {
     receive<T>()
         .fromTransportModel()
-        .let { context -> cqrsBus.processSingleStockResponseContext(context) }
+        .let { context -> commandBus.processSingleStockResponseContext(context) }
         .let { this.respond(it.toTransportModel()) }
 }
 

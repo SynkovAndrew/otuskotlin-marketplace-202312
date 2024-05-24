@@ -3,9 +3,8 @@ package com.otus.otuskotlin.stocktrack
 import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.model.ErrorDescription
 import com.otus.otuskotlin.stocktrack.model.State
-import java.time.Instant
 
-class CQRSBus(private val settings: ApplicationSettings) {
+class CommandBus(private val settings: ApplicationSettings) {
     private val logger: LoggerWrapper = settings.coreSettings.loggerProvider.logger(this::class)
 
     suspend fun processSingleStockResponseContext(
@@ -13,7 +12,6 @@ class CQRSBus(private val settings: ApplicationSettings) {
     ): SingleStockResponseContext {
         return try {
             context
-                .copy(startedAt = Instant.now())
                 .also { logger.info("Processing command ${it.command} ...", it.toLog(it.command.name)) }
                 .let { settings.singleStockResponseProcessor.execute(it) }
                 .also { logger.info("Command ${it.command} processed successfully", it.toLog(it.command.name)) }

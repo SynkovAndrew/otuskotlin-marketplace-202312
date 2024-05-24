@@ -3,7 +3,7 @@ package com.otus.otuskotlin.stocktrack.model
 import java.util.UUID
 
 data class Stock(
-    val id: Id = Id(value = UUID.randomUUID().toString()),
+    val id: Id = Id.NONE,
     val name: String = "",
     val category: Category = Category.NONE,
     val lock: StockLock = StockLock.NONE,
@@ -15,7 +15,11 @@ data class Stock(
     }
 
     @JvmInline
-    value class Id(val value: String)
+    value class Id(val value: String) {
+        companion object {
+            val NONE = Id("")
+        }
+    }
 
     companion object {
         val NONE = Stock()

@@ -6,6 +6,7 @@ import com.otus.otuskotlin.stocktrack.model.Command
 import com.otus.otuskotlin.stocktrack.model.Debug
 import com.otus.otuskotlin.stocktrack.model.ErrorDescription
 import com.otus.otuskotlin.stocktrack.model.State
+import java.time.Instant
 
 fun ChainDsl<SingleStockResponseContext>.command(
     command: Command,
@@ -37,7 +38,10 @@ fun ChainDsl<SingleStockResponseContext>.startProcessing() {
         name = "startProcessing"
         invokeOn { it.state == State.NONE }
         process {
-            it.copy(state = State.RUNNING)
+            it.copy(
+                startedAt = Instant.now(),
+                state = State.RUNNING
+            )
         }
     }
 }
@@ -51,11 +55,21 @@ fun ChainDsl<SingleStockResponseContext>.stubs(
     }
 }
 
-fun ChainDsl<SingleStockResponseContext>.commands(
+fun ChainDsl<SingleStockResponseContext>.commandPipeline(
+    command: Command,
     block: ChainDsl<SingleStockResponseContext>.() -> Unit
 ) {
     chain {
         block()
-        invokeOn { it.state == State.RUNNING && it.debug.mode == Debug.Mode.PROD }
+        invokeOn { it.state == State.RUNNING && it.debug.mode == Debug.Mode.PROD && it.command == command }
+    }
+}
+
+fun ChainDsl<SingleStockResponseContext>.validation(
+    block: ChainDsl<SingleStockResponseContext>.() -> Unit
+) {
+    chain {
+        block()
+        invokeOn { it.state == State.RUNNING }
     }
 }
