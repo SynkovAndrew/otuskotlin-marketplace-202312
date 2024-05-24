@@ -5,13 +5,16 @@ import com.otus.otuskotlin.stocktrack.cor.chainBuilder
 import com.otus.otuskotlin.stocktrack.dsl.command
 import com.otus.otuskotlin.stocktrack.dsl.commandPipeline
 import com.otus.otuskotlin.stocktrack.dsl.startProcessing
-import com.otus.otuskotlin.stocktrack.dsl.stubForDbErrorOnCreateCommand
+import com.otus.otuskotlin.stocktrack.dsl.stubForDbErrorOnCommand
 import com.otus.otuskotlin.stocktrack.dsl.stubForRequestedStubNotFound
 import com.otus.otuskotlin.stocktrack.dsl.stubForSucceededCreateCommand
+import com.otus.otuskotlin.stocktrack.dsl.stubForSucceededDeleteCommand
+import com.otus.otuskotlin.stocktrack.dsl.stubForSucceededFindCommand
+import com.otus.otuskotlin.stocktrack.dsl.stubForSucceededUpdateCommand
 import com.otus.otuskotlin.stocktrack.dsl.stubs
-import com.otus.otuskotlin.stocktrack.dsl.validateCreateCommandCategoryProperty
-import com.otus.otuskotlin.stocktrack.dsl.validateCreateCommandIdProperty
-import com.otus.otuskotlin.stocktrack.dsl.validateCreateCommandNameProperty
+import com.otus.otuskotlin.stocktrack.dsl.validateIdProperty
+import com.otus.otuskotlin.stocktrack.dsl.validateNameProperty
+import com.otus.otuskotlin.stocktrack.dsl.validateStockCategoryProperty
 import com.otus.otuskotlin.stocktrack.dsl.validation
 import com.otus.otuskotlin.stocktrack.model.Command
 
@@ -24,12 +27,12 @@ class SingleStockResponseProcessor(val coreSettings: CoreSettings) {
             commandPipeline(Command.CREATE) {
                 stubs {
                     stubForSucceededCreateCommand(coreSettings)
-                    stubForDbErrorOnCreateCommand()
+                    stubForDbErrorOnCommand()
                     stubForRequestedStubNotFound()
                 }
                 validation {
-                    validateCreateCommandNameProperty()
-                    validateCreateCommandCategoryProperty()
+                    validateNameProperty()
+                    validateStockCategoryProperty()
                 }
 
                 command(Command.CREATE) {
@@ -39,8 +42,14 @@ class SingleStockResponseProcessor(val coreSettings: CoreSettings) {
 
             commandPipeline(Command.UPDATE) {
                 stubs {
+                    stubForSucceededUpdateCommand(coreSettings)
+                    stubForDbErrorOnCommand()
+                    stubForRequestedStubNotFound()
                 }
                 validation {
+                    validateIdProperty()
+                    validateNameProperty()
+                    validateStockCategoryProperty()
                 }
 
                 command(Command.UPDATE) {
@@ -56,8 +65,12 @@ class SingleStockResponseProcessor(val coreSettings: CoreSettings) {
 
             commandPipeline(Command.FIND) {
                 stubs {
+                    stubForSucceededFindCommand(coreSettings)
+                    stubForDbErrorOnCommand()
+                    stubForRequestedStubNotFound()
                 }
                 validation {
+                    validateIdProperty()
                 }
 
                 command(Command.FIND) {
@@ -67,8 +80,12 @@ class SingleStockResponseProcessor(val coreSettings: CoreSettings) {
 
             commandPipeline(Command.DELETE) {
                 stubs {
+                    stubForSucceededDeleteCommand(coreSettings)
+                    stubForDbErrorOnCommand()
+                    stubForRequestedStubNotFound()
                 }
                 validation {
+                    validateIdProperty()
                 }
 
                 command(Command.DELETE) {

@@ -15,7 +15,11 @@ fun ChainDsl<SingleStockResponseContext>.command(
     processor {
         this.name = command.name
 
-        invokeOn { it.state == State.RUNNING && it.command == command }
+        invokeOn {
+            it.state == State.RUNNING &&
+                    it.debug.mode == Debug.Mode.PROD &&
+                    it.command == command
+        }
 
         process {
             it.process().copy(state = State.FINISHED)
@@ -61,7 +65,7 @@ fun ChainDsl<SingleStockResponseContext>.commandPipeline(
 ) {
     chain {
         block()
-        invokeOn { it.state == State.RUNNING && it.debug.mode == Debug.Mode.PROD && it.command == command }
+        invokeOn { it.state == State.RUNNING && it.command == command }
     }
 }
 

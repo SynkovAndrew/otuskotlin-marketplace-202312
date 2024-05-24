@@ -2,42 +2,40 @@ package com.otus.otuskotlin.stocktrack.dsl
 
 import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.cor.ChainDsl
-import com.otus.otuskotlin.stocktrack.model.Command
 import com.otus.otuskotlin.stocktrack.model.ErrorDescription
 import com.otus.otuskotlin.stocktrack.model.State
 import com.otus.otuskotlin.stocktrack.model.Stock
 
-fun ChainDsl<SingleStockResponseContext>.validateCreateCommandNameProperty() {
+
+fun ChainDsl<SingleStockResponseContext>.validateNameProperty() {
     processor {
-        this.name = "validateCreateCommandNameProperty"
+        this.name = "validateNameProperty"
 
         invokeOn {
             it.state == State.RUNNING &&
-                    it.command == Command.CREATE &&
                     it.request.name.trim().isEmpty()
         }
 
         process {
-                it.copy(
-                    state = State.FAILED,
-                    errors = it.errors + ErrorDescription(
-                        code = "NAME_EMPTY",
-                        field = "name",
-                        group = "validation",
-                        message = "Name is empty",
-                    )
+            it.copy(
+                state = State.FAILED,
+                errors = it.errors + ErrorDescription(
+                    code = "NAME_EMPTY",
+                    field = "name",
+                    group = "validation",
+                    message = "Name is empty",
                 )
-            }
+            )
+        }
     }
 }
 
-fun ChainDsl<SingleStockResponseContext>.validateCreateCommandIdProperty() {
+fun ChainDsl<SingleStockResponseContext>.validateIdProperty() {
     processor {
-        this.name = "validateCreateCommandIdProperty"
+        this.name = "validateIdProperty"
 
         invokeOn {
             it.state == State.RUNNING &&
-                    it.command == Command.CREATE &&
                     it.request.id.value.trim().isEmpty()
         }
 
@@ -55,13 +53,12 @@ fun ChainDsl<SingleStockResponseContext>.validateCreateCommandIdProperty() {
     }
 }
 
-fun ChainDsl<SingleStockResponseContext>.validateCreateCommandCategoryProperty() {
+fun ChainDsl<SingleStockResponseContext>.validateStockCategoryProperty() {
     processor {
-        this.name = "validateCreateCommandCategoryProperty"
+        this.name = "validateStockCategoryProperty"
 
         invokeOn {
             it.state == State.RUNNING &&
-                    it.command == Command.CREATE &&
                     it.request.category == Stock.Category.NONE
         }
 
