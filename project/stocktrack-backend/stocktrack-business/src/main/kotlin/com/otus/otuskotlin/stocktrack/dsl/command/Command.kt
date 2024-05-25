@@ -21,7 +21,6 @@ fun <T : Context<*, *>> ChainDsl<T>.command(
         }
 
         process {
-            it.process()
             it.process().finish() as T
         }
 
