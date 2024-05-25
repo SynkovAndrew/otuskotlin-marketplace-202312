@@ -6,6 +6,7 @@ import com.otus.otuskotlin.stocktrack.dsl.command.command
 import com.otus.otuskotlin.stocktrack.dsl.command.commandPipeline
 import com.otus.otuskotlin.stocktrack.dsl.command.startProcessing
 import com.otus.otuskotlin.stocktrack.dsl.stub.stubForDbErrorOnCommand
+import com.otus.otuskotlin.stocktrack.dsl.stub.stubForFailedCauseBadRequest
 import com.otus.otuskotlin.stocktrack.dsl.stub.stubForRequestedStubNotFound
 import com.otus.otuskotlin.stocktrack.dsl.stub.stubForSucceededCreateCommand
 import com.otus.otuskotlin.stocktrack.dsl.stub.stubForSucceededDeleteCommand
@@ -30,6 +31,7 @@ class SingleStockResponseProcessor(
             commandPipeline(Command.CREATE) {
                 stubs {
                     stubForSucceededCreateCommand(coreSettings)
+                    stubForFailedCauseBadRequest()
                     stubForDbErrorOnCommand()
                     stubForRequestedStubNotFound()
                 }
@@ -46,6 +48,7 @@ class SingleStockResponseProcessor(
             commandPipeline(Command.UPDATE) {
                 stubs {
                     stubForSucceededUpdateCommand(coreSettings)
+                    stubForFailedCauseBadRequest()
                     stubForDbErrorOnCommand()
                     stubForRequestedStubNotFound()
                 }
@@ -69,6 +72,7 @@ class SingleStockResponseProcessor(
             commandPipeline(Command.FIND) {
                 stubs {
                     stubForSucceededFindCommand(coreSettings)
+                    stubForFailedCauseBadRequest()
                     stubForDbErrorOnCommand()
                     stubForRequestedStubNotFound()
                 }
