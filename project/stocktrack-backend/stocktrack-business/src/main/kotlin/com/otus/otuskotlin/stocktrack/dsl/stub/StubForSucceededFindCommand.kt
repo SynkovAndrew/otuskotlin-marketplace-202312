@@ -30,8 +30,8 @@ fun ChainDsl<SingleStockResponseContext>.stubForSucceededFindCommand(
                     state = State.FINISHED,
                     response = Stock(
                         id = it.request.id,
-                        name = UUID.randomUUID().toString(),
-                        category = Stock.Category.entries.random()
+                        name = "Test Stock",
+                        category = Stock.Category.SHARE
                     )
                 )
             }
