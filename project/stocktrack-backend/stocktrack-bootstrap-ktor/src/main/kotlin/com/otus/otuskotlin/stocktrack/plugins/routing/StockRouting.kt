@@ -9,6 +9,7 @@ import com.otus.otuskotlin.stocktrack.api.v1.models.FindStockRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.Request
 import com.otus.otuskotlin.stocktrack.api.v1.models.SearchStocksRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockRequest
+import com.otus.otuskotlin.stocktrack.context.SearchStocksResponseContext
 import com.otus.otuskotlin.stocktrack.stock.fromTransportModel
 import com.otus.otuskotlin.stocktrack.stock.toTransportModel
 import io.ktor.http.*
@@ -36,15 +37,7 @@ fun Application.configureStockRoutes(applicationSettings: ApplicationSettings) {
                 call.processRequestWithSingleStockResponse<UpdateStockRequest>(applicationSettings)
             }
             post("/search") {
-                call.receive<SearchStocksRequest>()
-                    .fromTransportModel()
-                    .let { context ->
-                        withExceptionHandling(call) {
-                            applicationSettings.searchStocksResponseProcessor
-                                .execute(context)
-                        }
-                    }
-                    ?.let { call.respond(it.toTransportModel()) }
+                call.processRequestWithSingleStockResponse<SearchStocksRequest>(applicationSettings)
             }
         }
     }
@@ -56,15 +49,6 @@ suspend inline fun <reified T : Request> ApplicationCall.processRequestWithSingl
 ) {
     receive<T>()
         .fromTransportModel()
-        .let { context -> commandBus.processSingleStockResponseContext(context) }
+        .let { context -> commandBus.processContext(context) }
         .let { this.respond(it.toTransportModel()) }
-}
-
-suspend fun <T> withExceptionHandling(call: ApplicationCall, block: suspend () -> T): T? {
-    try {
-        return block()
-    } catch (ex: StubStockRepository.StockNotFoundException) {
-        call.respond(HttpStatusCode.NotFound)
-        return null
-    }
 }

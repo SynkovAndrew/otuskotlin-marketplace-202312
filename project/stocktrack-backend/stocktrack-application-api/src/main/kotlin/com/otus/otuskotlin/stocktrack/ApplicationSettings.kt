@@ -1,7 +1,8 @@
 package com.otus.otuskotlin.stocktrack
 
+import kotlin.reflect.KClass
+
 interface ApplicationSettings {
-    val singleStockResponseProcessor: SingleStockResponseProcessor
-    val searchStocksResponseProcessor: SearchStocksResponseProcessor
+    val processors: Map<KClass<*>, ResponseProcessor<*, *, *>>
     val coreSettings: CoreSettings
 }

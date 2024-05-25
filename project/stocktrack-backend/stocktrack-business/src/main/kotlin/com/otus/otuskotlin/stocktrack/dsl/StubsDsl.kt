@@ -2,6 +2,7 @@ package com.otus.otuskotlin.stocktrack.dsl
 
 import com.otus.otuskotlin.stocktrack.CoreSettings
 import com.otus.otuskotlin.stocktrack.LogLevel
+import com.otus.otuskotlin.stocktrack.context.Context
 import com.otus.otuskotlin.stocktrack.context.SearchStocksResponseContext
 import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.cor.ChainDsl
@@ -147,7 +148,30 @@ fun ChainDsl<SearchStocksResponseContext>.stubForSucceededSearchCommand(
     }
 }
 
-fun ChainDsl<SingleStockResponseContext>.stubForDbErrorOnCommand() {
+fun <T : Context<*, *>> ChainDsl<T>.stubForDbErrorOnCommand() {
+    processor {
+        this.name = "stubForDbErrorOnCommand"
+
+        invokeOn {
+            it.state == State.RUNNING &&
+                    it.debug.mode == Debug.Mode.STUB &&
+                    it.debug.stub == Debug.Stub.DATABASE_ERROR
+        }
+
+        process {
+            it.fail(
+                ErrorDescription(
+                    code = "db-error",
+                    group = "db-error-group",
+                    field = "no",
+                    message = "Failed to access database"
+                )
+            ) as T
+        }
+    }
+}
+
+/*fun ChainDsl<SearchStocksResponseContext>.stubForDbErrorOnCommand() {
     processor {
         this.name = "stubForDbErrorOnCommand"
 
@@ -169,33 +193,9 @@ fun ChainDsl<SingleStockResponseContext>.stubForDbErrorOnCommand() {
             )
         }
     }
-}
+}*/
 
-fun ChainDsl<SearchStocksResponseContext>.stubForDbErrorOnCommand() {
-    processor {
-        this.name = "stubForDbErrorOnCommand"
-
-        invokeOn {
-            it.state == State.RUNNING &&
-                    it.debug.mode == Debug.Mode.STUB &&
-                    it.debug.stub == Debug.Stub.DATABASE_ERROR
-        }
-
-        process {
-            it.copy(
-                state = State.FAILED,
-                errors = it.errors + ErrorDescription(
-                    code = "db-error",
-                    group = "db-error-group",
-                    field = "no",
-                    message = "Failed to access database"
-                )
-            )
-        }
-    }
-}
-
-fun ChainDsl<SingleStockResponseContext>.stubForRequestedStubNotFound() {
+fun <T : Context<*, *>> ChainDsl<T>.stubForRequestedStubNotFound() {
     processor {
         this.name = "stubForRequestedCaseNotFound"
 
@@ -204,19 +204,19 @@ fun ChainDsl<SingleStockResponseContext>.stubForRequestedStubNotFound() {
         }
 
         process {
-            it.copy(
-                state = State.FAILED,
-                errors = it.errors + ErrorDescription(
+            it.fail(
+                ErrorDescription(
                     code = "stub-not-found-error",
                     group = "stub-not-found-error-group",
                     field = "no",
                     message = "Failed to find stub"
                 )
-            )
+            ) as T
         }
     }
 }
 
+/*
 fun ChainDsl<SearchStocksResponseContext>.stubForRequestedStubNotFound() {
     processor {
         this.name = "stubForRequestedCaseNotFound"
@@ -237,4 +237,4 @@ fun ChainDsl<SearchStocksResponseContext>.stubForRequestedStubNotFound() {
             )
         }
     }
-}
+}*/

@@ -16,4 +16,6 @@ sealed interface Context<IN, OUT> {
     val startedAt: Instant
     val request: IN
     val response: OUT
+
+    fun fail(error: ErrorDescription): Context<IN, OUT>
 }

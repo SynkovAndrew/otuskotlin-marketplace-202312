@@ -17,10 +17,13 @@ import com.otus.otuskotlin.stocktrack.dsl.validateNameProperty
 import com.otus.otuskotlin.stocktrack.dsl.validateStockCategoryProperty
 import com.otus.otuskotlin.stocktrack.dsl.validation
 import com.otus.otuskotlin.stocktrack.model.Command
+import com.otus.otuskotlin.stocktrack.model.Stock
 
-class SingleStockResponseProcessor(val coreSettings: CoreSettings) {
+class SingleStockResponseProcessor(
+    val coreSettings: CoreSettings
+) : ResponseProcessor<Stock, Stock, SingleStockResponseContext> {
 
-    suspend fun execute(context: SingleStockResponseContext): SingleStockResponseContext {
+    override suspend fun execute(context: SingleStockResponseContext): SingleStockResponseContext {
         return chainBuilder<SingleStockResponseContext> {
             startProcessing()
 

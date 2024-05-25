@@ -1,6 +1,8 @@
 package com.otus.otuskotlin.stocktrack
 
 import com.otus.otuskotlin.stocktrack.configuration.KtorApplicationSettings
+import com.otus.otuskotlin.stocktrack.context.SearchStocksResponseContext
+import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.plugins.configureAuthentication
 import com.otus.otuskotlin.stocktrack.plugins.configureRouting
 import com.otus.otuskotlin.stocktrack.plugins.configureSerialization
@@ -22,8 +24,10 @@ fun Application.modules() {
     val searchStocksResponseProcessor = SearchStocksResponseProcessor(coreSettings = coreSettings)
     val applicationSettings = KtorApplicationSettings(
         coreSettings = coreSettings,
-        singleStockResponseProcessor = singleStockResponseProcessor,
-        searchStocksResponseProcessor = searchStocksResponseProcessor
+        processors = mapOf(
+            SingleStockResponseContext::class to singleStockResponseProcessor,
+            SearchStocksResponseContext::class to searchStocksResponseProcessor
+        )
     )
 
     configureAuthentication()

@@ -16,10 +16,10 @@ class KafkaApplicationSettings(
     val kafkaTopicOut: String = "stocktrack-stock-out",
     override val coreSettings: CoreSettings =
         CoreSettings(loggerProvider = LoggerProvider { logbackLoggerWrapper(it) }),
-    override val singleStockResponseProcessor: SingleStockResponseProcessor =
-        SingleStockResponseProcessor(coreSettings = coreSettings),
-    override val searchStocksResponseProcessor: SearchStocksResponseProcessor =
-        SearchStocksResponseProcessor(coreSettings = coreSettings)
+    override val processors: Map<KClass<*>, ResponseProcessor<*, *, *>> = mapOf(
+        SingleStockResponseProcessor::class to SingleStockResponseProcessor(coreSettings = coreSettings),
+        SearchStocksResponseProcessor::class to SearchStocksResponseProcessor(coreSettings = coreSettings)
+    )
 ) : ApplicationSettings
 
 fun <K, V> KafkaApplicationSettings.instantiateKafkaConsumer(

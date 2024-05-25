@@ -19,4 +19,11 @@ data class SearchStocksResponseContext(
     override val debug: Debug = Debug.NONE,
     override val requestId: RequestId = RequestId(value = UUID.randomUUID().toString()),
     override val startedAt: Instant = Instant.MIN
-) : Context<StockFilter, List<Stock>>
+) : Context<StockFilter, List<Stock>> {
+    override fun fail(error: ErrorDescription): Context<StockFilter, List<Stock>> {
+        return copy(
+            state = State.FAILED,
+            errors = errors + error
+        )
+    }
+}

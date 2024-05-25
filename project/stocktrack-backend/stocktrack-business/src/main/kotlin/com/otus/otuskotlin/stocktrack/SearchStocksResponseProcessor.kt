@@ -1,5 +1,6 @@
 package com.otus.otuskotlin.stocktrack
 
+import com.otus.otuskotlin.stocktrack.context.Context
 import com.otus.otuskotlin.stocktrack.context.SearchStocksResponseContext
 import com.otus.otuskotlin.stocktrack.cor.chainBuilder
 import com.otus.otuskotlin.stocktrack.dsl.command
@@ -10,10 +11,14 @@ import com.otus.otuskotlin.stocktrack.dsl.stubForRequestedStubNotFound
 import com.otus.otuskotlin.stocktrack.dsl.stubForSucceededSearchCommand
 import com.otus.otuskotlin.stocktrack.dsl.stubs
 import com.otus.otuskotlin.stocktrack.model.Command
+import com.otus.otuskotlin.stocktrack.model.Stock
+import com.otus.otuskotlin.stocktrack.model.StockFilter
 
-class SearchStocksResponseProcessor(val coreSettings: CoreSettings) {
+class SearchStocksResponseProcessor(
+    val coreSettings: CoreSettings
+) : ResponseProcessor<StockFilter, List<Stock>, SearchStocksResponseContext> {
 
-    suspend fun execute(context: SearchStocksResponseContext): SearchStocksResponseContext {
+    override suspend fun execute(context: SearchStocksResponseContext): SearchStocksResponseContext {
         return chainBuilder<SearchStocksResponseContext> {
             startProcessing()
 
