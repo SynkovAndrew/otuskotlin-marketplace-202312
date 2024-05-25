@@ -2,20 +2,20 @@ package com.otus.otuskotlin.stocktrack
 
 import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.cor.chainBuilder
-import com.otus.otuskotlin.stocktrack.dsl.command
-import com.otus.otuskotlin.stocktrack.dsl.commandPipeline
-import com.otus.otuskotlin.stocktrack.dsl.startProcessing
-import com.otus.otuskotlin.stocktrack.dsl.stubForDbErrorOnCommand
-import com.otus.otuskotlin.stocktrack.dsl.stubForRequestedStubNotFound
-import com.otus.otuskotlin.stocktrack.dsl.stubForSucceededCreateCommand
-import com.otus.otuskotlin.stocktrack.dsl.stubForSucceededDeleteCommand
-import com.otus.otuskotlin.stocktrack.dsl.stubForSucceededFindCommand
-import com.otus.otuskotlin.stocktrack.dsl.stubForSucceededUpdateCommand
-import com.otus.otuskotlin.stocktrack.dsl.stubs
-import com.otus.otuskotlin.stocktrack.dsl.validateIdProperty
-import com.otus.otuskotlin.stocktrack.dsl.validateNameProperty
-import com.otus.otuskotlin.stocktrack.dsl.validateStockCategoryProperty
-import com.otus.otuskotlin.stocktrack.dsl.validation
+import com.otus.otuskotlin.stocktrack.dsl.command.command
+import com.otus.otuskotlin.stocktrack.dsl.command.commandPipeline
+import com.otus.otuskotlin.stocktrack.dsl.command.startProcessing
+import com.otus.otuskotlin.stocktrack.dsl.stub.stubForDbErrorOnCommand
+import com.otus.otuskotlin.stocktrack.dsl.stub.stubForRequestedStubNotFound
+import com.otus.otuskotlin.stocktrack.dsl.stub.stubForSucceededCreateCommand
+import com.otus.otuskotlin.stocktrack.dsl.stub.stubForSucceededDeleteCommand
+import com.otus.otuskotlin.stocktrack.dsl.stub.stubForSucceededFindCommand
+import com.otus.otuskotlin.stocktrack.dsl.stub.stubForSucceededUpdateCommand
+import com.otus.otuskotlin.stocktrack.dsl.stub.stubs
+import com.otus.otuskotlin.stocktrack.dsl.validation.validateIdProperty
+import com.otus.otuskotlin.stocktrack.dsl.validation.validateNameProperty
+import com.otus.otuskotlin.stocktrack.dsl.validation.validateStockCategoryProperty
+import com.otus.otuskotlin.stocktrack.dsl.validation.validation
 import com.otus.otuskotlin.stocktrack.model.Command
 import com.otus.otuskotlin.stocktrack.model.Stock
 

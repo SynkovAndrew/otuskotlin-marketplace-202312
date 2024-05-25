@@ -12,6 +12,7 @@ import com.otus.otuskotlin.stocktrack.api.v1.models.SearchStocksRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.SearchStocksResponse
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockResponse
+import com.otus.otuskotlin.stocktrack.context.Context
 import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.stock.fromTransportModel
 import com.otus.otuskotlin.stocktrack.stock.toTransportModel
@@ -27,9 +28,9 @@ interface ConsumerStrategy {
 
     fun topic(kafkaApplicationSettings: KafkaApplicationSettings): BidirectionalTopic
 
-    fun serialize(context: SingleStockResponseContext): Response
+    fun serialize(context: Context<*, *>): Response
 
-    fun deserialize(value: Request): SingleStockResponseContext
+    fun deserialize(value: Request): Context<*, *>
 }
 
 data class BidirectionalTopic(
@@ -65,11 +66,11 @@ class ConsumerStrategyImpl : ConsumerStrategy {
         )
     }
 
-    override fun serialize(context: SingleStockResponseContext): Response {
+    override fun serialize(context: Context<*, *>): Response {
         return context.toTransportModel()
     }
 
-    override fun deserialize(value: Request): SingleStockResponseContext {
+    override fun deserialize(value: Request): Context<*, *> {
         return value.fromTransportModel()
     }
 }

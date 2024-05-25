@@ -20,10 +20,21 @@ data class SearchStocksResponseContext(
     override val requestId: RequestId = RequestId(value = UUID.randomUUID().toString()),
     override val startedAt: Instant = Instant.MIN
 ) : Context<StockFilter, List<Stock>> {
+    override fun start(): Context<StockFilter, List<Stock>> {
+        return copy(
+            startedAt = Instant.now(),
+            state = State.RUNNING
+        )
+    }
+
     override fun fail(error: ErrorDescription): Context<StockFilter, List<Stock>> {
         return copy(
             state = State.FAILED,
             errors = errors + error
         )
+    }
+
+    override fun finish(): Context<StockFilter, List<Stock>> {
+        return copy(state = State.FINISHED)
     }
 }

@@ -20,7 +20,7 @@ class StockController(applicationSettings: ApplicationSettings) {
     suspend fun find(request: FindStockRequest): Response {
         return request
             .fromTransportModel()
-            .let { commandBus.processSingleStockResponseContext(it) }
+            .let { commandBus.processContext(it) }
             .toTransportModel()
     }
 
@@ -28,7 +28,7 @@ class StockController(applicationSettings: ApplicationSettings) {
     suspend fun create(request: CreateStockRequest): Response {
         return request
             .fromTransportModel()
-            .let { commandBus.processSingleStockResponseContext(it) }
+            .let { commandBus.processContext(it) }
             .toTransportModel()
     }
 }

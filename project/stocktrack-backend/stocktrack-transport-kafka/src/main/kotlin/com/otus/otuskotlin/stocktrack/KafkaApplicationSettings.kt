@@ -1,5 +1,7 @@
 package com.otus.otuskotlin.stocktrack
 
+import com.otus.otuskotlin.stocktrack.context.SearchStocksResponseContext
+import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.producer.KafkaProducer
@@ -17,8 +19,8 @@ class KafkaApplicationSettings(
     override val coreSettings: CoreSettings =
         CoreSettings(loggerProvider = LoggerProvider { logbackLoggerWrapper(it) }),
     override val processors: Map<KClass<*>, ResponseProcessor<*, *, *>> = mapOf(
-        SingleStockResponseProcessor::class to SingleStockResponseProcessor(coreSettings = coreSettings),
-        SearchStocksResponseProcessor::class to SearchStocksResponseProcessor(coreSettings = coreSettings)
+        SingleStockResponseContext::class to SingleStockResponseProcessor(coreSettings = coreSettings),
+        SearchStocksResponseContext::class to SearchStocksResponseProcessor(coreSettings = coreSettings)
     )
 ) : ApplicationSettings
 

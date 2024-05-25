@@ -63,7 +63,7 @@ class KafkaCommandBus(
                     ?: throw IllegalStateException("Unsupported topic ${record.topic()}")
 
                 val context = strategy.deserialize(record.value())
-                val result = commandBus.processSingleStockResponseContext(context)
+                val result = commandBus.processContext(context)
                 val payload = strategy.serialize(result)
 
                 send(topic.output, payload)
