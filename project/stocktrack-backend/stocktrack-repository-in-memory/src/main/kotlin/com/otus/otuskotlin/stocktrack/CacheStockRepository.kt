@@ -1,9 +1,7 @@
 package com.otus.otuskotlin.stocktrack
 
-import com.otus.otuskotlin.stocktrack.model.ErrorDescription
 import com.otus.otuskotlin.stocktrack.model.Stock
 import com.otus.otuskotlin.stocktrack.stock.BaseStockRepository
-import com.otus.otuskotlin.stocktrack.stock.ErrorStockRepositoryResponse
 import com.otus.otuskotlin.stocktrack.stock.OkStockRepositoryResponse
 import com.otus.otuskotlin.stocktrack.stock.OkStocksRepositoryResponse
 import com.otus.otuskotlin.stocktrack.stock.StockFilterRepositoryRequest
@@ -20,6 +18,7 @@ import kotlin.time.Duration.Companion.minutes
 
 class CacheStockRepository(
     ttl: Duration = 2.minutes,
+    val randomUuid: () -> String = { UUID.randomUUID().toString() },
 ) : BaseStockRepository() {
     private val mutex: Mutex = Mutex()
     private val cache = Cache.Builder<String, StockEntity>()
@@ -28,9 +27,9 @@ class CacheStockRepository(
 
     override suspend fun create(request: StockRepositoryRequest): StockRepositoryResponse {
         return tryReturningOne {
-            request.stock.copy(id = Stock.Id(value = UUID.randomUUID().toString()))
+            request.stock.copy(id = Stock.Id(value = randomUuid()))
                 .also {
-                    mutex.withLock("create") {
+                    mutex.withLock(WRITE_ACCESS) {
                         cache.put(it.id.value, StockEntityMapper.toEntity(it))
                     }
                 }
@@ -42,7 +41,7 @@ class CacheStockRepository(
         return tryReturningOne {
             request
                 .let {
-                    mutex.withLock("find") {
+                    mutex.withLock(READ_ACCESS) {
                         cache.get(it.stockId.value)
                     }
                 }
@@ -55,7 +54,7 @@ class CacheStockRepository(
         return tryReturningOne {
             request
                 .let {
-                    mutex.withLock("update") {
+                    mutex.withLock(WRITE_ACCESS) {
                         cache.get(it.stock.id.value)
                             ?.let {
                                 StockEntityMapper.fromEntity(it)
@@ -76,7 +75,7 @@ class CacheStockRepository(
         return tryReturningOne {
             request
                 .let {
-                    mutex.withLock("update") {
+                    mutex.withLock(WRITE_ACCESS) {
                         cache.get(it.stockId.value)
                             ?.also { cache.invalidate(it.id) }
                     }
@@ -91,10 +90,25 @@ class CacheStockRepository(
             request
                 .let {
                     cache.asMap().values
-                        .filter { stock -> stock.category == it.category.name && stock.name.contains(it.name) }
+                        .filter { stock ->
+                            it.category
+                                .takeIf { category -> category != Stock.Category.NONE }
+                                ?.let { category -> category.name == stock.category }
+                                ?: true
+                        }
+                        .filter { stock -> stock.name.contains(it.name) }
                 }
                 .map { StockEntityMapper.fromEntity(it) }
                 .let { OkStocksRepositoryResponse(data = it) }
         }
+    }
+
+    override fun enrich(stocks: Collection<Stock>): Collection<Stock> {
+       return stocks.map { stock -> stock.also { cache.put(it.id.value, StockEntityMapper.toEntity(it)) } }
+    }
+
+    companion object {
+        const val READ_ACCESS = "READ_ACCESS"
+        const val WRITE_ACCESS = "WRITE_ACCESS"
     }
 }

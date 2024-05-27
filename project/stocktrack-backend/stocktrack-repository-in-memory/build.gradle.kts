@@ -11,6 +11,7 @@ dependencies {
 
     testImplementation(kotlin("test"))
     testImplementation(libs.assertj)
+    testImplementation(libs.coroutines.test)
 }
 
 tasks.test {
