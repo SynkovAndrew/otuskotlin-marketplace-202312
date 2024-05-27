@@ -7,6 +7,7 @@ dependencies {
     implementation(project(":stocktrack-core-model"))
 
     implementation(libs.cache4k)
+    implementation(libs.coroutines.core)
 
     testImplementation(kotlin("test"))
     testImplementation(libs.assertj)
