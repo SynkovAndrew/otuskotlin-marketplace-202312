@@ -1,7 +1,5 @@
 package com.otus.otuskotlin.stocktrack.model
 
-import java.util.UUID
-
 data class Stock(
     val id: Id = Id.NONE,
     val name: String = "",

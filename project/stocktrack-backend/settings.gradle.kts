@@ -12,6 +12,9 @@ include(
     "stocktrack-business",
     "stocktrack-application-api",
     "stocktrack-transport-kafka",
+    "stocktrack-repository-core",
+    "stocktrack-repository-in-memory",
+    "stocktrack-repository-stub",
 )
 
 dependencyResolutionManagement {
