@@ -4,6 +4,10 @@ plugins {
 
 dependencies {
     implementation(project(":stocktrack-core-model"))
+    implementation(project(":stocktrack-repository-core"))
+    implementation(kotlin("test-junit"))
+    implementation(libs.assertj)
+    implementation(libs.coroutines.test)
 }
 
 tasks.test {
