@@ -1,7 +1,12 @@
 package com.otus.otuskotlin.stocktrack.stock
 
+import com.otus.otuskotlin.stocktrack.api.v1.models.Response
 import com.otus.otuskotlin.stocktrack.api.v1.models.ResponseResult
+import com.otus.otuskotlin.stocktrack.api.v1.models.SearchStocksResponse
 import com.otus.otuskotlin.stocktrack.api.v1.models.StockResponseBody
+import com.otus.otuskotlin.stocktrack.context.Context
+import com.otus.otuskotlin.stocktrack.context.SearchStocksResponseContext
+import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.model.ErrorDescription
 import com.otus.otuskotlin.stocktrack.model.State
 import com.otus.otuskotlin.stocktrack.model.Stock
@@ -34,3 +39,10 @@ fun ErrorDescription.toTransportModel(): com.otus.otuskotlin.stocktrack.api.v1.m
         message = message
     )
 }
+
+fun Context<*, *>.toTransportModel() : Response {
+    return when(this) {
+        is SearchStocksResponseContext -> this.toTransportModel()
+        is SingleStockResponseContext -> this.toTransportModel()
+    }
+ }

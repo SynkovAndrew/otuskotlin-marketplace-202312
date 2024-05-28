@@ -28,6 +28,7 @@ components:
       enum:
         - "SHARE"
         - "BOND"
+        - "NONE"
     StockId:
       type: "object"
       properties:

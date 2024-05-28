@@ -37,20 +37,6 @@ class KafkaCommandBusTest {
 
     @Test
     fun `send message to kafka`() {
-        val incomingMessage = """
-            {
-                "type": "com.otus.otuskotlin.stocktrack.api.v1.models.CreateStockRequest",
-                "requestType": "create",
-                "debug": {
-                    "mode": "prod",
-                    "stub": "success"
-                }
-                "body": {
-                    "name": "Test Stock",
-                    "category": "SHARE"
-                }
-            }""".trimIndent()
-
         val request = CreateStockRequest(
             requestType = "create",
             debug = Debug(

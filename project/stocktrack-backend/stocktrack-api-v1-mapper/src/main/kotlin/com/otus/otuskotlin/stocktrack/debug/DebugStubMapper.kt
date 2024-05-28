@@ -11,9 +11,7 @@ object DebugStubMapper : Mapper<Debug.Stub, DebugStub> {
             Debug.Stub.NOT_FOUND -> DebugStub.NOT_FOUND
             Debug.Stub.BAD_REQUEST -> DebugStub.BAD_REQUEST
             Debug.Stub.DATABASE_ERROR -> DebugStub.DATABASE_ERROR
-            Debug.Stub.NONE -> throw IllegalArgumentException(
-                "There is no such a value $internalModel in DebugStub"
-            )
+            Debug.Stub.NONE -> DebugStub.NONE
         }
     }
 
@@ -23,6 +21,7 @@ object DebugStubMapper : Mapper<Debug.Stub, DebugStub> {
             DebugStub.NOT_FOUND -> Debug.Stub.NOT_FOUND
             DebugStub.BAD_REQUEST -> Debug.Stub.BAD_REQUEST
             DebugStub.DATABASE_ERROR -> Debug.Stub.DATABASE_ERROR
+            DebugStub.NONE -> Debug.Stub.NONE
         }
     }
 }

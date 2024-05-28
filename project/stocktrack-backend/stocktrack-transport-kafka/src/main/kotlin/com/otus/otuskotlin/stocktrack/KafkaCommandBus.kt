@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class KafkaCommandBus(
     private val kafkaApplicationSettings: KafkaApplicationSettings,
-    private val cqrsBus: CQRSBus = CQRSBus(settings = kafkaApplicationSettings),
+    private val commandBus: CommandBus = CommandBus(settings = kafkaApplicationSettings),
     private val consumer: Consumer<String, Request> = kafkaApplicationSettings.instantiateKafkaConsumer(
         StringDeserializer::class,
         RequestDeserializer::class
@@ -63,7 +63,7 @@ class KafkaCommandBus(
                     ?: throw IllegalStateException("Unsupported topic ${record.topic()}")
 
                 val context = strategy.deserialize(record.value())
-                val result = cqrsBus.processSingleStockResponseContext(context)
+                val result = commandBus.processContext(context)
                 val payload = strategy.serialize(result)
 
                 send(topic.output, payload)

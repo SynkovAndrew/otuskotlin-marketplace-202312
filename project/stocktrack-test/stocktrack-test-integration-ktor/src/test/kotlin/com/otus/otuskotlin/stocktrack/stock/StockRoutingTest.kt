@@ -9,6 +9,7 @@ import com.otus.otuskotlin.stocktrack.api.v1.models.DebugStub
 import com.otus.otuskotlin.stocktrack.api.v1.models.DeleteStockBody
 import com.otus.otuskotlin.stocktrack.api.v1.models.DeleteStockRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.DeleteStockResponse
+import com.otus.otuskotlin.stocktrack.api.v1.models.Error
 import com.otus.otuskotlin.stocktrack.api.v1.models.FindStockBody
 import com.otus.otuskotlin.stocktrack.api.v1.models.FindStockRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.FindStockResponse
@@ -24,14 +25,10 @@ import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockBody
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockResponse
 import com.otus.otuskotlin.stocktrack.modules
-import io.ktor.client.*
 import io.ktor.client.call.*
-import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.testing.*
-import kotlinx.serialization.json.Json
 import org.assertj.core.api.Assertions.assertThat
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -87,12 +84,37 @@ class StockRoutingTest {
                 setBody(
                     FindStockRequest(
                         requestType = "find",
-                        debug = Debug(mode = DebugMode.PROD, stub = DebugStub.SUCCESS),
+                        debug = Debug(mode = DebugMode.PROD, stub = DebugStub.NONE),
                         body = FindStockBody(id = StockId(value = "11"))
                     )
                 )
             }
-            assertEquals(HttpStatusCode.InternalServerError, response.status)
+            val findStockResponse = response.body<FindStockResponse>()
+
+            assertEquals(HttpStatusCode.OK, response.status)
+            assertThat(findStockResponse)
+                .usingRecursiveComparison()
+                .isEqualTo(
+                    FindStockResponse(
+                        responseType = "find",
+                        result = ResponseResult.ERROR,
+                        errors = listOf(
+                            Error(
+                                code = "",
+                                field = "",
+                                group = "",
+                                message = "Stock(id=11) not found"
+                            )
+                        ),
+                        body = StockResponseBody(
+                            id = StockId(value = ""),
+                            name = "",
+                            category = StockCategory.NONE,
+                            permissions = setOf(),
+                            lock = ""
+                        )
+                    )
+                )
         }
     }
 
@@ -203,7 +225,32 @@ class StockRoutingTest {
                     )
                 )
             }
-            assertEquals(HttpStatusCode.InternalServerError, response.status)
+            val updateStockResponse = response.body<UpdateStockResponse>()
+
+            assertEquals(HttpStatusCode.OK, response.status)
+            assertThat(updateStockResponse)
+                .usingRecursiveComparison()
+                .isEqualTo(
+                    UpdateStockResponse(
+                        responseType = "update",
+                        result = ResponseResult.ERROR,
+                        errors = listOf(
+                            Error(
+                                code = "",
+                                field = "",
+                                group = "",
+                                message = "Stock(id=12) not found"
+                            )
+                        ),
+                        body = StockResponseBody(
+                            id = StockId(value = ""),
+                            name = "",
+                            category = StockCategory.NONE,
+                            permissions = setOf(),
+                            lock = ""
+                        )
+                    )
+                )
         }
     }
 
@@ -288,18 +335,6 @@ class StockRoutingTest {
                         )
                     )
                 )
-        }
-    }
-
-    private fun ApplicationTestBuilder.configuredHttpClient(): HttpClient {
-        return createClient {
-            install(ContentNegotiation) {
-                json(Json {
-                    prettyPrint = true
-                    isLenient = true
-                    ignoreUnknownKeys = true
-                })
-            }
         }
     }
 }

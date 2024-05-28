@@ -13,6 +13,7 @@ components:
         - notFound
         - badRequest
         - databaseError
+        - none
     Debug:
       type: object
       properties:

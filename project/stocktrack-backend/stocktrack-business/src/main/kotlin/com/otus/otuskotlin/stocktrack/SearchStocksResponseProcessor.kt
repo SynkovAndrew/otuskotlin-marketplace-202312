@@ -1,25 +1,45 @@
 package com.otus.otuskotlin.stocktrack
 
 import com.otus.otuskotlin.stocktrack.context.SearchStocksResponseContext
+import com.otus.otuskotlin.stocktrack.cor.chainBuilder
+import com.otus.otuskotlin.stocktrack.dsl.command.command
+import com.otus.otuskotlin.stocktrack.dsl.command.commandPipeline
+import com.otus.otuskotlin.stocktrack.dsl.command.startProcessing
+import com.otus.otuskotlin.stocktrack.dsl.stub.stubForDbErrorOnCommand
+import com.otus.otuskotlin.stocktrack.dsl.stub.stubForRequestedStubNotFound
+import com.otus.otuskotlin.stocktrack.dsl.stub.stubForSucceededSearchCommand
+import com.otus.otuskotlin.stocktrack.dsl.stub.stubs
 import com.otus.otuskotlin.stocktrack.model.Command
-import com.otus.otuskotlin.stocktrack.model.State
+import com.otus.otuskotlin.stocktrack.model.Stock
+import com.otus.otuskotlin.stocktrack.model.StockFilter
 
-class SearchStocksResponseProcessor(val coreSettings: CoreSettings) {
+class SearchStocksResponseProcessor(
+    val coreSettings: CoreSettings
+) : ResponseProcessor<StockFilter, List<Stock>, SearchStocksResponseContext> {
 
-    suspend fun execute(context: SearchStocksResponseContext): SearchStocksResponseContext {
+    override suspend fun execute(context: SearchStocksResponseContext): SearchStocksResponseContext {
+        return chainBuilder<SearchStocksResponseContext> {
+            startProcessing()
 
-        return context.copy(
-            state = State.RUNNING,
-            response = when (context.command) {
-                Command.SEARCH -> StubStockRepository.findAll()
-                    .filter { stock ->
-                        context.request.searchString
-                            ?.let { stock.name.contains(it, true) }
-                            ?: true
-                    }
+            commandPipeline(Command.SEARCH) {
+                stubs {
+                    stubForSucceededSearchCommand(coreSettings)
+                    stubForDbErrorOnCommand()
+                    stubForRequestedStubNotFound()
+                }
 
-                else -> throw IllegalArgumentException("Command ${context.command} not supported")
+                command(Command.SEARCH) {
+                    copy(
+                        response = StubStockRepository.findAll()
+                            .filter { stock ->
+                                context.request.searchString
+                                    ?.let { stock.name.contains(it, true) }
+                                    ?: true
+                            }
+                    )
+                }
             }
-        )
+
+        }.execute(context)
     }
 }
