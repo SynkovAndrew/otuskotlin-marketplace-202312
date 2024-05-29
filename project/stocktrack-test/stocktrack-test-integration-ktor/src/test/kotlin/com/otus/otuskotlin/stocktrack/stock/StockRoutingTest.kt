@@ -40,6 +40,8 @@ class StockRoutingTest {
         testApplication {
             application { modules() }
 
+            val stockId = storeStock("Gazprom", StockCategory.SHARE)
+
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/find")
                 contentType(ContentType.Application.Json)
@@ -47,7 +49,7 @@ class StockRoutingTest {
                     FindStockRequest(
                         requestType = "find",
                         debug = Debug(mode = DebugMode.PROD, stub = DebugStub.SUCCESS),
-                        body = FindStockBody(id = StockId(value = "1"))
+                        body = FindStockBody(id = stockId)
                     )
                 )
             }
@@ -62,10 +64,10 @@ class StockRoutingTest {
                         result = ResponseResult.SUCCESS,
                         errors = emptyList(),
                         body = StockResponseBody(
-                            id = StockId(value = "1"),
+                            id = stockId,
                             name = "Gazprom",
                             category = StockCategory.SHARE,
-                            permissions = setOf(StockPermission.READ),
+                            permissions = emptySet(),
                             lock = ""
                         )
                     )
@@ -100,10 +102,10 @@ class StockRoutingTest {
                         result = ResponseResult.ERROR,
                         errors = listOf(
                             Error(
-                                code = "",
+                                code = "stock-not-found",
                                 field = "",
                                 group = "",
-                                message = "Stock(id=11) not found"
+                                message = "Stock(id=11) is not found"
                             )
                         ),
                         body = StockResponseBody(
@@ -165,6 +167,8 @@ class StockRoutingTest {
         testApplication {
             application { modules() }
 
+            val stockId = storeStock("Uzim Co", StockCategory.SHARE)
+
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/update")
                 contentType(ContentType.Application.Json)
@@ -173,7 +177,7 @@ class StockRoutingTest {
                         requestType = "update",
                         debug = Debug(mode = DebugMode.PROD, stub = DebugStub.SUCCESS),
                         body = UpdateStockBody(
-                            id = StockId(value = "2"),
+                            id = stockId,
                             name = "Uzim Co",
                             category = StockCategory.SHARE,
                             lock = "lock-2"
@@ -186,17 +190,16 @@ class StockRoutingTest {
             assertEquals(HttpStatusCode.OK, response.status)
             assertThat(updateStockResponse)
                 .usingRecursiveComparison()
-                .ignoringFields("body.id")
                 .isEqualTo(
                     UpdateStockResponse(
                         responseType = "update",
                         result = ResponseResult.SUCCESS,
                         errors = emptyList(),
                         body = StockResponseBody(
-                            id = StockId("2"),
+                            id = stockId,
                             name = "Uzim Co",
                             category = StockCategory.SHARE,
-                            permissions = setOf(StockPermission.READ),
+                            permissions = emptySet(),
                             lock = ""
                         )
                     )
@@ -236,10 +239,10 @@ class StockRoutingTest {
                         result = ResponseResult.ERROR,
                         errors = listOf(
                             Error(
-                                code = "",
+                                code = "stock-not-found",
                                 field = "",
                                 group = "",
-                                message = "Stock(id=12) not found"
+                                message = "Stock(id=12) is not found"
                             )
                         ),
                         body = StockResponseBody(
@@ -259,6 +262,8 @@ class StockRoutingTest {
         testApplication {
             application { modules() }
 
+            val stockId = storeStock("Rosbank", StockCategory.BOND)
+
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/delete")
                 contentType(ContentType.Application.Json)
@@ -267,7 +272,7 @@ class StockRoutingTest {
                         requestType = "delete",
                         debug = Debug(mode = DebugMode.PROD, stub = DebugStub.SUCCESS),
                         body = DeleteStockBody(
-                            id = StockId(value = "2"),
+                            id = stockId,
                             lock = "lock-2"
                         )
                     )
@@ -284,10 +289,10 @@ class StockRoutingTest {
                         result = ResponseResult.SUCCESS,
                         errors = emptyList(),
                         body = StockResponseBody(
-                            id = StockId("2"),
+                            id = stockId,
                             name = "Rosbank",
                             category = StockCategory.BOND,
-                            permissions = setOf(StockPermission.READ),
+                            permissions = emptySet(),
                             lock = ""
                         )
                     )
@@ -336,5 +341,26 @@ class StockRoutingTest {
                     )
                 )
         }
+    }
+
+    private suspend fun ApplicationTestBuilder.storeStock(name: String, category: StockCategory): StockId {
+        return configuredHttpClient()
+        .post {
+            url("/api/v1/stock/create")
+            contentType(ContentType.Application.Json)
+            setBody(
+                CreateStockRequest(
+                    requestType = "create",
+                    debug = Debug(mode = DebugMode.PROD, stub = DebugStub.SUCCESS),
+                    body = CreateStockBody(
+                        name = name,
+                        category = category
+                    )
+                )
+            )
+        }
+        .body<CreateStockResponse>()
+        .body
+        .id
     }
 }

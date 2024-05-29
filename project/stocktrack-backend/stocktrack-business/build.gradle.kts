@@ -8,6 +8,7 @@ dependencies {
     implementation("com.otus.otuskotlin.stocktrack:stocktrack-log-model")
 
     implementation(project(":stocktrack-core-model"))
+    implementation(project(":stocktrack-repository-core"))
     implementation(project(":stocktrack-core"))
 
     testImplementation(kotlin("test"))

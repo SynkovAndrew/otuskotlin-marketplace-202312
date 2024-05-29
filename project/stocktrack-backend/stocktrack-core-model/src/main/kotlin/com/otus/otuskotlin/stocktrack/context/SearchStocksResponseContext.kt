@@ -34,6 +34,13 @@ data class SearchStocksResponseContext(
         )
     }
 
+    override fun fail(error: Collection<ErrorDescription>): Context<StockFilter, List<Stock>> {
+        return copy(
+            state = State.FAILED,
+            errors = errors + error
+        )
+    }
+
     override fun finish(): Context<StockFilter, List<Stock>> {
         return copy(state = State.FINISHED)
     }

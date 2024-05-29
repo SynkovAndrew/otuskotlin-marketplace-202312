@@ -21,5 +21,7 @@ sealed interface Context<IN, OUT> {
 
     fun fail(error: ErrorDescription): Context<IN, OUT>
 
+    fun fail(error: Collection<ErrorDescription>): Context<IN, OUT>
+
     fun finish(): Context<IN, OUT>
 }

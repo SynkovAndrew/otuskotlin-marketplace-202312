@@ -19,6 +19,11 @@ import com.otus.otuskotlin.stocktrack.dsl.validation.validateStockCategoryProper
 import com.otus.otuskotlin.stocktrack.dsl.validation.validation
 import com.otus.otuskotlin.stocktrack.model.Command
 import com.otus.otuskotlin.stocktrack.model.Stock
+import com.otus.otuskotlin.stocktrack.stock.ErrorStockRepositoryResponse
+import com.otus.otuskotlin.stocktrack.stock.OkStockRepositoryResponse
+import com.otus.otuskotlin.stocktrack.stock.OkWithErrorsStockRepositoryResponse
+import com.otus.otuskotlin.stocktrack.stock.StockIdRepositoryRequest
+import com.otus.otuskotlin.stocktrack.stock.StockRepositoryRequest
 
 class SingleStockResponseProcessor(
     val coreSettings: CoreSettings
@@ -41,7 +46,16 @@ class SingleStockResponseProcessor(
                 }
 
                 command(Command.CREATE) {
-                    copy(response = request)
+                    StockRepositoryRequest(stock = request)
+                        .let { request -> coreSettings.prodStockRepository.create(request) }
+                        .let { response ->
+                            when (response) {
+                                is OkStockRepositoryResponse -> copy(response = response.data).finish()
+                                is ErrorStockRepositoryResponse -> fail(response.errors)
+                                is OkWithErrorsStockRepositoryResponse -> copy(response = response.data)
+                                    .fail(response.errors)
+                            } as SingleStockResponseContext
+                        }
                 }
             }
 
@@ -59,13 +73,16 @@ class SingleStockResponseProcessor(
                 }
 
                 command(Command.UPDATE) {
-                    copy(
-                        response = StubStockRepository.findById(context.request.id)
-                            .copy(
-                                name = context.request.name,
-                                category = context.request.category
-                            )
-                    )
+                    StockRepositoryRequest(stock = request)
+                        .let { request -> coreSettings.prodStockRepository.update(request) }
+                        .let { response ->
+                            when (response) {
+                                is OkStockRepositoryResponse -> copy(response = response.data).finish()
+                                is ErrorStockRepositoryResponse -> fail(response.errors)
+                                is OkWithErrorsStockRepositoryResponse -> copy(response = response.data)
+                                    .fail(response.errors)
+                            } as SingleStockResponseContext
+                        }
                 }
             }
 
@@ -81,7 +98,16 @@ class SingleStockResponseProcessor(
                 }
 
                 command(Command.FIND) {
-                    copy(response = StubStockRepository.findById(context.request.id))
+                    StockIdRepositoryRequest(stockId = request.id)
+                        .let { request -> coreSettings.prodStockRepository.findById(request) }
+                        .let { response ->
+                            when (response) {
+                                is OkStockRepositoryResponse -> copy(response = response.data).finish()
+                                is ErrorStockRepositoryResponse -> fail(response.errors)
+                                is OkWithErrorsStockRepositoryResponse -> copy(response = response.data)
+                                    .fail(response.errors)
+                            } as SingleStockResponseContext
+                        }
                 }
             }
 
@@ -96,7 +122,16 @@ class SingleStockResponseProcessor(
                 }
 
                 command(Command.DELETE) {
-                    copy(response = StubStockRepository.findById(context.request.id))
+                    StockIdRepositoryRequest(stockId = request.id)
+                        .let { request -> coreSettings.prodStockRepository.delete(request) }
+                        .let { response ->
+                            when (response) {
+                                is OkStockRepositoryResponse -> copy(response = response.data).finish()
+                                is ErrorStockRepositoryResponse -> fail(response.errors)
+                                is OkWithErrorsStockRepositoryResponse -> copy(response = response.data)
+                                    .fail(response.errors)
+                            } as SingleStockResponseContext
+                        }
                 }
             }
         }.execute(context)

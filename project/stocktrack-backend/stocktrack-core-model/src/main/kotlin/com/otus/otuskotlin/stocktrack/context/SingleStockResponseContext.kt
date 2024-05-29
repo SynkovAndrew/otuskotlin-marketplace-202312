@@ -8,6 +8,7 @@ import com.otus.otuskotlin.stocktrack.model.State
 import com.otus.otuskotlin.stocktrack.model.Stock
 import java.time.Instant
 import java.util.*
+import kotlin.collections.Collection
 
 data class SingleStockResponseContext(
     override val command: Command,
@@ -27,6 +28,13 @@ data class SingleStockResponseContext(
     }
 
     override fun fail(error: ErrorDescription): Context<Stock, Stock> {
+        return copy(
+            state = State.FAILED,
+            errors = errors + error
+        )
+    }
+
+    override fun fail(error: Collection<ErrorDescription>): Context<Stock, Stock> {
         return copy(
             state = State.FAILED,
             errors = errors + error
