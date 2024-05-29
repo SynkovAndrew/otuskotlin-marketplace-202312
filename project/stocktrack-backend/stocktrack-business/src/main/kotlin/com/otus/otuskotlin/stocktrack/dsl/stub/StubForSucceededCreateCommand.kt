@@ -16,7 +16,6 @@ fun ChainDsl<SingleStockResponseContext>.stubForSucceededCreateCommand(
     coreSettings: CoreSettings
 ) {
     processor {
-        val logger = coreSettings.loggerProvider.logger("stubForSucceededCreateCommand")
         this.name = "stubForSucceededCreateCommand"
 
         invokeOn {
@@ -27,12 +26,10 @@ fun ChainDsl<SingleStockResponseContext>.stubForSucceededCreateCommand(
         }
 
         process {
-            logger.callLogged(it.requestId.asString(), LogLevel.DEBUG) {
-                StockRepositoryRequest(stock = it.request)
-                    .let { request -> coreSettings.stubStockRepository.create(request) }
-                    .let { response -> it.copy(response = (response as OkStockRepositoryResponse).data).finish() }
-                        as SingleStockResponseContext
-            }
+            StockRepositoryRequest(stock = it.request)
+                .let { request -> coreSettings.stubStockRepository.create(request) }
+                .let { response -> it.copy(response = (response as OkStockRepositoryResponse).data).finish() }
+                    as SingleStockResponseContext
         }
     }
 }
