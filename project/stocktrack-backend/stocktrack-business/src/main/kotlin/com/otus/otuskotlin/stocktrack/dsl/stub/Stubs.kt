@@ -5,7 +5,7 @@ import com.otus.otuskotlin.stocktrack.cor.ChainDsl
 import com.otus.otuskotlin.stocktrack.model.Debug
 import com.otus.otuskotlin.stocktrack.model.State
 
-fun <T : Context<*, *>> ChainDsl<T>.stubs(
+fun <T : Context<*, *, T>> ChainDsl<T>.stubs(
     block: ChainDsl<T>.() -> Unit
 ) {
     chain {

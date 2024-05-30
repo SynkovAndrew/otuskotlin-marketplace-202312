@@ -7,7 +7,7 @@ import com.otus.otuskotlin.stocktrack.model.Debug
 import com.otus.otuskotlin.stocktrack.model.ErrorDescription
 import com.otus.otuskotlin.stocktrack.model.State
 
-fun <T : Context<*, *>> ChainDsl<T>.command(
+fun <T : Context<*, *, T>> ChainDsl<T>.command(
     command: Command,
     process: suspend T.() -> T
 ) {

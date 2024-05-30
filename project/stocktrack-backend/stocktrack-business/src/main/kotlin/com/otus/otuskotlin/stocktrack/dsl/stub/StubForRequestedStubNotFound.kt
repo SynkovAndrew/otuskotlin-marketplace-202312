@@ -6,7 +6,7 @@ import com.otus.otuskotlin.stocktrack.model.Debug
 import com.otus.otuskotlin.stocktrack.model.ErrorDescription
 import com.otus.otuskotlin.stocktrack.model.State
 
-fun <T : Context<*, *>> ChainDsl<T>.stubForRequestedStubNotFound() {
+fun <T : Context<*, *, T>> ChainDsl<T>.stubForRequestedStubNotFound() {
     processor {
         this.name = "stubForRequestedCaseNotFound"
 
@@ -22,7 +22,7 @@ fun <T : Context<*, *>> ChainDsl<T>.stubForRequestedStubNotFound() {
                     field = "no",
                     message = "Failed to find stub"
                 )
-            ) as T
+            )
         }
     }
 }

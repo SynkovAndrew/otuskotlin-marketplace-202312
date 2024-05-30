@@ -8,12 +8,12 @@ import com.otus.otuskotlin.stocktrack.model.ErrorDescription
 class CommandBus(private val settings: ApplicationSettings) {
     private val logger: LoggerWrapper = settings.coreSettings.loggerProvider.logger(this::class)
 
-    suspend fun processContext(context: Context<*, *>): Context<*, *> {
+    suspend fun <T : Context<*, *, T>> processContext(context: T): T {
         return try {
             context
                 .also { log("Processing command ${it.command} ...", it) }
                 .let { settings.processors[it::class] }
-                ?.let { it as ResponseProcessor<*, *, Context<*, *>> }
+                ?.let { it as ResponseProcessor<T> }
                 ?.execute(context)
                 ?.also { log("Command ${it.command} processed successfully", it) }
                 ?: context.fail(ErrorDescription(message = "Response processor not found"))
@@ -29,16 +29,10 @@ class CommandBus(private val settings: ApplicationSettings) {
         }
     }
 
-    private fun log(message: String, context: Context<*, *>) {
+    private fun log(message: String, context: Context<*, *, *>) {
         when (context) {
             is SearchStocksResponseContext -> logger.info(message, context.toLog(context.command.name))
             is SingleStockResponseContext -> logger.info(message, context.toLog(context.command.name))
         }
-    }
-
-    suspend fun processSingleStockResponseContext(
-        context: SingleStockResponseContext
-    ): SingleStockResponseContext {
-        return processContext(context) as SingleStockResponseContext
     }
 }

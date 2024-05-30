@@ -18,7 +18,6 @@ import com.otus.otuskotlin.stocktrack.dsl.validation.validateNameProperty
 import com.otus.otuskotlin.stocktrack.dsl.validation.validateStockCategoryProperty
 import com.otus.otuskotlin.stocktrack.dsl.validation.validation
 import com.otus.otuskotlin.stocktrack.model.Command
-import com.otus.otuskotlin.stocktrack.model.Stock
 import com.otus.otuskotlin.stocktrack.stock.ErrorStockRepositoryResponse
 import com.otus.otuskotlin.stocktrack.stock.OkStockRepositoryResponse
 import com.otus.otuskotlin.stocktrack.stock.OkWithErrorsStockRepositoryResponse
@@ -27,7 +26,7 @@ import com.otus.otuskotlin.stocktrack.stock.StockRepositoryRequest
 
 class SingleStockResponseProcessor(
     val coreSettings: CoreSettings
-) : ResponseProcessor<Stock, Stock, SingleStockResponseContext> {
+) : ResponseProcessor<SingleStockResponseContext> {
 
     override suspend fun execute(context: SingleStockResponseContext): SingleStockResponseContext {
         return chainBuilder<SingleStockResponseContext> {
@@ -54,7 +53,7 @@ class SingleStockResponseProcessor(
                                 is ErrorStockRepositoryResponse -> fail(response.errors)
                                 is OkWithErrorsStockRepositoryResponse -> copy(response = response.data)
                                     .fail(response.errors)
-                            } as SingleStockResponseContext
+                            }
                         }
                 }
             }
@@ -81,7 +80,7 @@ class SingleStockResponseProcessor(
                                 is ErrorStockRepositoryResponse -> fail(response.errors)
                                 is OkWithErrorsStockRepositoryResponse -> copy(response = response.data)
                                     .fail(response.errors)
-                            } as SingleStockResponseContext
+                            }
                         }
                 }
             }
@@ -106,7 +105,7 @@ class SingleStockResponseProcessor(
                                 is ErrorStockRepositoryResponse -> fail(response.errors)
                                 is OkWithErrorsStockRepositoryResponse -> copy(response = response.data)
                                     .fail(response.errors)
-                            } as SingleStockResponseContext
+                            }
                         }
                 }
             }
@@ -130,7 +129,7 @@ class SingleStockResponseProcessor(
                                 is ErrorStockRepositoryResponse -> fail(response.errors)
                                 is OkWithErrorsStockRepositoryResponse -> copy(response = response.data)
                                     .fail(response.errors)
-                            } as SingleStockResponseContext
+                            }
                         }
                 }
             }

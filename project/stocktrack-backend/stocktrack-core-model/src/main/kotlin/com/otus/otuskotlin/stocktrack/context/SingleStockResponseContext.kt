@@ -19,29 +19,29 @@ data class SingleStockResponseContext(
     override val debug: Debug = Debug.NONE,
     override val requestId: RequestId = RequestId(value = UUID.randomUUID().toString()),
     override val startedAt: Instant = Instant.MIN
-) : Context<Stock, Stock> {
-    override fun start(): Context<Stock, Stock> {
+) : Context<Stock, Stock, SingleStockResponseContext> {
+    override fun start(): SingleStockResponseContext {
         return copy(
             startedAt = Instant.now(),
             state = State.RUNNING
         )
     }
 
-    override fun fail(error: ErrorDescription): Context<Stock, Stock> {
+    override fun fail(error: ErrorDescription): SingleStockResponseContext {
         return copy(
             state = State.FAILED,
             errors = errors + error
         )
     }
 
-    override fun fail(error: Collection<ErrorDescription>): Context<Stock, Stock> {
+    override fun fail(error: Collection<ErrorDescription>): SingleStockResponseContext {
         return copy(
             state = State.FAILED,
             errors = errors + error
         )
     }
 
-    override fun finish(): Context<Stock, Stock> {
+    override fun finish(): SingleStockResponseContext {
         return copy(state = State.FINISHED)
     }
 }

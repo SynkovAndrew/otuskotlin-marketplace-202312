@@ -10,12 +10,10 @@ import com.otus.otuskotlin.stocktrack.dsl.stub.stubForRequestedStubNotFound
 import com.otus.otuskotlin.stocktrack.dsl.stub.stubForSucceededSearchCommand
 import com.otus.otuskotlin.stocktrack.dsl.stub.stubs
 import com.otus.otuskotlin.stocktrack.model.Command
-import com.otus.otuskotlin.stocktrack.model.Stock
-import com.otus.otuskotlin.stocktrack.model.StockFilter
 
 class SearchStocksResponseProcessor(
     val coreSettings: CoreSettings
-) : ResponseProcessor<StockFilter, List<Stock>, SearchStocksResponseContext> {
+) : ResponseProcessor<SearchStocksResponseContext> {
 
     override suspend fun execute(context: SearchStocksResponseContext): SearchStocksResponseContext {
         return chainBuilder<SearchStocksResponseContext> {

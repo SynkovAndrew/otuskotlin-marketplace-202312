@@ -29,7 +29,6 @@ fun ChainDsl<SingleStockResponseContext>.stubForSucceededCreateCommand(
             StockRepositoryRequest(stock = it.request)
                 .let { request -> coreSettings.stubStockRepository.create(request) }
                 .let { response -> it.copy(response = (response as OkStockRepositoryResponse).data).finish() }
-                    as SingleStockResponseContext
         }
     }
 }

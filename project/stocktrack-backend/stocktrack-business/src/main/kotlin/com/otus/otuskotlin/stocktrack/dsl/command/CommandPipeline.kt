@@ -5,7 +5,7 @@ import com.otus.otuskotlin.stocktrack.cor.ChainDsl
 import com.otus.otuskotlin.stocktrack.model.Command
 import com.otus.otuskotlin.stocktrack.model.State
 
-fun <T : Context<*, *>> ChainDsl<T>.commandPipeline(
+fun <T : Context<*, *, T>> ChainDsl<T>.commandPipeline(
     command: Command,
     block: ChainDsl<T>.() -> Unit
 ) {

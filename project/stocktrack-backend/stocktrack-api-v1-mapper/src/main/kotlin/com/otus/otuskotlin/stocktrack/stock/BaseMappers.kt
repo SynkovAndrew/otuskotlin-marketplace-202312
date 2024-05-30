@@ -40,7 +40,7 @@ fun ErrorDescription.toTransportModel(): com.otus.otuskotlin.stocktrack.api.v1.m
     )
 }
 
-fun Context<*, *>.toTransportModel() : Response {
+fun <T : Context<*, *, T>> Context<*, *, T>.toTransportModel() : Response {
     return when(this) {
         is SearchStocksResponseContext -> this.toTransportModel()
         is SingleStockResponseContext -> this.toTransportModel()
