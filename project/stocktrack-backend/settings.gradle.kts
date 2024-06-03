@@ -15,6 +15,7 @@ include(
     "stocktrack-repository-core",
     "stocktrack-repository-core-test",
     "stocktrack-repository-in-memory",
+    "stocktrack-repository-postgresql",
     "stocktrack-repository-stub",
 )
 

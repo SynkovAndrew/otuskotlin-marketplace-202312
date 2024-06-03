@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  psql:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_USER: "user"
+      POSTGRES_DB: "stocktrack-db"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  liquibase:
+    image: liquibase/liquibase
+    volumes:
+      - ./volumes/liquibase:/liquibase/changelog
+    depends_on:
+      psql:
+        condition: service_healthy
+    command: ["--defaults-file=/liquibase/changelog/liquibase.properties", "--search-path=/liquibase/changelog", "--url=jdbc:postgresql://psql:5432/stocktrack-db", "update"]

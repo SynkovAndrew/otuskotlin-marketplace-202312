@@ -19,7 +19,6 @@ import com.otus.otuskotlin.stocktrack.api.v1.models.SearchStocksRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.SearchStocksResponse
 import com.otus.otuskotlin.stocktrack.api.v1.models.StockCategory
 import com.otus.otuskotlin.stocktrack.api.v1.models.StockId
-import com.otus.otuskotlin.stocktrack.api.v1.models.StockPermission
 import com.otus.otuskotlin.stocktrack.api.v1.models.StockResponseBody
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockBody
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockRequest
@@ -30,6 +29,7 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import org.assertj.core.api.Assertions.assertThat
+import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -40,7 +40,7 @@ class StockRoutingTest {
         testApplication {
             application { modules() }
 
-            val stockId = storeStock("Gazprom", StockCategory.SHARE)
+            val stock = storeStock("Gazprom", StockCategory.SHARE)
 
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/find")
@@ -49,7 +49,7 @@ class StockRoutingTest {
                     FindStockRequest(
                         requestType = "find",
                         debug = Debug(mode = DebugMode.PROD, stub = DebugStub.SUCCESS),
-                        body = FindStockBody(id = stockId)
+                        body = FindStockBody(id = stock.id)
                     )
                 )
             }
@@ -64,11 +64,11 @@ class StockRoutingTest {
                         result = ResponseResult.SUCCESS,
                         errors = emptyList(),
                         body = StockResponseBody(
-                            id = stockId,
+                            id = stock.id,
                             name = "Gazprom",
                             category = StockCategory.SHARE,
                             permissions = emptySet(),
-                            lock = ""
+                            lock = stock.lock
                         )
                     )
                 )
@@ -144,7 +144,7 @@ class StockRoutingTest {
             assertEquals(HttpStatusCode.OK, response.status)
             assertThat(createStockResponse)
                 .usingRecursiveComparison()
-                .ignoringFields("body.id")
+                .ignoringFields("body.id", "body.lock")
                 .isEqualTo(
                     CreateStockResponse(
                         responseType = "create",
@@ -167,7 +167,7 @@ class StockRoutingTest {
         testApplication {
             application { modules() }
 
-            val stockId = storeStock("Uzim Co", StockCategory.SHARE)
+            val stock = storeStock("Uzim Co", StockCategory.SHARE)
 
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/update")
@@ -177,10 +177,10 @@ class StockRoutingTest {
                         requestType = "update",
                         debug = Debug(mode = DebugMode.PROD, stub = DebugStub.SUCCESS),
                         body = UpdateStockBody(
-                            id = stockId,
+                            id = stock.id,
                             name = "Uzim Co",
                             category = StockCategory.SHARE,
-                            lock = "lock-2"
+                            lock = stock.lock!!
                         )
                     )
                 )
@@ -190,13 +190,14 @@ class StockRoutingTest {
             assertEquals(HttpStatusCode.OK, response.status)
             assertThat(updateStockResponse)
                 .usingRecursiveComparison()
+                .ignoringFields("body.lock")
                 .isEqualTo(
                     UpdateStockResponse(
                         responseType = "update",
                         result = ResponseResult.SUCCESS,
                         errors = emptyList(),
                         body = StockResponseBody(
-                            id = stockId,
+                            id = stock.id,
                             name = "Uzim Co",
                             category = StockCategory.SHARE,
                             permissions = emptySet(),
@@ -262,7 +263,7 @@ class StockRoutingTest {
         testApplication {
             application { modules() }
 
-            val stockId = storeStock("Rosbank", StockCategory.BOND)
+            val stock = storeStock("Rosbank", StockCategory.BOND)
 
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/delete")
@@ -272,8 +273,8 @@ class StockRoutingTest {
                         requestType = "delete",
                         debug = Debug(mode = DebugMode.PROD, stub = DebugStub.SUCCESS),
                         body = DeleteStockBody(
-                            id = stockId,
-                            lock = "lock-2"
+                            id = stock.id,
+                            lock = stock.lock!!
                         )
                     )
                 )
@@ -289,11 +290,11 @@ class StockRoutingTest {
                         result = ResponseResult.SUCCESS,
                         errors = emptyList(),
                         body = StockResponseBody(
-                            id = stockId,
+                            id = stock.id,
                             name = "Rosbank",
                             category = StockCategory.BOND,
                             permissions = emptySet(),
-                            lock = ""
+                            lock = stock.lock
                         )
                     )
                 )
@@ -305,6 +306,8 @@ class StockRoutingTest {
         testApplication {
             application { modules() }
 
+            val stock = storeStock(UUID.randomUUID().toString(), StockCategory.BOND)
+
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/search")
                 contentType(ContentType.Application.Json)
@@ -313,7 +316,7 @@ class StockRoutingTest {
                         requestType = "search",
                         debug = Debug(mode = DebugMode.PROD, stub = DebugStub.SUCCESS),
                         filter = SearchStocksFilter(
-                            searchString = "Ros"
+                            searchString = stock.name
                         )
                     )
                 )
@@ -331,11 +334,11 @@ class StockRoutingTest {
                         errors = emptyList(),
                         body = listOf(
                             StockResponseBody(
-                                id = StockId("2"),
-                                name = "Rosbank",
-                                category = StockCategory.BOND,
-                                permissions = setOf(StockPermission.READ),
-                                lock = ""
+                                id = stock.id,
+                                name = stock.name,
+                                category = stock.category,
+                                permissions = emptySet(),
+                                lock = stock.lock
                             )
                         )
                     )
@@ -343,24 +346,23 @@ class StockRoutingTest {
         }
     }
 
-    private suspend fun ApplicationTestBuilder.storeStock(name: String, category: StockCategory): StockId {
+    private suspend fun ApplicationTestBuilder.storeStock(name: String, category: StockCategory): StockResponseBody {
         return configuredHttpClient()
-        .post {
-            url("/api/v1/stock/create")
-            contentType(ContentType.Application.Json)
-            setBody(
-                CreateStockRequest(
-                    requestType = "create",
-                    debug = Debug(mode = DebugMode.PROD, stub = DebugStub.SUCCESS),
-                    body = CreateStockBody(
-                        name = name,
-                        category = category
+            .post {
+                url("/api/v1/stock/create")
+                contentType(ContentType.Application.Json)
+                setBody(
+                    CreateStockRequest(
+                        requestType = "create",
+                        debug = Debug(mode = DebugMode.PROD, stub = DebugStub.SUCCESS),
+                        body = CreateStockBody(
+                            name = name,
+                            category = category
+                        )
                     )
                 )
-            )
-        }
-        .body<CreateStockResponse>()
-        .body
-        .id
+            }
+            .body<CreateStockResponse>()
+            .body
     }
 }

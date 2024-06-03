@@ -15,6 +15,7 @@ dependencies {
     implementation(project(":stocktrack-repository-core"))
     implementation(project(":stocktrack-repository-in-memory"))
     implementation(project(":stocktrack-repository-stub"))
+    implementation(project(":stocktrack-repository-postgresql"))
 
     implementation("com.otus.otuskotlin.stocktrack:stocktrack-log-core")
     implementation("com.otus.otuskotlin.stocktrack:stocktrack-log-logback")

@@ -39,4 +39,40 @@ abstract class BaseStockRepository : EnrichableStockRepository {
             )
         )
     }
+
+    protected fun emptyRequestLockErrorResponse(stockId: Stock.Id): ErrorStockRepositoryResponse {
+        return ErrorStockRepositoryResponse(
+            errorDescription = ErrorDescription(
+                code = "empty-request-lock",
+                message = "Failed to perform write operation on Stock(id=${stockId.value}) with empty lock in request"
+            )
+        )
+    }
+
+    protected fun emptyStockLockErrorResponse(stockId: Stock.Id): ErrorStockRepositoryResponse {
+        return ErrorStockRepositoryResponse(
+            errorDescription = ErrorDescription(
+                code = "empty-stock-lock",
+                message = "Failed to perform write operation on Stock(id=${stockId.value}) with empty lock"
+            )
+        )
+    }
+
+    protected fun concurrencyErrorResponse(stockId: Stock.Id): ErrorStockRepositoryResponse {
+        return ErrorStockRepositoryResponse(
+            errorDescription = ErrorDescription(
+                code = "concurrency-error",
+                message = "Failed to perform write operation on Stock(id=${stockId.value}) with lock updated already"
+            )
+        )
+    }
+
+    protected fun notSingleResultErrorResponse(stockId: Stock.Id): ErrorStockRepositoryResponse {
+        return ErrorStockRepositoryResponse(
+            errorDescription = ErrorDescription(
+                code = "database-result-error",
+                message = "Failed to perform operation on Stock(id=${stockId.value}) cause returned result not single"
+            )
+        )
+    }
 }

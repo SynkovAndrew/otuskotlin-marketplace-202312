@@ -1,6 +1,7 @@
 package com.otus.otuskotlin.stocktrack
 
 import com.otus.otuskotlin.stocktrack.model.Stock
+import com.otus.otuskotlin.stocktrack.model.StockLock
 import com.otus.otuskotlin.stocktrack.stock.BaseStockRepository
 import com.otus.otuskotlin.stocktrack.stock.OkStockRepositoryResponse
 import com.otus.otuskotlin.stocktrack.stock.OkStocksRepositoryResponse
@@ -27,7 +28,7 @@ class CacheStockRepository(
 
     override suspend fun create(request: StockRepositoryRequest): StockRepositoryResponse {
         return tryReturningOne {
-            request.stock.copy(id = Stock.Id(value = randomUuid()))
+            request.stock.copy(id = Stock.Id(value = randomUuid()), lock = StockLock(value = randomUuid()))
                 .also {
                     mutex.withLock(WRITE_ACCESS) {
                         cache.put(it.id.value, StockEntityMapper.toEntity(it))
@@ -52,51 +53,36 @@ class CacheStockRepository(
 
     override suspend fun update(request: StockRepositoryRequest): StockRepositoryResponse {
         return tryReturningOne {
-            request
-                .let {
-                    mutex.withLock(WRITE_ACCESS) {
-                        cache.get(it.stock.id.value)
-                            ?.let {
-                                StockEntityMapper.fromEntity(it)
-                                    .copy(
-                                        name = request.stock.name,
-                                        category = request.stock.category
-                                    )
-                            }
-                            ?.also { cache.put(it.id.value, StockEntityMapper.toEntity(it)) }
-                    }
-                }
-                ?.let { OkStockRepositoryResponse(data = it) }
-                ?: stockNotFoundErrorResponse(request.stock.id)
+            mutex.withLock(WRITE_ACCESS) {
+                cache.get(request.stock.id.value)
+                    ?.let { stockEntity -> tryUpdateWithLock(request, stockEntity) }
+                    ?: stockNotFoundErrorResponse(request.stock.id)
+            }
         }
     }
 
     override suspend fun delete(request: StockIdRepositoryRequest): StockRepositoryResponse {
         return tryReturningOne {
-            request
-                .let {
-                    mutex.withLock(WRITE_ACCESS) {
-                        cache.get(it.stockId.value)
-                            ?.also { cache.invalidate(it.id) }
-                    }
-                }
-                ?.let { OkStockRepositoryResponse(data = StockEntityMapper.fromEntity(it)) }
-                ?: stockNotFoundErrorResponse(request.stockId)
+            mutex.withLock(WRITE_ACCESS) {
+                cache.get(request.stockId.value)
+                    ?.let { tryDeleteWithLock(request, it) }
+                    ?: stockNotFoundErrorResponse(request.stockId)
+            }
         }
     }
 
     override suspend fun search(request: StockFilterRepositoryRequest): StocksRepositoryResponse {
         return tryReturningMultiple {
             request
-                .let {
+                .let { req ->
                     cache.asMap().values
                         .filter { stock ->
-                            it.category
+                            req.category
                                 .takeIf { category -> category != Stock.Category.NONE }
                                 ?.let { category -> category.name == stock.category }
                                 ?: true
                         }
-                        .filter { stock -> stock.name.contains(it.name) }
+                        .filter { stock -> req.name?.let { stock.name.contains(it) } ?: true }
                 }
                 .map { StockEntityMapper.fromEntity(it) }
                 .let { OkStocksRepositoryResponse(data = it) }
@@ -104,7 +90,44 @@ class CacheStockRepository(
     }
 
     override fun enrich(stocks: Collection<Stock>): Collection<Stock> {
-       return stocks.map { stock -> stock.also { cache.put(it.id.value, StockEntityMapper.toEntity(it)) } }
+        return stocks.map { stock -> stock.also { cache.put(it.id.value, StockEntityMapper.toEntity(it)) } }
+    }
+
+    private fun tryUpdateWithLock(request: StockRepositoryRequest, stockEntity: StockEntity): StockRepositoryResponse {
+        return when {
+            request.stock.lock.isNone() ->
+                emptyRequestLockErrorResponse(request.stock.id)
+            stockEntity.lock.isNullOrBlank() ->
+                emptyStockLockErrorResponse(request.stock.id)
+            request.stock.lock.value != stockEntity.lock ->
+                concurrencyErrorResponse(request.stock.id)
+            else -> updateStock(stockEntity, request.stock)
+        }
+    }
+
+    private fun tryDeleteWithLock(request: StockIdRepositoryRequest, stockEntity: StockEntity): StockRepositoryResponse {
+        return when {
+            request.lock.isNone() ->
+                emptyRequestLockErrorResponse(request.stockId)
+            stockEntity.lock.isNullOrBlank() ->
+                emptyStockLockErrorResponse(request.stockId)
+            request.lock.value != stockEntity.lock ->
+                concurrencyErrorResponse(request.stockId)
+            else -> stockEntity
+                .also { cache.invalidate(it.id) }
+                .let { OkStockRepositoryResponse(data = StockEntityMapper.fromEntity(it)) }
+        }
+    }
+
+    private fun updateStock(entity: StockEntity, updateBody: Stock): StockRepositoryResponse {
+        return StockEntityMapper.fromEntity(entity)
+            .copy(
+                lock = StockLock(value = randomUuid()),
+                name = updateBody.name,
+                category = updateBody.category
+            )
+            .also { cache.put(updateBody.id.value, StockEntityMapper.toEntity(it)) }
+            .let { OkStockRepositoryResponse(data = it) }
     }
 
     companion object {

@@ -2,9 +2,12 @@ package com.otus.otuskotlin.stocktrack
 
 import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.cor.chainBuilder
-import com.otus.otuskotlin.stocktrack.dsl.command.command
 import com.otus.otuskotlin.stocktrack.dsl.command.commandPipeline
+import com.otus.otuskotlin.stocktrack.dsl.command.createCommand
+import com.otus.otuskotlin.stocktrack.dsl.command.deleteCommand
+import com.otus.otuskotlin.stocktrack.dsl.command.findCommand
 import com.otus.otuskotlin.stocktrack.dsl.command.startProcessing
+import com.otus.otuskotlin.stocktrack.dsl.command.updateCommand
 import com.otus.otuskotlin.stocktrack.dsl.stub.stubForDbErrorOnCommand
 import com.otus.otuskotlin.stocktrack.dsl.stub.stubForFailedCauseBadRequest
 import com.otus.otuskotlin.stocktrack.dsl.stub.stubForRequestedStubNotFound
@@ -18,18 +21,13 @@ import com.otus.otuskotlin.stocktrack.dsl.validation.validateNameProperty
 import com.otus.otuskotlin.stocktrack.dsl.validation.validateStockCategoryProperty
 import com.otus.otuskotlin.stocktrack.dsl.validation.validation
 import com.otus.otuskotlin.stocktrack.model.Command
-import com.otus.otuskotlin.stocktrack.stock.ErrorStockRepositoryResponse
-import com.otus.otuskotlin.stocktrack.stock.OkStockRepositoryResponse
-import com.otus.otuskotlin.stocktrack.stock.OkWithErrorsStockRepositoryResponse
-import com.otus.otuskotlin.stocktrack.stock.StockIdRepositoryRequest
-import com.otus.otuskotlin.stocktrack.stock.StockRepositoryRequest
 
 class SingleStockResponseProcessor(
     val coreSettings: CoreSettings
 ) : ResponseProcessor<SingleStockResponseContext> {
 
     override suspend fun execute(context: SingleStockResponseContext): SingleStockResponseContext {
-        return chainBuilder<SingleStockResponseContext> {
+        return chainBuilder {
             startProcessing()
 
             commandPipeline(Command.CREATE) {
@@ -44,18 +42,7 @@ class SingleStockResponseProcessor(
                     validateStockCategoryProperty()
                 }
 
-                command(Command.CREATE) {
-                    StockRepositoryRequest(stock = request)
-                        .let { request -> coreSettings.prodStockRepository.create(request) }
-                        .let { response ->
-                            when (response) {
-                                is OkStockRepositoryResponse -> copy(response = response.data).finish()
-                                is ErrorStockRepositoryResponse -> fail(response.errors)
-                                is OkWithErrorsStockRepositoryResponse -> copy(response = response.data)
-                                    .fail(response.errors)
-                            }
-                        }
-                }
+                createCommand(coreSettings)
             }
 
             commandPipeline(Command.UPDATE) {
@@ -71,18 +58,7 @@ class SingleStockResponseProcessor(
                     validateStockCategoryProperty()
                 }
 
-                command(Command.UPDATE) {
-                    StockRepositoryRequest(stock = request)
-                        .let { request -> coreSettings.prodStockRepository.update(request) }
-                        .let { response ->
-                            when (response) {
-                                is OkStockRepositoryResponse -> copy(response = response.data).finish()
-                                is ErrorStockRepositoryResponse -> fail(response.errors)
-                                is OkWithErrorsStockRepositoryResponse -> copy(response = response.data)
-                                    .fail(response.errors)
-                            }
-                        }
-                }
+                updateCommand(coreSettings)
             }
 
             commandPipeline(Command.FIND) {
@@ -96,18 +72,7 @@ class SingleStockResponseProcessor(
                     validateIdProperty()
                 }
 
-                command(Command.FIND) {
-                    StockIdRepositoryRequest(stockId = request.id)
-                        .let { request -> coreSettings.prodStockRepository.findById(request) }
-                        .let { response ->
-                            when (response) {
-                                is OkStockRepositoryResponse -> copy(response = response.data).finish()
-                                is ErrorStockRepositoryResponse -> fail(response.errors)
-                                is OkWithErrorsStockRepositoryResponse -> copy(response = response.data)
-                                    .fail(response.errors)
-                            }
-                        }
-                }
+                findCommand(coreSettings)
             }
 
             commandPipeline(Command.DELETE) {
@@ -120,18 +85,7 @@ class SingleStockResponseProcessor(
                     validateIdProperty()
                 }
 
-                command(Command.DELETE) {
-                    StockIdRepositoryRequest(stockId = request.id)
-                        .let { request -> coreSettings.prodStockRepository.delete(request) }
-                        .let { response ->
-                            when (response) {
-                                is OkStockRepositoryResponse -> copy(response = response.data).finish()
-                                is ErrorStockRepositoryResponse -> fail(response.errors)
-                                is OkWithErrorsStockRepositoryResponse -> copy(response = response.data)
-                                    .fail(response.errors)
-                            }
-                        }
-                }
+                deleteCommand(coreSettings)
             }
         }.execute(context)
     }

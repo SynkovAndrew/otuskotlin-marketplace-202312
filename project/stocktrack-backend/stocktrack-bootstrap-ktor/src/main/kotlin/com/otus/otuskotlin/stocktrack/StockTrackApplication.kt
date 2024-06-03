@@ -23,7 +23,7 @@ fun Application.modules() {
     val cacheStockRepository = CacheStockRepository()
     val coreSettings = CoreSettings(
         loggerProvider = loggerProvider,
-        prodStockRepository = cacheStockRepository,
+        prodStockRepository = PostgreSqlStockRepository(properties = PostgreSqlProperties()),
         testStockRepository = cacheStockRepository,
         stubStockRepository = StubStockRepository()
     )

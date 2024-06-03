@@ -10,24 +10,25 @@ import com.otus.otuskotlin.stocktrack.model.State
 import com.otus.otuskotlin.stocktrack.stock.ErrorStockRepositoryResponse
 import com.otus.otuskotlin.stocktrack.stock.OkStockRepositoryResponse
 import com.otus.otuskotlin.stocktrack.stock.OkWithErrorsStockRepositoryResponse
+import com.otus.otuskotlin.stocktrack.stock.StockIdRepositoryRequest
 import com.otus.otuskotlin.stocktrack.stock.StockRepositoryRequest
 import com.otus.otuskotlin.stocktrack.stock.StockRepositoryResponse
 
-fun ChainDsl<SingleStockResponseContext>.createCommand(
+fun ChainDsl<SingleStockResponseContext>.findCommand(
     coreSettings: CoreSettings
 ) {
     processor {
-        this.name = Command.CREATE.name
+        this.name = Command.FIND.name
 
         invokeOn {
             it.state == State.RUNNING &&
                     it.debug.mode == Debug.Mode.PROD &&
-                    it.command == Command.CREATE
+                    it.command == Command.FIND
         }
 
         process {
-            StockRepositoryRequest(stock = it.request)
-                .let { request -> coreSettings.prodStockRepository.create(request) }
+            StockIdRepositoryRequest(stockId = it.request.id)
+                .let { request -> coreSettings.prodStockRepository.findById(request) }
                 .let { response -> it.handleResponse(response) }
         }
 
