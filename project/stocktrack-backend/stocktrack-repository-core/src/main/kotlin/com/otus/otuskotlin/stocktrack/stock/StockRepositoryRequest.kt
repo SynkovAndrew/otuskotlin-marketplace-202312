@@ -4,13 +4,8 @@ import com.otus.otuskotlin.stocktrack.model.Stock
 import com.otus.otuskotlin.stocktrack.model.StockLock
 
 data class StockRepositoryRequest(
-    val stock: Stock,/*
-    val stockLock: StockLock = StockLock.NONE*/
-) {
-/*    fun isLockNone(): Boolean {
-        return stockLock == StockLock.NONE
-    }*/
-}
+    val stock: Stock
+)
 
 data class StockIdRepositoryRequest(
     val stockId: Stock.Id,

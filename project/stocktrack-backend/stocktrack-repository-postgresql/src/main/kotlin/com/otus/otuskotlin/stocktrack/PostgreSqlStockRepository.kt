@@ -10,9 +10,7 @@ import com.otus.otuskotlin.stocktrack.stock.StockIdRepositoryRequest
 import com.otus.otuskotlin.stocktrack.stock.StockRepositoryRequest
 import com.otus.otuskotlin.stocktrack.stock.StockRepositoryResponse
 import com.otus.otuskotlin.stocktrack.stock.StocksRepositoryResponse
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -20,7 +18,6 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import java.util.UUID
 
@@ -29,7 +26,7 @@ class PostgreSqlStockRepository(
     properties: PostgreSqlProperties
 ) : BaseStockRepository() {
 
-    private val connection = Database.connect(
+    private val database = Database.connect(
         properties.url,
         properties.driver,
         properties.user,
@@ -38,7 +35,7 @@ class PostgreSqlStockRepository(
 
     override suspend fun create(request: StockRepositoryRequest): StockRepositoryResponse {
         return tryReturningOne {
-            transactionWrapper {
+            transactionWrapper(database) {
                 StockTable
                     .insert { toTable(it, request.stock, randomUuid) }
                     .resultedValues
@@ -52,13 +49,13 @@ class PostgreSqlStockRepository(
 
     override suspend fun findById(request: StockIdRepositoryRequest): StockRepositoryResponse {
         return tryReturningOne {
-            transactionWrapper { tryFindById(request.stockId) }
+            transactionWrapper(database) { tryFindById(request.stockId) }
         }
     }
 
     override suspend fun update(request: StockRepositoryRequest): StockRepositoryResponse {
         return tryReturningOne {
-            transactionWrapper {
+            transactionWrapper(database) {
                 val stock = tryFindById(request.stock.id)
 
                 when {
@@ -80,7 +77,7 @@ class PostgreSqlStockRepository(
 
     override suspend fun delete(request: StockIdRepositoryRequest): StockRepositoryResponse {
         return tryReturningOne {
-            transactionWrapper {
+            transactionWrapper(database)  {
                 val stock = tryFindById(request.stockId)
 
                 when {
@@ -99,7 +96,7 @@ class PostgreSqlStockRepository(
 
     override suspend fun search(request: StockFilterRepositoryRequest): StocksRepositoryResponse {
         return tryReturningMultiple {
-            transactionWrapper {
+            transactionWrapper(database) {
                 StockTable.selectAll()
                     .where {
                         buildList {
@@ -119,16 +116,6 @@ class PostgreSqlStockRepository(
         return stocks
             .map { stock -> runBlocking { create(StockRepositoryRequest(stock)) } }
             .map { (it as OkStockRepositoryResponse).data }
-    }
-
-    private suspend inline fun <T> transactionWrapper(
-        crossinline block: () -> T
-    ): T {
-        return withContext(Dispatchers.IO) {
-            transaction(connection) {
-                block()
-            }
-        }
     }
 
     private fun tryFindById(stockId: Stock.Id): StockRepositoryResponse {

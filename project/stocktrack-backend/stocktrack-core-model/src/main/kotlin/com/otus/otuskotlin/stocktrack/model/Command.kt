@@ -5,5 +5,8 @@ enum class Command(val value: String) {
     UPDATE("update"),
     DELETE("delete"),
     FIND("find"),
-    SEARCH("search")
+    SEARCH("search"),
+    FIND_SNAPSHOTS("find_snapshots"),
+    PREDICT_SNAPSHOTS("predict_snapshots"),
+    UPLOAD_SNAPSHOTS("upload_snapshots")
 }

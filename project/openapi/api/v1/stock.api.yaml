@@ -101,6 +101,56 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SearchStocksResponse"
+  /api/v1/stock-snapshot/upload:
+    post:
+      tags:
+        - "stock-snapshot"
+      operationId: "uploadStockSnapshots"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UploadStockSnapshotsRequest"
+        required: true
+      responses:
+        "200":
+          description: "Success"
+  /api/v1/stock-snapshot/find:
+    post:
+      tags:
+        - "stock-snapshot"
+      operationId: "findStockSnapshots"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FindStockSnapshotsRequest"
+        required: true
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FindStockSnapshotsResponse"
+  /api/v1/stock-snapshot/predict:
+    post:
+      tags:
+        - "stock-snapshot"
+      operationId: "predictStockSnapshots"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PredictStockSnapshotsRequest"
+        required: true
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PredictStockSnapshotsResponse"
 components:
   schemas:
     Request:
@@ -217,3 +267,69 @@ components:
       allOf:
         - $ref: "#/components/schemas/Response"
         - $ref: "stock.schemas.yaml#/components/schemas/MultipleStockResponse"
+    StockSnapshot:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        stockId:
+          type: "string"
+        value:
+          type: number
+        timestamp:
+          type: string
+          format: 'date-time'
+      required:
+        - "id"
+        - "stockId"
+        - "value"
+        - "timestamp"
+    UploadStockSnapshotsRequest:
+      type: "object"
+      properties:
+        snapshots:
+          type: array
+          items:
+            $ref: "#/components/schemas/StockSnapshot"
+      required:
+        - "snapshots"
+    FindStockSnapshotsRequest:
+      type: "object"
+      properties:
+        stockId:
+          type: string
+        from:
+          type: string
+          format: 'date-time'
+        to:
+          type: string
+          format: 'date-time'
+      required:
+        - "stockId"
+        - "from"
+        - "to"
+    FindStockSnapshotsResponse:
+      type: "object"
+      properties:
+        snapshots:
+          type: array
+          items:
+            $ref: "#/components/schemas/StockSnapshot"
+      required:
+        - "snapshots"
+    PredictStockSnapshotsRequest:
+      type: "object"
+      properties:
+        stockId:
+          type: string
+      required:
+        - "stockId"
+    PredictStockSnapshotsResponse:
+      type: "object"
+      properties:
+        snapshots:
+          type: array
+          items:
+            $ref: "#/components/schemas/StockSnapshot"
+      required:
+        - "snapshots"
