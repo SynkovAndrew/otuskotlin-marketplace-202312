@@ -2,7 +2,6 @@ package com.otus.otuskotlin.stocktrack
 
 import com.otus.otuskotlin.stocktrack.context.SearchStocksResponseContext
 import com.otus.otuskotlin.stocktrack.cor.chainBuilder
-import com.otus.otuskotlin.stocktrack.dsl.command.command
 import com.otus.otuskotlin.stocktrack.dsl.command.commandPipeline
 import com.otus.otuskotlin.stocktrack.dsl.command.searchCommand
 import com.otus.otuskotlin.stocktrack.dsl.command.startProcessing
@@ -28,16 +27,6 @@ class SearchStocksResponseProcessor(
                 }
 
                 searchCommand(coreSettings)
-                /*command(Command.SEARCH) {
-                    copy(
-                        response = StubStockRepository.findAll()
-                            .filter { stock ->
-                                context.request.searchString
-                                    ?.let { stock.name.contains(it, true) }
-                                    ?: true
-                            }
-                    )
-                }*/
             }
 
         }.execute(context)
