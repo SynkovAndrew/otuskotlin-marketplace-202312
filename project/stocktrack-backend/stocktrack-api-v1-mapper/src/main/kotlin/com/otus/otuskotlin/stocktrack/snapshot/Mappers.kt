@@ -47,25 +47,6 @@ fun FindStockSnapshotsRequest.fromTransportModel(): GetStockSnapshotsContext {
     )
 }
 
-fun GetStockSnapshotsContext.toTransportModel(): Response {
-    return when (command) {
-        Command.FIND_SNAPSHOTS -> FindStockSnapshotsResponse(
-            responseType = command.value,
-            result = state.toTransportModel(),
-            errors = errors.map { it.toTransportModel() },
-            snapshots = response.map { it.toTransportModel() },
-        )
-        Command.PREDICT_SNAPSHOTS -> PredictStockSnapshotsResponse(
-            responseType = command.value,
-            result = state.toTransportModel(),
-            errors = errors.map { it.toTransportModel() },
-            snapshots = response.map { it.toTransportModel() },
-        )
-
-        else -> error("not supported $this")
-    }
-}
-
 fun UploadStockSnapshotsRequest.fromTransportModel(): PostStockSnapshotsContext {
     return PostStockSnapshotsContext(
         command = Command.UPLOAD_SNAPSHOTS,
