@@ -1,8 +1,5 @@
 package com.otus.otuskotlin.stocktrack.stock
 
-import com.otus.otuskotlin.stocktrack.model.Stock
-import com.otus.otuskotlin.stocktrack.model.StockLock
-
 data class StockRepositoryRequest(
     val stock: Stock
 )

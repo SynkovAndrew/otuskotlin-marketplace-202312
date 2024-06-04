@@ -9,7 +9,7 @@ import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.model.Command
 import com.otus.otuskotlin.stocktrack.model.Debug
 import com.otus.otuskotlin.stocktrack.model.State
-import com.otus.otuskotlin.stocktrack.model.Stock
+import com.otus.otuskotlin.stocktrack.stock.Stock
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import kotlin.test.Test
 

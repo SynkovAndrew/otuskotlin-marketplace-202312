@@ -5,8 +5,8 @@ import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.logbackLoggerWrapper
 import com.otus.otuskotlin.stocktrack.model.Command
 import com.otus.otuskotlin.stocktrack.model.State
-import com.otus.otuskotlin.stocktrack.model.Stock
-import com.otus.otuskotlin.stocktrack.model.StockPermission
+import com.otus.otuskotlin.stocktrack.stock.Stock
+import com.otus.otuskotlin.stocktrack.stock.StockPermission
 import com.otus.otuskotlin.stocktrack.toLog
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -14,9 +14,7 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.routing.get
-import kotlinx.serialization.Serializable
 import java.time.Instant
-import java.util.UUID
 
 
 fun Application.configureRouting() {

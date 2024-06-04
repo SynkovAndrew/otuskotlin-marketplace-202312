@@ -1,4 +1,4 @@
-package com.otus.otuskotlin.stocktrack.model
+package com.otus.otuskotlin.stocktrack.stock
 
 data class Stock(
     val id: Id = Id.NONE,

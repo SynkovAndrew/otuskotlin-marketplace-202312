@@ -28,8 +28,6 @@ import com.otus.otuskotlin.stocktrack.context.SearchStocksResponseContext
 import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.debug.DebugMapper
 import com.otus.otuskotlin.stocktrack.model.Command
-import com.otus.otuskotlin.stocktrack.model.Stock
-import com.otus.otuskotlin.stocktrack.model.StockLock
 import com.otus.otuskotlin.stocktrack.snapshot.fromTransportModel
 import com.otus.otuskotlin.stocktrack.snapshot.toTransportModel
 

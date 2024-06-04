@@ -1,7 +1,7 @@
 package com.otus.otuskotlin.stocktrack
 
-import com.otus.otuskotlin.stocktrack.model.Stock
-import com.otus.otuskotlin.stocktrack.model.StockPermission
+import com.otus.otuskotlin.stocktrack.stock.Stock
+import com.otus.otuskotlin.stocktrack.stock.StockPermission
 
 object StubStockRepository {
     private val stocks = listOf(

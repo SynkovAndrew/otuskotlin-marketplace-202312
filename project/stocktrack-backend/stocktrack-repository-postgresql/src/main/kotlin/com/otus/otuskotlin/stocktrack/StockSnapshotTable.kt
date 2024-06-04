@@ -1,6 +1,6 @@
 package com.otus.otuskotlin.stocktrack
 
-import com.otus.otuskotlin.stocktrack.model.Stock
+import com.otus.otuskotlin.stocktrack.stock.Stock
 import com.otus.otuskotlin.stocktrack.snapshot.StockSnapshot
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.ResultRow

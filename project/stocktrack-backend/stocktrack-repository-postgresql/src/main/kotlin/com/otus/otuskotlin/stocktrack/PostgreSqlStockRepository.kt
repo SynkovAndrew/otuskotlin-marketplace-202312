@@ -1,7 +1,7 @@
 package com.otus.otuskotlin.stocktrack
 
-import com.otus.otuskotlin.stocktrack.model.Stock
-import com.otus.otuskotlin.stocktrack.model.StockLock
+import com.otus.otuskotlin.stocktrack.stock.Stock
+import com.otus.otuskotlin.stocktrack.stock.StockLock
 import com.otus.otuskotlin.stocktrack.stock.BaseStockRepository
 import com.otus.otuskotlin.stocktrack.stock.OkStockRepositoryResponse
 import com.otus.otuskotlin.stocktrack.stock.OkStocksRepositoryResponse

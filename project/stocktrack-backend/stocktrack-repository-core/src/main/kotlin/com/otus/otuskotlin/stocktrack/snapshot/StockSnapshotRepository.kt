@@ -1,7 +1,6 @@
 package com.otus.otuskotlin.stocktrack.snapshot
 
-import com.otus.otuskotlin.stocktrack.model.ErrorDescription
-import com.otus.otuskotlin.stocktrack.model.Stock
+import com.otus.otuskotlin.stocktrack.stock.Stock
 
 interface StockSnapshotRepository {
 

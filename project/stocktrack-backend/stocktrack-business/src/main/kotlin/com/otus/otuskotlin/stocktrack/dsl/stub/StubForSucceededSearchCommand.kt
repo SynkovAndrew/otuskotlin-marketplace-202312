@@ -7,8 +7,8 @@ import com.otus.otuskotlin.stocktrack.cor.ChainDsl
 import com.otus.otuskotlin.stocktrack.model.Command
 import com.otus.otuskotlin.stocktrack.model.Debug
 import com.otus.otuskotlin.stocktrack.model.State
-import com.otus.otuskotlin.stocktrack.model.Stock
-import com.otus.otuskotlin.stocktrack.model.StockPermission
+import com.otus.otuskotlin.stocktrack.stock.Stock
+import com.otus.otuskotlin.stocktrack.stock.StockPermission
 
 fun ChainDsl<SearchStocksResponseContext>.stubForSucceededSearchCommand(
     coreSettings: CoreSettings

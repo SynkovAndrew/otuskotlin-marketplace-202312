@@ -4,7 +4,7 @@ import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.cor.ChainDsl
 import com.otus.otuskotlin.stocktrack.model.ErrorDescription
 import com.otus.otuskotlin.stocktrack.model.State
-import com.otus.otuskotlin.stocktrack.model.Stock
+import com.otus.otuskotlin.stocktrack.stock.Stock
 
 fun ChainDsl<SingleStockResponseContext>.validateStockCategoryProperty() {
     processor {

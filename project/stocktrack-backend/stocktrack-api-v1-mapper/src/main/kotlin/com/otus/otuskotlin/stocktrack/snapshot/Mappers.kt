@@ -1,18 +1,14 @@
 package com.otus.otuskotlin.stocktrack.snapshot
 
 import com.otus.otuskotlin.stocktrack.api.v1.models.FindStockSnapshotsRequest
-import com.otus.otuskotlin.stocktrack.api.v1.models.FindStockSnapshotsResponse
 import com.otus.otuskotlin.stocktrack.api.v1.models.PredictStockSnapshotsRequest
-import com.otus.otuskotlin.stocktrack.api.v1.models.PredictStockSnapshotsResponse
-import com.otus.otuskotlin.stocktrack.api.v1.models.Response
 import com.otus.otuskotlin.stocktrack.api.v1.models.StockSnapshot
 import com.otus.otuskotlin.stocktrack.api.v1.models.UploadStockSnapshot
 import com.otus.otuskotlin.stocktrack.api.v1.models.UploadStockSnapshotsRequest
 import com.otus.otuskotlin.stocktrack.context.GetStockSnapshotsContext
 import com.otus.otuskotlin.stocktrack.context.PostStockSnapshotsContext
 import com.otus.otuskotlin.stocktrack.model.Command
-import com.otus.otuskotlin.stocktrack.model.Stock
-import com.otus.otuskotlin.stocktrack.stock.toTransportModel
+import com.otus.otuskotlin.stocktrack.stock.Stock
 import com.otus.otuskotlin.stocktrack.snapshot.StockSnapshot as InternalStockSnapshot
 
 fun UploadStockSnapshot.fromTransportModel(): InternalStockSnapshot {

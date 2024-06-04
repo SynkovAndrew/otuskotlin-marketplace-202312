@@ -7,14 +7,13 @@ import com.otus.otuskotlin.stocktrack.api.v1.models.SingleStockResponseLog
 import com.otus.otuskotlin.stocktrack.api.v1.models.SnapshotResponseLog
 import com.otus.otuskotlin.stocktrack.api.v1.models.StockFilterLog
 import com.otus.otuskotlin.stocktrack.api.v1.models.StockLog
-import com.otus.otuskotlin.stocktrack.context.Context
 import com.otus.otuskotlin.stocktrack.context.GetStockSnapshotsContext
 import com.otus.otuskotlin.stocktrack.context.PostStockSnapshotsContext
 import com.otus.otuskotlin.stocktrack.context.SearchStocksResponseContext
 import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.model.Command
 import com.otus.otuskotlin.stocktrack.model.ErrorDescription
-import com.otus.otuskotlin.stocktrack.model.Stock
+import com.otus.otuskotlin.stocktrack.stock.Stock
 import com.otus.otuskotlin.stocktrack.model.StockFilter
 import java.time.OffsetDateTime
 import java.time.ZoneId

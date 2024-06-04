@@ -1,4 +1,4 @@
-package com.otus.otuskotlin.stocktrack.model
+package com.otus.otuskotlin.stocktrack.stock
 
 @JvmInline
 value class StockLock(val value: String) {
