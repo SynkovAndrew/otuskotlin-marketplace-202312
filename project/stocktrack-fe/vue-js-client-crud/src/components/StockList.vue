@@ -1,17 +1,35 @@
 <template>
-  <div class="row">
-    <div class="col-md-6">
-      <ul class="list-group">
-        <li class="list-group-item"
-            :class="{ active: index == currentIndex }"
-            v-for="(stock, index) in stocks"
-            :key="index"
-            @click="setActiveStock(stock, index)"
-        >
-          {{ stock.name }}
-        </li>
-      </ul>
-    </div>
+  <!--  <div class="row">
+      <div class="col-md-6">
+        <ul class="list-group">
+          <li class="list-group-item"
+              :class="{ active: index == currentIndex }"
+              v-for="(stock, index) in stocks"
+              :key="index"
+              @click="setActiveStock(stock, index)"
+          >
+            {{ stock.name }}
+          </li>
+        </ul>
+      </div>
+    </div>-->
+  <div class="table-container">
+    <table class="styled-table">
+      <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Category</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="(stock, index) in stocks" :key="index">
+        <td :class="{ active: index == currentIndex }">{{ stock.id.value }}</td>
+        <td :class="{ active: index == currentIndex }">{{ stock.name }}</td>
+        <td :class="{ active: index == currentIndex }">{{ stock.category }}</td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
@@ -29,10 +47,10 @@ export default {
     };
   },
   methods: {
-    findAllStocks() {
-      StockService.findAll()
+    find() {
+      StockService.find()
           .then(response => {
-            this.stocks = response.data;
+            this.stocks = response.data.body;
             console.log(response.data);
           })
           .catch(e => {
@@ -41,7 +59,7 @@ export default {
     },
 
     refreshList() {
-      this.findAllStocks();
+      this.find();
       this.currentStock = null;
       this.currentIndex = -1;
     },
@@ -52,7 +70,7 @@ export default {
     },
 
     searchByName() {
-      StockService.findAll()
+      StockService.find()
           .then(response => {
             this.stocks = response.data;
             console.log(response.data);
@@ -63,7 +81,49 @@ export default {
     }
   },
   mounted() {
-    this.findAllStocks();
+    this.find();
   }
 };
 </script>
+<style scoped>
+.table-container {
+  width: 100%;
+  margin: 20px 0;
+  overflow-x: auto;
+}
+
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 18px;
+  text-align: left;
+}
+
+.styled-table thead tr {
+  background-color: #2c3e50;
+  color: #ffffff;
+  text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+  border-bottom: 2px solid #2c3e50;
+}
+
+.styled-table tbody tr:hover {
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+</style>

@@ -5,13 +5,10 @@
         <li class="nav-item">
           <router-link to="/stocks" class="nav-link">Stocks</router-link>
         </li>
-        <li class="nav-item">
-          <router-link to="/favourites" class="nav-link">Favourites</router-link>
-        </li>
       </div>
     </nav>
 
-    <div class="container mt-3">
+    <div>
       <router-view />
     </div>
   </div>

@@ -16,7 +16,6 @@ import com.otus.otuskotlin.stocktrack.context.GetStockSnapshotsContext
 import com.otus.otuskotlin.stocktrack.context.PostStockSnapshotsContext
 import com.otus.otuskotlin.stocktrack.context.SearchStocksResponseContext
 import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
-import com.otus.otuskotlin.stocktrack.snapshot.fromTransportModel
 import com.otus.otuskotlin.stocktrack.stock.fromTransportModel
 import com.otus.otuskotlin.stocktrack.stock.toTransportModel
 import io.ktor.server.application.*
@@ -25,8 +24,6 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Application.configureStockRoutes(applicationSettings: ApplicationSettings) {
-    val commandBus = CommandBus(applicationSettings)
-
     routing {
         route("/api/v1/stock") {
             post("find") {

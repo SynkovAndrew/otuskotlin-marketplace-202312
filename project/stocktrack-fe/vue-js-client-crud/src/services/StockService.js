@@ -1,8 +1,20 @@
 import http from "../http";
 
 class StockService {
-    findAll() {
-        return http.get("/stocks");
+    find() {
+        return http.post(
+            "/stock/search",
+            {
+                "requestType": "search",
+                "debug": {
+                    "mode": "prod",
+                    "stub": "success"
+                },
+                "filter": {
+                    "searchString": ""
+                }
+            }
+        );
     }
 }
 

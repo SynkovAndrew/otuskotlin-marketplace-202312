@@ -45,9 +45,9 @@ fun Application.modules() {
         )
     )
 
-    configureAuthentication()
+   // configureAuthentication()
     configureSerialization()
-    configureRouting()
+    //configureRouting()
     configureStockRoutes(applicationSettings)
     configureWeb()
 }
