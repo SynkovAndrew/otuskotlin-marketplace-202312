@@ -7,15 +7,15 @@ import com.otus.otuskotlin.stocktrack.model.Command
 import com.otus.otuskotlin.stocktrack.model.ErrorDescription
 import com.otus.otuskotlin.stocktrack.model.State
 
-fun ChainDsl<GetStockSnapshotsContext>.findSnapshotsCommand(
+fun ChainDsl<GetStockSnapshotsContext>.predictSnapshotsCommand(
     coreSettings: CoreSettings
 ) {
     processor {
-        this.name = Command.FIND_SNAPSHOTS.name
+        this.name = Command.PREDICT_SNAPSHOTS.name
 
         invokeOn {
             it.state == State.RUNNING &&
-                    it.command == Command.FIND_SNAPSHOTS
+                    it.command == Command.PREDICT_SNAPSHOTS
         }
 
         process {

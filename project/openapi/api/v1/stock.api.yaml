@@ -171,6 +171,9 @@ components:
           update: "#/components/schemas/UpdateStockRequest"
           delete: "#/components/schemas/DeleteStockRequest"
           search: "#/components/schemas/SearchStocksRequest"
+          upload_snapshots: "#/components/schemas/UploadStockSnapshotsRequest"
+          find_snapshots: "#/components/schemas/FindStockSnapshotsRequest"
+          predict_snapshots: "#/components/schemas/PredictStockSnapshotsRequest"
     Response:
       type: "object"
       description: "Base interface for all responses"
@@ -197,6 +200,9 @@ components:
           update: "#/components/schemas/UpdateStockResponse"
           delete: "#/components/schemas/DeleteStockResponse"
           search: "#/components/schemas/SearchStocksResponse"
+          upload_snapshots: "#/components/schemas/UploadStockSnapshotsResponse"
+          find_snapshots: "#/components/schemas/FindStockSnapshotsResponse"
+          predict_snapshots: "#/components/schemas/PredictStockSnapshotsResponse"
     CreateStockRequest:
       allOf:
         - $ref: '#/components/schemas/Request'
@@ -284,52 +290,79 @@ components:
         - "stockId"
         - "value"
         - "timestamp"
-    UploadStockSnapshotsRequest:
+    UploadStockSnapshot:
       type: "object"
       properties:
-        snapshots:
-          type: array
-          items:
-            $ref: "#/components/schemas/StockSnapshot"
+        stockId:
+          type: "string"
+        value:
+          type: number
+        timestamp:
+          type: string
+          format: 'date-time'
+      required:
+        - "stockId"
+        - "value"
+        - "timestamp"
+    UploadStockSnapshotsRequest:
+      allOf:
+        - $ref: "#/components/schemas/Request"
+        - type: "object"
+          properties:
+            snapshots:
+              type: array
+              items:
+                $ref: "#/components/schemas/UploadStockSnapshot"
       required:
         - "snapshots"
     FindStockSnapshotsRequest:
-      type: "object"
-      properties:
-        stockId:
-          type: string
-        from:
-          type: string
-          format: 'date-time'
-        to:
-          type: string
-          format: 'date-time'
-      required:
-        - "stockId"
-        - "from"
-        - "to"
+      allOf:
+        - $ref: "#/components/schemas/Request"
+        - type: "object"
+          properties:
+            stockId:
+              type: string
+            from:
+              type: string
+              format: 'date-time'
+            to:
+              type: string
+              format: 'date-time'
+          required:
+            - "stockId"
+            - "from"
+            - "to"
     FindStockSnapshotsResponse:
-      type: "object"
-      properties:
-        snapshots:
-          type: array
-          items:
-            $ref: "#/components/schemas/StockSnapshot"
-      required:
-        - "snapshots"
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            snapshots:
+              type: array
+              items:
+                $ref: "#/components/schemas/StockSnapshot"
+          required:
+            - "snapshots"
     PredictStockSnapshotsRequest:
-      type: "object"
-      properties:
-        stockId:
-          type: string
-      required:
-        - "stockId"
+      allOf:
+        - $ref: "#/components/schemas/Request"
+        - type: "object"
+          properties:
+            stockId:
+              type: string
+          required:
+            - "stockId"
     PredictStockSnapshotsResponse:
-      type: "object"
-      properties:
-        snapshots:
-          type: array
-          items:
-            $ref: "#/components/schemas/StockSnapshot"
-      required:
-        - "snapshots"
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            snapshots:
+              type: array
+              items:
+                $ref: "#/components/schemas/StockSnapshot"
+          required:
+            - "snapshots"
+    UploadStockSnapshotsResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"

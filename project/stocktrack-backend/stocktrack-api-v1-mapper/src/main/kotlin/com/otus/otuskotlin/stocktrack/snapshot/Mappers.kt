@@ -4,14 +4,20 @@ import com.otus.otuskotlin.stocktrack.api.v1.models.FindStockSnapshotsRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.FindStockSnapshotsResponse
 import com.otus.otuskotlin.stocktrack.api.v1.models.PredictStockSnapshotsRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.PredictStockSnapshotsResponse
+import com.otus.otuskotlin.stocktrack.api.v1.models.Response
 import com.otus.otuskotlin.stocktrack.api.v1.models.StockSnapshot
+import com.otus.otuskotlin.stocktrack.api.v1.models.UploadStockSnapshot
 import com.otus.otuskotlin.stocktrack.api.v1.models.UploadStockSnapshotsRequest
+import com.otus.otuskotlin.stocktrack.context.GetStockSnapshotsContext
+import com.otus.otuskotlin.stocktrack.context.PostStockSnapshotsContext
+import com.otus.otuskotlin.stocktrack.model.Command
 import com.otus.otuskotlin.stocktrack.model.Stock
+import com.otus.otuskotlin.stocktrack.stock.toTransportModel
 import com.otus.otuskotlin.stocktrack.snapshot.StockSnapshot as InternalStockSnapshot
 
-fun StockSnapshot.fromTransportModel(): InternalStockSnapshot {
+fun UploadStockSnapshot.fromTransportModel(): InternalStockSnapshot {
     return InternalStockSnapshot(
-        id = InternalStockSnapshot.Id(value = id),
+        id = InternalStockSnapshot.Id.NONE,
         stockId = Stock.Id(value = stockId),
         value = value.toBigDecimal(),
         timestamp = timestamp
@@ -27,22 +33,42 @@ fun InternalStockSnapshot.toTransportModel(): StockSnapshot {
     )
 }
 
-fun PredictStockSnapshotsRequest.fromTransportModel(): Stock.Id {
-    return Stock.Id(value = stockId)
+fun PredictStockSnapshotsRequest.fromTransportModel(): GetStockSnapshotsContext {
+    return GetStockSnapshotsContext(
+        command = Command.PREDICT_SNAPSHOTS,
+        request = Stock.Id(value = stockId)
+    )
 }
 
-fun FindStockSnapshotsRequest.fromTransportModel(): Stock.Id {
-    return Stock.Id(value = stockId)
+fun FindStockSnapshotsRequest.fromTransportModel(): GetStockSnapshotsContext {
+    return GetStockSnapshotsContext(
+        command = Command.FIND_SNAPSHOTS,
+        request = Stock.Id(value = stockId)
+    )
 }
 
-fun List<InternalStockSnapshot>.toFindTransportModel(): FindStockSnapshotsResponse {
-    return FindStockSnapshotsResponse(snapshots = this.map { it.toTransportModel() })
+fun GetStockSnapshotsContext.toTransportModel(): Response {
+    return when (command) {
+        Command.FIND_SNAPSHOTS -> FindStockSnapshotsResponse(
+            responseType = command.value,
+            result = state.toTransportModel(),
+            errors = errors.map { it.toTransportModel() },
+            snapshots = response.map { it.toTransportModel() },
+        )
+        Command.PREDICT_SNAPSHOTS -> PredictStockSnapshotsResponse(
+            responseType = command.value,
+            result = state.toTransportModel(),
+            errors = errors.map { it.toTransportModel() },
+            snapshots = response.map { it.toTransportModel() },
+        )
+
+        else -> error("not supported $this")
+    }
 }
 
-fun List<InternalStockSnapshot>.toPredictTransportModel(): PredictStockSnapshotsResponse {
-    return PredictStockSnapshotsResponse(snapshots = this.map { it.toTransportModel() })
-}
-
-fun UploadStockSnapshotsRequest.fromTransportModel(): List<InternalStockSnapshot> {
-    return snapshots.map { it.fromTransportModel() }
+fun UploadStockSnapshotsRequest.fromTransportModel(): PostStockSnapshotsContext {
+    return PostStockSnapshotsContext(
+        command = Command.UPLOAD_SNAPSHOTS,
+        request = snapshots.map { it.fromTransportModel() }
+    )
 }

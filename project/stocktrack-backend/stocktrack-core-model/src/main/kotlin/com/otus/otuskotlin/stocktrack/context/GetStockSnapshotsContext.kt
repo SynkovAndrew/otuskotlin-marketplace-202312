@@ -5,20 +5,21 @@ import com.otus.otuskotlin.stocktrack.model.Debug
 import com.otus.otuskotlin.stocktrack.model.ErrorDescription
 import com.otus.otuskotlin.stocktrack.model.RequestId
 import com.otus.otuskotlin.stocktrack.model.State
+import com.otus.otuskotlin.stocktrack.model.Stock
 import com.otus.otuskotlin.stocktrack.snapshot.StockSnapshot
 import java.time.Instant
 import java.util.*
 
 data class GetStockSnapshotsContext(
     override val command: Command,
-    override val request: StockSnapshot.Id = StockSnapshot.Id.NONE,
+    override val request: Stock.Id = Stock.Id.NONE,
     override val response: List<StockSnapshot> = emptyList(),
     override val state: State = State.NONE,
     override val errors: List<ErrorDescription> = emptyList(),
     override val debug: Debug = Debug.NONE,
     override val requestId: RequestId = RequestId(value = UUID.randomUUID().toString()),
     override val startedAt: Instant = Instant.MIN
-) : Context<StockSnapshot.Id, List<StockSnapshot>, GetStockSnapshotsContext> {
+) : Context<Stock.Id, List<StockSnapshot>, GetStockSnapshotsContext> {
     override fun start(): GetStockSnapshotsContext {
         return copy(
             startedAt = Instant.now(),

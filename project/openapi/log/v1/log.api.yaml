@@ -55,4 +55,20 @@ components:
             - operation
             - requestBody
             - responseBody
+    SnapshotResponseLog:
+      allOf:
+        - $ref: 'log.schemas.yaml#/components/schemas/BaseLog'
+        - type: object
+          properties:
+            requestId:
+              type: string
+            operation:
+              type: string
+              enum:
+                - upload_snapshots
+                - find_snapshots
+                - predict_snapshots
+          required:
+            - requestId
+            - operation
 

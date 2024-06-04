@@ -18,6 +18,7 @@ dependencies {
     testImplementation("io.ktor:ktor-serialization-kotlinx-json:2.3.9")
     testImplementation("io.ktor:ktor-server-test-host:2.3.9")
     testImplementation(libs.coroutines.core)
+    testImplementation(libs.kotlinx.datetime)
     testImplementation(libs.assertj)
     testImplementation(libs.junit.jupiter)
 }
@@ -35,6 +36,6 @@ tasks.test {
 
 dockerCompose {
     dockerComposeWorkingDirectory = project.file("./docker")
-/*    executable = "/Applications/Docker.app/Contents/Resources/bin/docker-compose"
-    dockerExecutable = "/Applications/Docker.app/Contents/Resources/bin/docker"*/
+    executable = "/Applications/Docker.app/Contents/Resources/bin/docker-compose"
+    dockerExecutable = "/Applications/Docker.app/Contents/Resources/bin/docker"
 }

@@ -1,26 +1,27 @@
 package com.otus.otuskotlin.stocktrack.dsl.command
 
 import com.otus.otuskotlin.stocktrack.CoreSettings
-import com.otus.otuskotlin.stocktrack.context.GetStockSnapshotsContext
+import com.otus.otuskotlin.stocktrack.context.PostStockSnapshotsContext
 import com.otus.otuskotlin.stocktrack.cor.ChainDsl
 import com.otus.otuskotlin.stocktrack.model.Command
 import com.otus.otuskotlin.stocktrack.model.ErrorDescription
 import com.otus.otuskotlin.stocktrack.model.State
 
-fun ChainDsl<GetStockSnapshotsContext>.findSnapshotsCommand(
+fun ChainDsl<PostStockSnapshotsContext>.uploadSnapshotsCommand(
     coreSettings: CoreSettings
 ) {
     processor {
-        this.name = Command.FIND_SNAPSHOTS.name
+        this.name = Command.UPLOAD_SNAPSHOTS.name
 
         invokeOn {
             it.state == State.RUNNING &&
-                    it.command == Command.FIND_SNAPSHOTS
+                    it.command == Command.UPLOAD_SNAPSHOTS
         }
 
         process {
-            coreSettings.stockSnapshotRepository.findByStockId(it.request)
-                .let { response -> it.handleResponse(response) }
+            it.request
+                .map { snapshot -> coreSettings.stockSnapshotRepository.create(snapshot) }
+                .let { _ -> it.copy(response = Unit) }
         }
 
         handleException { throwable, context ->

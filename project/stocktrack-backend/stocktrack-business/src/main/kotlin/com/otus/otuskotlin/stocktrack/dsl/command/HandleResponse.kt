@@ -1,7 +1,11 @@
 package com.otus.otuskotlin.stocktrack.dsl.command
 
+import com.otus.otuskotlin.stocktrack.context.GetStockSnapshotsContext
 import com.otus.otuskotlin.stocktrack.context.SearchStocksResponseContext
 import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
+import com.otus.otuskotlin.stocktrack.snapshot.ErrorStockSnapshotsRepositoryResponse
+import com.otus.otuskotlin.stocktrack.snapshot.OkStockSnapshotsRepositoryResponse
+import com.otus.otuskotlin.stocktrack.snapshot.StockSnapshotsRepositoryResponse
 import com.otus.otuskotlin.stocktrack.stock.ErrorStockRepositoryResponse
 import com.otus.otuskotlin.stocktrack.stock.ErrorStocksRepositoryResponse
 import com.otus.otuskotlin.stocktrack.stock.OkStockRepositoryResponse
@@ -27,5 +31,14 @@ internal fun SearchStocksResponseContext.handleResponse(
     return when (response) {
         is OkStocksRepositoryResponse -> copy(response = response.data).finish()
         is ErrorStocksRepositoryResponse -> fail(response.errors)
+    }
+}
+
+internal fun GetStockSnapshotsContext.handleResponse(
+    response: StockSnapshotsRepositoryResponse
+): GetStockSnapshotsContext {
+    return when (response) {
+        is OkStockSnapshotsRepositoryResponse -> copy(response = response.data).finish()
+        is ErrorStockSnapshotsRepositoryResponse -> fail(response.errors)
     }
 }

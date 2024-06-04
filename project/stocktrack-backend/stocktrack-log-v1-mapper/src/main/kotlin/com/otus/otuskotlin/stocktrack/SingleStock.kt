@@ -4,9 +4,12 @@ import com.otus.otuskotlin.stocktrack.api.v1.models.ErrorLog
 import com.otus.otuskotlin.stocktrack.api.v1.models.LogLevel
 import com.otus.otuskotlin.stocktrack.api.v1.models.MultipleStockResponseLog
 import com.otus.otuskotlin.stocktrack.api.v1.models.SingleStockResponseLog
+import com.otus.otuskotlin.stocktrack.api.v1.models.SnapshotResponseLog
 import com.otus.otuskotlin.stocktrack.api.v1.models.StockFilterLog
 import com.otus.otuskotlin.stocktrack.api.v1.models.StockLog
 import com.otus.otuskotlin.stocktrack.context.Context
+import com.otus.otuskotlin.stocktrack.context.GetStockSnapshotsContext
+import com.otus.otuskotlin.stocktrack.context.PostStockSnapshotsContext
 import com.otus.otuskotlin.stocktrack.context.SearchStocksResponseContext
 import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.model.Command
@@ -41,6 +44,35 @@ fun SearchStocksResponseContext.toLog(logId: String) : MultipleStockResponseLog 
         operation = command.toMultipleStockResponseOperation(),
         requestBody = request.toLog(),
         responseBody = response.map { it.toLog() }
+    )
+}
+
+fun GetStockSnapshotsContext.toLog(logId: String) : SnapshotResponseLog {
+    return SnapshotResponseLog(
+        id = logId,
+        timestamp = OffsetDateTime.now(ZoneId.of("UTC")),
+        source = STOCK_TRACK_SERVICE_NAME,
+        errors = errors.map { it.toErrorLog() },
+        requestId = requestId.asString(),
+        operation = when (command) {
+            Command.FIND_SNAPSHOTS -> SnapshotResponseLog.Operation.FIND_SNAPSHOTS
+            Command.PREDICT_SNAPSHOTS -> SnapshotResponseLog.Operation.PREDICT_SNAPSHOTS
+            else -> error("not supported $this")
+        }
+    )
+}
+
+fun PostStockSnapshotsContext.toLog(logId: String) : SnapshotResponseLog {
+    return SnapshotResponseLog(
+        id = logId,
+        timestamp = OffsetDateTime.now(ZoneId.of("UTC")),
+        source = STOCK_TRACK_SERVICE_NAME,
+        errors = errors.map { it.toErrorLog() },
+        requestId = requestId.asString(),
+        operation = when (command) {
+            Command.UPLOAD_SNAPSHOTS -> SnapshotResponseLog.Operation.UPLOAD_SNAPSHOTS
+            else -> error("not supported $this")
+        }
     )
 }
 

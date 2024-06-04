@@ -2,6 +2,7 @@ package com.otus.otuskotlin.stocktrack
 
 import com.otus.otuskotlin.stocktrack.configuration.KtorApplicationSettings
 import com.otus.otuskotlin.stocktrack.context.GetStockSnapshotsContext
+import com.otus.otuskotlin.stocktrack.context.PostStockSnapshotsContext
 import com.otus.otuskotlin.stocktrack.context.SearchStocksResponseContext
 import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.plugins.configureAuthentication
@@ -33,12 +34,14 @@ fun Application.modules() {
     val singleStockResponseProcessor = SingleStockResponseProcessor(coreSettings = coreSettings)
     val searchStocksResponseProcessor = SearchStocksResponseProcessor(coreSettings = coreSettings)
     val getStockSnapshotsProcessor = GetStockSnapshotsProcessor(coreSettings = coreSettings)
+    val postStockSnapshotsProcessor = PostStockSnapshotsProcessor(coreSettings = coreSettings)
     val applicationSettings = KtorApplicationSettings(
         coreSettings = coreSettings,
         processors = mapOf(
             SingleStockResponseContext::class to singleStockResponseProcessor,
             SearchStocksResponseContext::class to searchStocksResponseProcessor,
-            GetStockSnapshotsContext::class to getStockSnapshotsProcessor
+            GetStockSnapshotsContext::class to getStockSnapshotsProcessor,
+            PostStockSnapshotsContext::class to postStockSnapshotsProcessor,
         )
     )
 

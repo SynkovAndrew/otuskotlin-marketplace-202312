@@ -2,9 +2,10 @@ package com.otus.otuskotlin.stocktrack.stock
 
 import com.otus.otuskotlin.stocktrack.api.v1.models.Response
 import com.otus.otuskotlin.stocktrack.api.v1.models.ResponseResult
-import com.otus.otuskotlin.stocktrack.api.v1.models.SearchStocksResponse
 import com.otus.otuskotlin.stocktrack.api.v1.models.StockResponseBody
 import com.otus.otuskotlin.stocktrack.context.Context
+import com.otus.otuskotlin.stocktrack.context.GetStockSnapshotsContext
+import com.otus.otuskotlin.stocktrack.context.PostStockSnapshotsContext
 import com.otus.otuskotlin.stocktrack.context.SearchStocksResponseContext
 import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.model.ErrorDescription
@@ -44,5 +45,8 @@ fun <T : Context<*, *, T>> Context<*, *, T>.toTransportModel() : Response {
     return when(this) {
         is SearchStocksResponseContext -> this.toTransportModel()
         is SingleStockResponseContext -> this.toTransportModel()
+        is GetStockSnapshotsContext -> this.toTransportModel()
+        is PostStockSnapshotsContext -> this.toTransportModel()
+        else -> error("Not supported: $this")
     }
  }
