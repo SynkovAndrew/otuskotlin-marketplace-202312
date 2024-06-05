@@ -52,9 +52,7 @@ class SnapshotRoutingTest {
                 setBody(
                     FindStockSnapshotsRequest(
                         requestType = "find_snapshots",
-                        stockId = stock.id.value,
-                        from = Clock.System.now(),
-                        to = Clock.System.now()
+                        stockId = stock.id.value
                     )
                 )
             }
