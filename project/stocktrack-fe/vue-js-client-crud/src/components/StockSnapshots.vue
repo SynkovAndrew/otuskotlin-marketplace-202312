@@ -1,6 +1,6 @@
 <template>
   <div class="table-container">
-    <table class="styled-table">
+<!--    <table class="styled-table">
       <thead>
       <tr>
         <th>Value</th>
@@ -13,23 +13,40 @@
         <td :class="{ active: index == currentIndex }">{{ snapshot.timestamp }}</td>
       </tr>
       </tbody>
-    </table>
+    </table>-->
+    <Bar v-if="loaded"
+        id="my-chart-id"
+        :options="chartOptions"
+        :data="chartData"
+    />
   </div>
 </template>
 
 <script>
-
 import StockSnapshotService from "../services/StockSnapshotService";
+import { Bar } from 'vue-chartjs'
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
 export default {
   name: "stock-snapshots",
+  components: { Bar },
   data() {
     return {
       snapshots: [],
       stockId: this.$route.params.stockId,
       currentSnapshot: null,
       currentIndex: -1,
-      name: ""
+      name: "",
+      loaded: false,
+      chartData: {
+        labels: [],
+        datasets: []
+      },
+      chartOptions: {
+        responsive: true
+      }
     };
   },
   methods: {
@@ -37,7 +54,27 @@ export default {
       StockSnapshotService.findByStockId(stockId)
           .then(response => {
             this.snapshots = response.data.snapshots;
-            console.log(response.data);
+
+            const labels = []
+            const data = []
+
+            for (let i = 0; i < this.snapshots.length; i++) {
+              labels.push(this.snapshots[i].timestamp)
+              data.push(this.snapshots[i].value)
+            }
+
+            this.chartData.datasets = [
+              {
+                label: 'Data One',
+                backgroundColor: '#f87979',
+                data: data
+              }
+            ]
+            this.chartData.labels = labels
+            this.loaded = true
+
+           // console.log(labels);
+           // console.log(data);
           })
           .catch(e => {
             console.log(e);
@@ -56,6 +93,7 @@ export default {
     },
   },
   mounted() {
+    this.loaded = false
     this.findByStockId(this.stockId);
   }
 };

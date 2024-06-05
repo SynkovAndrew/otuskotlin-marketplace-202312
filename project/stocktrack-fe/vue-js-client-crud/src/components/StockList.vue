@@ -24,11 +24,11 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(stock, index) in stocks" :key="index">
-        <td :class="{ active: index == currentIndex }">{{ stock.id.value }}</td>
-        <td :class="{ active: index == currentIndex }">{{ stock.name }}</td>
-        <td :class="{ active: index == currentIndex }">{{ stock.category }}</td>
-        <td :class="{ active: index == currentIndex }">
+      <tr :class="{ active: index == currentIndex }" v-for="(stock, index) in stocks" :key="index">
+        <td>{{ stock.id.value }}</td>
+        <td>{{ stock.name }}</td>
+        <td>{{ stock.category }}</td>
+        <td>
           <router-link :to="`/stock/${stock.id.value}/snapshots`" class="btn btn-outline-info mx-1">View</router-link>
         </td>
       </tr>
