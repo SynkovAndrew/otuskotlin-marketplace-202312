@@ -20,6 +20,7 @@
         <th>Id</th>
         <th>Name</th>
         <th>Category</th>
+        <th>Snapshots</th>
       </tr>
       </thead>
       <tbody>
@@ -27,6 +28,9 @@
         <td :class="{ active: index == currentIndex }">{{ stock.id.value }}</td>
         <td :class="{ active: index == currentIndex }">{{ stock.name }}</td>
         <td :class="{ active: index == currentIndex }">{{ stock.category }}</td>
+        <td :class="{ active: index == currentIndex }">
+          <router-link :to="`/stock/${stock.id.value}/snapshots`" class="btn btn-outline-info mx-1">View</router-link>
+        </td>
       </tr>
       </tbody>
     </table>
@@ -68,17 +72,6 @@ export default {
       this.currentStock = stock;
       this.currentIndex = index;
     },
-
-    searchByName() {
-      StockService.find()
-          .then(response => {
-            this.stocks = response.data;
-            console.log(response.data);
-          })
-          .catch(e => {
-            console.log(e);
-          });
-    }
   },
   mounted() {
     this.find();

@@ -6,6 +6,11 @@ const routes =  [
         alias: "/stocks",
         name: "stocks",
         component: () => import("./components/StockList")
+    },
+    {
+        path: "/stock/:stockId/snapshots",
+        name: "snapshots",
+        component: () => import("./components/StockSnapshots.vue")
     }
 ];
 
