@@ -6,7 +6,6 @@ import com.otus.otuskotlin.stocktrack.context.PostStockSnapshotsContext
 import com.otus.otuskotlin.stocktrack.context.SearchStocksResponseContext
 import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.plugins.configureAuthentication
-import com.otus.otuskotlin.stocktrack.plugins.configureRouting
 import com.otus.otuskotlin.stocktrack.plugins.configureSerialization
 import com.otus.otuskotlin.stocktrack.plugins.configureWeb
 import com.otus.otuskotlin.stocktrack.plugins.routing.configureStockRoutes
@@ -45,9 +44,8 @@ fun Application.modules() {
         )
     )
 
-   // configureAuthentication()
+    configureAuthentication()
     configureSerialization()
-    //configureRouting()
     configureStockRoutes(applicationSettings)
     configureWeb()
 }
