@@ -1,20 +1,6 @@
 <template>
   <div class="table-container">
-<!--    <table class="styled-table">
-      <thead>
-      <tr>
-        <th>Value</th>
-        <th>Timestamp</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="(snapshot, index) in snapshots" :key="index">
-        <td :class="{ active: index == currentIndex }">{{ snapshot.value }}</td>
-        <td :class="{ active: index == currentIndex }">{{ snapshot.timestamp }}</td>
-      </tr>
-      </tbody>
-    </table>-->
-    <Bar v-if="loaded"
+    <Line v-if="loaded"
         id="my-chart-id"
         :options="chartOptions"
         :data="chartData"
@@ -24,14 +10,30 @@
 
 <script>
 import StockSnapshotService from "../services/StockSnapshotService";
-import { Bar } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
-
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js'
+import { Line } from 'vue-chartjs'
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+)
 
 export default {
   name: "stock-snapshots",
-  components: { Bar },
+  components: { Line },
   data() {
     return {
       snapshots: [],
@@ -59,13 +61,17 @@ export default {
             const data = []
 
             for (let i = 0; i < this.snapshots.length; i++) {
-              labels.push(this.snapshots[i].timestamp)
+              const timestamp = new Date(this.snapshots[i].timestamp)
+                  .toISOString()
+                  .replace("T", " ")
+                  .replace("Z", "")
+              labels.push(timestamp.substring(0, timestamp.length - 4))
               data.push(this.snapshots[i].value)
             }
 
             this.chartData.datasets = [
               {
-                label: 'Data One',
+                label: 'Stock Value',
                 backgroundColor: '#f87979',
                 data: data
               }
