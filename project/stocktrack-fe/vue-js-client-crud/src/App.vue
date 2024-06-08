@@ -5,6 +5,9 @@
         <li class="nav-item">
           <router-link to="/stocks" class="nav-link">Stocks</router-link>
         </li>
+        <li class="nav-item">
+          <router-link to="/auth-details" class="nav-link">Auth Details</router-link>
+        </li>
       </div>
     </nav>
 
