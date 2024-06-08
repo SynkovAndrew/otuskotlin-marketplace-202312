@@ -10,6 +10,7 @@ fun Application.configureWeb() {
         allowMethod(HttpMethod.Post)
         allowMethod(HttpMethod.Get)
         allowHeader(HttpHeaders.AccessControlAllowOrigin)
+        allowHeader(HttpHeaders.AccessControlRequestHeaders)
         allowHeader(HttpHeaders.ContentType)
         anyHost()
     }

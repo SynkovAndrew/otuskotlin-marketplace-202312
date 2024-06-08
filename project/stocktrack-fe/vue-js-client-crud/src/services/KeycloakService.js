@@ -20,11 +20,23 @@ const Token = () =>  keycloakInstance?.token;
 
 const LogOut = () => keycloakInstance.logout();
 
+function updateToken (successCallback) {
+    keycloakInstance.updateToken(5)
+        .then(successCallback)
+        .catch(doLogin)
+}
+
+const doLogin = keycloakInstance.login;
+
+const isLoggedIn = () => !!keycloakInstance.token;
+
 const KeyCloakService = {
     CallLogin: Login,
     GetUserName: UserName,
     GetAccessToken: Token,
     CallLogOut: LogOut,
+    UpdateToken: updateToken,
+    IsLoggedIn: isLoggedIn,
 };
 
 export default KeyCloakService;

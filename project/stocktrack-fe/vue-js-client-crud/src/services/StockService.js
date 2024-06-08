@@ -1,8 +1,8 @@
-import http from "../http";
+import Http from "../http";
 
 class StockService {
     find() {
-        return http.post(
+        return Http.getAxiosClient().post(
             "/stock/search",
             {
                 "requestType": "search",

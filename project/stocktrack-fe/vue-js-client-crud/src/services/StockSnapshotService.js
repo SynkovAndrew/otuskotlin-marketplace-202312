@@ -1,8 +1,8 @@
-import http from "../http";
+import Http from "../http";
 
 class StockSnapshotService {
     findByStockId(stockId) {
-        return http.post(
+        return Http.getAxiosClient().post(
             "/snapshot/find",
             {
                 "requestType": "find_snapshot",
