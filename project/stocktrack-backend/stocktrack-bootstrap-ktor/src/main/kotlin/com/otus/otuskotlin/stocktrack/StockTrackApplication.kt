@@ -9,10 +9,21 @@ import com.otus.otuskotlin.stocktrack.plugins.configureAuthentication
 import com.otus.otuskotlin.stocktrack.plugins.configureSerialization
 import com.otus.otuskotlin.stocktrack.plugins.configureWeb
 import com.otus.otuskotlin.stocktrack.plugins.routing.configureStockRoutes
+import com.otus.otuskotlin.stocktrack.snapshot.StockSnapshot
+import com.otus.otuskotlin.stocktrack.snapshot.StockSnapshotRepository
+import com.otus.otuskotlin.stocktrack.stock.Stock
+import com.otus.otuskotlin.stocktrack.stock.StockRepository
+import com.otus.otuskotlin.stocktrack.stock.StockRepositoryRequest
 import com.otus.otuskotlin.stocktrack.stock.StubStockRepository
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import kotlinx.coroutines.runBlocking
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.util.UUID
+import kotlin.random.Random
+import kotlin.time.Duration
 
 fun main() {
     embeddedServer(Netty, port = 8090, host = "0.0.0.0", module = Application::modules)
@@ -23,12 +34,14 @@ fun Application.modules() {
     val postgreSqlProperties = PostgreSqlProperties()
     val loggerProvider = LoggerProvider { logbackLoggerWrapper(it) }
     val cacheStockRepository = CacheStockRepository()
+    val postgreSqlStockRepository = PostgreSqlStockRepository(properties = postgreSqlProperties)
+    val postgreSqlSnapshotRepository = PostgreSqlSnapshotRepository(properties = postgreSqlProperties)
     val coreSettings = CoreSettings(
         loggerProvider = loggerProvider,
-        prodStockRepository = PostgreSqlStockRepository(properties = postgreSqlProperties),
+        prodStockRepository = postgreSqlStockRepository,
         testStockRepository = cacheStockRepository,
         stubStockRepository = StubStockRepository(),
-        stockSnapshotRepository = PostgreSqlSnapshotRepository(properties = postgreSqlProperties)
+        stockSnapshotRepository = postgreSqlSnapshotRepository
     )
     val singleStockResponseProcessor = SingleStockResponseProcessor(coreSettings = coreSettings)
     val searchStocksResponseProcessor = SearchStocksResponseProcessor(coreSettings = coreSettings)
@@ -48,4 +61,44 @@ fun Application.modules() {
     configureSerialization()
     configureStockRoutes(applicationSettings)
     configureWeb()
+    configureData(postgreSqlStockRepository, postgreSqlSnapshotRepository)
+}
+
+fun configureData(
+    stockRepository: StockRepository,
+    stockSnapshotRepository: StockSnapshotRepository
+) {
+
+    val stock = Stock(
+        Stock.Id(UUID.randomUUID().toString()),
+        "GENERATED 1",
+        Stock.Category.SHARE
+    )
+    val snapshots = generateDataForStock(stock.id)
+
+    runBlocking {
+        stockRepository.create(StockRepositoryRequest(stock))
+        snapshots.forEach { stockSnapshotRepository.create(it) }
+    }
+}
+
+fun generateDataForStock(stockId: Stock.Id): List<StockSnapshot> {
+    val delta = 1
+    val initial = StockSnapshot(
+        id = StockSnapshot.Id(value = UUID.randomUUID().toString()),
+        stockId = stockId,
+        value =  Random.nextDouble(12.3, 99.1).toBigDecimal(),
+        timestamp = kotlinx.datetime.Instant.parse("2020-12-09T09:16:56.000124Z")
+    )
+
+    return generateSequence(initial) {
+        StockSnapshot(
+            id = StockSnapshot.Id(value = UUID.randomUUID().toString()),
+            stockId = stockId,
+            value =  Random
+                .nextDouble(it.value.toDouble() - delta.toDouble(), it.value.toDouble() + delta.toDouble())
+                .toBigDecimal(),
+            timestamp = it.timestamp.plus(Duration.parseIsoString("PT30M")),
+        )
+    }.take(10000).toList()
 }
