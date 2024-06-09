@@ -1,8 +1,7 @@
 <template>
   <div class="login">
     <h2>Username: {{ Login() }}</h2>
-    <h2>Access Token: {{ AccessToken() }}</h2>
-    <button @click="LogOut">Log Out</button>
+    <button @click="ShowAccessToken">Access Token</button>
   </div>
 </template>
 
@@ -16,12 +15,9 @@ export default defineComponent({
     Login() {
       return KeyCloakService.GetUserName();
     },
-    AccessToken() {
-      return KeyCloakService.GetAccessToken();
-    },
-    LogOut() {
-      return KeyCloakService.CallLogOut();
-    },
+    ShowAccessToken() {
+      alert(KeyCloakService.GetAccessToken())
+    }
   },
 });
 </script>

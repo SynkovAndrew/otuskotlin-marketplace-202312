@@ -5,9 +5,10 @@
         <li class="nav-item">
           <router-link to="/stocks" class="nav-link">Stocks</router-link>
         </li>
-        <li class="nav-item">
-          <router-link to="/auth-details" class="nav-link">Auth Details</router-link>
-        </li>
+      </div>
+      <div>
+        <router-link to="/auth-details" class="nav-link" style="color: #f1f1f1">{{ Login() }}</router-link>
+        <button type="button" class="btn btn-light" @click="LogOut">Logout</button>
       </div>
     </nav>
 
@@ -18,11 +19,21 @@
 </template>
 
 <script>
+import KeyCloakService from "./services/KeycloakService.js";
+
 export default {
   name: 'App',
   components: {
 
-  }
+  },
+  methods: {
+    Login() {
+      return KeyCloakService.GetUserName();
+    },
+    LogOut() {
+      return KeyCloakService.CallLogOut();
+    },
+  },
 }
 </script>
 
@@ -33,5 +44,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+.h5, h5 {
+  font-size: 1.25rem;
+  color: white;
 }
 </style>
