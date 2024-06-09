@@ -9,9 +9,16 @@ fun Application.configureWeb() {
         allowMethod(HttpMethod.Options)
         allowMethod(HttpMethod.Post)
         allowMethod(HttpMethod.Get)
+        allowHeader(HttpHeaders.Authorization)
         allowHeader(HttpHeaders.AccessControlAllowOrigin)
         allowHeader(HttpHeaders.AccessControlRequestHeaders)
+        allowHeader(HttpHeaders.AccessControlAllowMethods)
+        allowHeader(HttpHeaders.AccessControlAllowCredentials)
+        allowHeader(HttpHeaders.AccessControlRequestMethod)
+        allowHeader(HttpHeaders.AccessControlExposeHeaders)
+        allowHeader(HttpHeaders.AccessControlMaxAge)
         allowHeader(HttpHeaders.ContentType)
         anyHost()
+        allowCredentials = true
     }
 }

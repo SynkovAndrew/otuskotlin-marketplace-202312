@@ -17,7 +17,7 @@ const HttpMethods = {
 };
 
 const _axios = axios.create({
-    baseURL: "http://localhost:8091/api/v1",
+    baseURL: "http://localhost:8090/api/v1",
     headers: {
         "Content-type": "application/json"
     }
@@ -29,8 +29,7 @@ function cb(config) {
 }
 
 const configureAxiosKeycloak = () => {
-    _axios.interceptors.request.use(
-        (config) => {
+    _axios.interceptors.request.use(function (config) {
             if (KeyCloakService.IsLoggedIn()) {
                 KeyCloakService.UpdateToken(cb(config));
             }
