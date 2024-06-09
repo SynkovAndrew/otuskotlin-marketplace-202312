@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <h2>Username: {{ Login() }}</h2>
+    <h3>Username: {{ Login() }}</h3>
     <button @click="ShowAccessToken">Access Token</button>
   </div>
 </template>
@@ -27,15 +27,7 @@ export default defineComponent({
 h3 {
   margin: 40px 0 0;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+button {
+  margin: 40px 0 0;
 }
 </style>

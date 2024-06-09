@@ -1,18 +1,4 @@
 <template>
-  <!--  <div class="row">
-      <div class="col-md-6">
-        <ul class="list-group">
-          <li class="list-group-item"
-              :class="{ active: index == currentIndex }"
-              v-for="(stock, index) in stocks"
-              :key="index"
-              @click="setActiveStock(stock, index)"
-          >
-            {{ stock.name }}
-          </li>
-        </ul>
-      </div>
-    </div>-->
   <div class="table-container">
     <table class="styled-table">
       <thead>
@@ -81,7 +67,7 @@ export default {
 <style scoped>
 .table-container {
   width: 100%;
-  margin: 20px 0;
+  margin: 2px 0;
   overflow-x: auto;
 }
 
