@@ -69,16 +69,43 @@ fun configureData(
     stockSnapshotRepository: StockSnapshotRepository
 ) {
 
-    val stock = Stock(
+    val stock1 = Stock(
         Stock.Id(UUID.randomUUID().toString()),
-        "GENERATED 1",
+        "Gazprombank",
         Stock.Category.SHARE
     )
-    val snapshots = generateDataForStock(stock.id)
+    val stock2 = Stock(
+        Stock.Id(UUID.randomUUID().toString()),
+        "Alphabank",
+        Stock.Category.SHARE
+    )
+    val stock3 = Stock(
+        Stock.Id(UUID.randomUUID().toString()),
+        "T-bank",
+        Stock.Category.BOND
+    )
+    val stock4 = Stock(
+        Stock.Id(UUID.randomUUID().toString()),
+        "Yandex Ltd.",
+        Stock.Category.SHARE
+    )
+    val stock5 = Stock(
+        Stock.Id(UUID.randomUUID().toString()),
+        "Ozon Company",
+        Stock.Category.SHARE
+    )
 
     runBlocking {
-        stockRepository.create(StockRepositoryRequest(stock))
-        snapshots.forEach { stockSnapshotRepository.create(it) }
+        stockRepository.create(StockRepositoryRequest(stock1))
+        stockRepository.create(StockRepositoryRequest(stock2))
+        stockRepository.create(StockRepositoryRequest(stock3))
+        stockRepository.create(StockRepositoryRequest(stock4))
+        stockRepository.create(StockRepositoryRequest(stock5))
+        generateDataForStock(stock1.id).forEach { stockSnapshotRepository.create(it) }
+        generateDataForStock(stock2.id).forEach { stockSnapshotRepository.create(it) }
+        generateDataForStock(stock3.id).forEach { stockSnapshotRepository.create(it) }
+        generateDataForStock(stock4.id).forEach { stockSnapshotRepository.create(it) }
+        generateDataForStock(stock5.id).forEach { stockSnapshotRepository.create(it) }
     }
 }
 
@@ -98,7 +125,7 @@ fun generateDataForStock(stockId: Stock.Id): List<StockSnapshot> {
             value =  Random
                 .nextDouble(it.value.toDouble() - delta.toDouble(), it.value.toDouble() + delta.toDouble())
                 .toBigDecimal(),
-            timestamp = it.timestamp.plus(Duration.parseIsoString("PT30M")),
+            timestamp = it.timestamp.plus(Duration.parseIsoString("PT1200M")),
         )
     }.take(10000).toList()
 }
