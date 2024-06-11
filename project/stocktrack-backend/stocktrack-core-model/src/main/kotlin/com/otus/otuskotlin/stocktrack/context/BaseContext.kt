@@ -7,7 +7,7 @@ import com.otus.otuskotlin.stocktrack.model.RequestId
 import com.otus.otuskotlin.stocktrack.model.State
 import java.time.Instant
 
-sealed interface Context<IN, OUT> {
+sealed interface Context<IN, OUT, SELF : Context<IN, OUT, SELF>> {
     val command: Command
     val state: State
     val errors: List<ErrorDescription>
@@ -17,9 +17,11 @@ sealed interface Context<IN, OUT> {
     val request: IN
     val response: OUT
 
-    fun start(): Context<IN, OUT>
+    fun start(): SELF
 
-    fun fail(error: ErrorDescription): Context<IN, OUT>
+    fun fail(error: ErrorDescription): SELF
 
-    fun finish(): Context<IN, OUT>
+    fun fail(error: Collection<ErrorDescription>): SELF
+
+    fun finish(): SELF
 }

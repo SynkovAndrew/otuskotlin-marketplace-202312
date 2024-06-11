@@ -23,7 +23,7 @@ import com.otus.otuskotlin.stocktrack.model.Command
 import com.otus.otuskotlin.stocktrack.model.Stock
 import com.otus.otuskotlin.stocktrack.model.StockLock
 
-fun Request.fromTransportModel(): Context<*, *> {
+fun Request.fromTransportModel(): Context<*, *, *> {
     return when (this) {
         is CreateStockRequest -> SingleStockResponseContext(
             command = Command.CREATE,

@@ -2,7 +2,8 @@ package com.otus.otuskotlin.stocktrack
 
 import com.otus.otuskotlin.stocktrack.context.Context
 
-interface ResponseProcessor <I, O, C : Context<I, O>>{
+
+interface ResponseProcessor <C : Context<*, *, C>>{
 
     suspend fun execute(context: C): C
 }

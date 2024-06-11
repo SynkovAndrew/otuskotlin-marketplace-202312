@@ -6,7 +6,7 @@ import com.otus.otuskotlin.stocktrack.model.Debug
 import com.otus.otuskotlin.stocktrack.model.ErrorDescription
 import com.otus.otuskotlin.stocktrack.model.State
 
-fun <T : Context<*, *>> ChainDsl<T>.stubForDbErrorOnCommand() {
+fun <T : Context<*, *, T>> ChainDsl<T>.stubForDbErrorOnCommand() {
     processor {
         this.name = "stubForDbErrorOnCommand"
 
@@ -24,7 +24,7 @@ fun <T : Context<*, *>> ChainDsl<T>.stubForDbErrorOnCommand() {
                     field = "no",
                     message = "Failed to access database"
                 )
-            ) as T
+            )
         }
     }
 }

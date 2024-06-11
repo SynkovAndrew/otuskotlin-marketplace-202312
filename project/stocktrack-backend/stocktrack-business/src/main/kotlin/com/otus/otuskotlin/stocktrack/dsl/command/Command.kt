@@ -7,9 +7,9 @@ import com.otus.otuskotlin.stocktrack.model.Debug
 import com.otus.otuskotlin.stocktrack.model.ErrorDescription
 import com.otus.otuskotlin.stocktrack.model.State
 
-fun <T : Context<*, *>> ChainDsl<T>.command(
+fun <T : Context<*, *, T>> ChainDsl<T>.command(
     command: Command,
-    process: T.() -> T
+    process: suspend T.() -> T
 ) {
     processor {
         this.name = command.name
@@ -21,7 +21,7 @@ fun <T : Context<*, *>> ChainDsl<T>.command(
         }
 
         process {
-            it.process().finish() as T
+            it.process()
         }
 
         handleException { throwable, context ->
@@ -30,7 +30,7 @@ fun <T : Context<*, *>> ChainDsl<T>.command(
                     message = throwable.message ?: "",
                     throwable = throwable
                 )
-            ) as T
+            )
         }
     }
 }

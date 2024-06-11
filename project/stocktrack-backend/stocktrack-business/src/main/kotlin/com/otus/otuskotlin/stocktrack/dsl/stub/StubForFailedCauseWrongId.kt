@@ -6,7 +6,7 @@ import com.otus.otuskotlin.stocktrack.model.Debug
 import com.otus.otuskotlin.stocktrack.model.ErrorDescription
 import com.otus.otuskotlin.stocktrack.model.State
 
-fun <T : Context<*, *>> ChainDsl<T>.stubForFailedCauseBadRequest() {
+fun <T : Context<*, *, T>> ChainDsl<T>.stubForFailedCauseBadRequest() {
     processor {
         this.name = "stubForFailedCauseWrongId"
 
@@ -24,7 +24,7 @@ fun <T : Context<*, *>> ChainDsl<T>.stubForFailedCauseBadRequest() {
                     field = "no",
                     message = "Bad request"
                 )
-            ) as T
+            )
         }
     }
 }

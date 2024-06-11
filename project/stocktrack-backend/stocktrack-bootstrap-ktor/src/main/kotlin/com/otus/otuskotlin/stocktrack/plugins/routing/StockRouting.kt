@@ -8,6 +8,8 @@ import com.otus.otuskotlin.stocktrack.api.v1.models.FindStockRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.Request
 import com.otus.otuskotlin.stocktrack.api.v1.models.SearchStocksRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockRequest
+import com.otus.otuskotlin.stocktrack.context.Context
+import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.stock.fromTransportModel
 import com.otus.otuskotlin.stocktrack.stock.toTransportModel
 import io.ktor.server.application.*
@@ -19,33 +21,34 @@ fun Application.configureStockRoutes(applicationSettings: ApplicationSettings) {
     routing {
         route("/api/v1/stock") {
             post("find") {
-                call.handleCall<FindStockRequest>(applicationSettings)
+                call.handleCall<FindStockRequest, SingleStockResponseContext>(applicationSettings)
             }
 
             post("/create") {
-                call.handleCall<CreateStockRequest>(applicationSettings)
+                call.handleCall<CreateStockRequest, SingleStockResponseContext>(applicationSettings)
             }
 
             post("/delete") {
-                call.handleCall<DeleteStockRequest>(applicationSettings)
+                call.handleCall<DeleteStockRequest, SingleStockResponseContext>(applicationSettings)
             }
 
             post("/update") {
-                call.handleCall<UpdateStockRequest>(applicationSettings)
+                call.handleCall<UpdateStockRequest, SingleStockResponseContext>(applicationSettings)
             }
             post("/search") {
-                call.handleCall<SearchStocksRequest>(applicationSettings)
+                call.handleCall<SearchStocksRequest, SingleStockResponseContext>(applicationSettings)
             }
         }
     }
 }
 
-suspend inline fun <reified T : Request> ApplicationCall.handleCall(
+suspend inline fun <reified R : Request, T : Context<*, *, T>> ApplicationCall.handleCall(
     applicationSettings: ApplicationSettings,
     commandBus: CommandBus = CommandBus(applicationSettings)
 ) {
-    receive<T>()
+    receive<R>()
         .fromTransportModel()
+        .let { it as T }
         .let { context -> commandBus.processContext(context) }
         .let { this.respond(it.toTransportModel()) }
 }

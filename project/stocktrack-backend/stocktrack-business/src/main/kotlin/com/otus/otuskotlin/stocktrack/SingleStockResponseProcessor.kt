@@ -2,9 +2,12 @@ package com.otus.otuskotlin.stocktrack
 
 import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.cor.chainBuilder
-import com.otus.otuskotlin.stocktrack.dsl.command.command
 import com.otus.otuskotlin.stocktrack.dsl.command.commandPipeline
+import com.otus.otuskotlin.stocktrack.dsl.command.createCommand
+import com.otus.otuskotlin.stocktrack.dsl.command.deleteCommand
+import com.otus.otuskotlin.stocktrack.dsl.command.findCommand
 import com.otus.otuskotlin.stocktrack.dsl.command.startProcessing
+import com.otus.otuskotlin.stocktrack.dsl.command.updateCommand
 import com.otus.otuskotlin.stocktrack.dsl.stub.stubForDbErrorOnCommand
 import com.otus.otuskotlin.stocktrack.dsl.stub.stubForFailedCauseBadRequest
 import com.otus.otuskotlin.stocktrack.dsl.stub.stubForRequestedStubNotFound
@@ -18,14 +21,13 @@ import com.otus.otuskotlin.stocktrack.dsl.validation.validateNameProperty
 import com.otus.otuskotlin.stocktrack.dsl.validation.validateStockCategoryProperty
 import com.otus.otuskotlin.stocktrack.dsl.validation.validation
 import com.otus.otuskotlin.stocktrack.model.Command
-import com.otus.otuskotlin.stocktrack.model.Stock
 
 class SingleStockResponseProcessor(
     val coreSettings: CoreSettings
-) : ResponseProcessor<Stock, Stock, SingleStockResponseContext> {
+) : ResponseProcessor<SingleStockResponseContext> {
 
     override suspend fun execute(context: SingleStockResponseContext): SingleStockResponseContext {
-        return chainBuilder<SingleStockResponseContext> {
+        return chainBuilder {
             startProcessing()
 
             commandPipeline(Command.CREATE) {
@@ -40,9 +42,7 @@ class SingleStockResponseProcessor(
                     validateStockCategoryProperty()
                 }
 
-                command(Command.CREATE) {
-                    copy(response = request)
-                }
+                createCommand(coreSettings)
             }
 
             commandPipeline(Command.UPDATE) {
@@ -58,15 +58,7 @@ class SingleStockResponseProcessor(
                     validateStockCategoryProperty()
                 }
 
-                command(Command.UPDATE) {
-                    copy(
-                        response = StubStockRepository.findById(context.request.id)
-                            .copy(
-                                name = context.request.name,
-                                category = context.request.category
-                            )
-                    )
-                }
+                updateCommand(coreSettings)
             }
 
             commandPipeline(Command.FIND) {
@@ -80,9 +72,7 @@ class SingleStockResponseProcessor(
                     validateIdProperty()
                 }
 
-                command(Command.FIND) {
-                    copy(response = StubStockRepository.findById(context.request.id))
-                }
+                findCommand(coreSettings)
             }
 
             commandPipeline(Command.DELETE) {
@@ -95,9 +85,7 @@ class SingleStockResponseProcessor(
                     validateIdProperty()
                 }
 
-                command(Command.DELETE) {
-                    copy(response = StubStockRepository.findById(context.request.id))
-                }
+                deleteCommand(coreSettings)
             }
         }.execute(context)
     }

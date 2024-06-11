@@ -8,6 +8,7 @@ import com.otus.otuskotlin.stocktrack.plugins.configureRouting
 import com.otus.otuskotlin.stocktrack.plugins.configureSerialization
 import com.otus.otuskotlin.stocktrack.plugins.configureWeb
 import com.otus.otuskotlin.stocktrack.plugins.routing.configureStockRoutes
+import com.otus.otuskotlin.stocktrack.stock.StubStockRepository
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -19,7 +20,13 @@ fun main() {
 
 fun Application.modules() {
     val loggerProvider = LoggerProvider { logbackLoggerWrapper(it) }
-    val coreSettings = CoreSettings(loggerProvider = loggerProvider)
+    val cacheStockRepository = CacheStockRepository()
+    val coreSettings = CoreSettings(
+        loggerProvider = loggerProvider,
+        prodStockRepository = PostgreSqlStockRepository(properties = PostgreSqlProperties()),
+        testStockRepository = cacheStockRepository,
+        stubStockRepository = StubStockRepository()
+    )
     val singleStockResponseProcessor = SingleStockResponseProcessor(coreSettings = coreSettings)
     val searchStocksResponseProcessor = SearchStocksResponseProcessor(coreSettings = coreSettings)
     val applicationSettings = KtorApplicationSettings(
