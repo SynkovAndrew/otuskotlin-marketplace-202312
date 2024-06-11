@@ -14,15 +14,6 @@ services:
     volumes:
       - ./volumes/keycloak:/opt/keycloak/data/import
 
-  envoy:
-    image: envoyproxy/envoy:v1.19.1
-    volumes:
-      - ./envoy.yaml:/etc/envoy/envoy.yaml
-    ports:
-      - "10000:10000"
-    depends_on:
-      - keycloak
-
   psql:
     image: postgres
     ports:
