@@ -36,6 +36,6 @@ tasks.test {
 
 dockerCompose {
     dockerComposeWorkingDirectory = project.file("./docker")
-    executable = "/Applications/Docker.app/Contents/Resources/bin/docker-compose"
-    dockerExecutable = "/Applications/Docker.app/Contents/Resources/bin/docker"
+/*    executable = "/Applications/Docker.app/Contents/Resources/bin/docker-compose"
+    dockerExecutable = "/Applications/Docker.app/Contents/Resources/bin/docker"*/
 }

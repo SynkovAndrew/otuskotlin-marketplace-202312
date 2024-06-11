@@ -10,7 +10,9 @@ import com.otus.otuskotlin.stocktrack.stock.StockIdRepositoryRequest
 import com.otus.otuskotlin.stocktrack.stock.StockRepositoryRequest
 import com.otus.otuskotlin.stocktrack.stock.StockRepositoryResponse
 import com.otus.otuskotlin.stocktrack.stock.StocksRepositoryResponse
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -18,6 +20,7 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import java.util.UUID
 
@@ -116,6 +119,16 @@ class PostgreSqlStockRepository(
         return stocks
             .map { stock -> runBlocking { create(StockRepositoryRequest(stock)) } }
             .map { (it as OkStockRepositoryResponse).data }
+    }
+
+    private suspend inline fun <T> transactionWrapper(
+        crossinline block: () -> T
+    ): T {
+        return withContext(Dispatchers.IO) {
+            transaction(connection) {
+                block()
+            }
+        }
     }
 
     private fun tryFindById(stockId: Stock.Id): StockRepositoryResponse {

@@ -1,6 +1,7 @@
 package com.otus.otuskotlin.stocktrack.stock
 
 import com.otus.otuskotlin.stocktrack.model.ErrorDescription
+import com.otus.otuskotlin.stocktrack.model.Stock
 
 abstract class BaseStockRepository : EnrichableStockRepository {
 

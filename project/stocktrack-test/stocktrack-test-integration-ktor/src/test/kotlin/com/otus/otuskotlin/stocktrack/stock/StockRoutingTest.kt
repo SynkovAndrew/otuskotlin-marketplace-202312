@@ -345,4 +345,24 @@ class StockRoutingTest {
                 )
         }
     }
+
+    private suspend fun ApplicationTestBuilder.storeStock(name: String, category: StockCategory): StockResponseBody {
+        return configuredHttpClient()
+            .post {
+                url("/api/v1/stock/create")
+                contentType(ContentType.Application.Json)
+                setBody(
+                    CreateStockRequest(
+                        requestType = "create",
+                        debug = Debug(mode = DebugMode.PROD, stub = DebugStub.SUCCESS),
+                        body = CreateStockBody(
+                            name = name,
+                            category = category
+                        )
+                    )
+                )
+            }
+            .body<CreateStockResponse>()
+            .body
+    }
 }
