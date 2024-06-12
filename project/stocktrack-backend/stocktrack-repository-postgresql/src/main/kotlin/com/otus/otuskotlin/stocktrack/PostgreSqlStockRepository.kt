@@ -121,16 +121,6 @@ class PostgreSqlStockRepository(
             .map { (it as OkStockRepositoryResponse).data }
     }
 
-    private suspend inline fun <T> transactionWrapper(
-        crossinline block: () -> T
-    ): T {
-        return withContext(Dispatchers.IO) {
-            transaction(connection) {
-                block()
-            }
-        }
-    }
-
     private fun tryFindById(stockId: Stock.Id): StockRepositoryResponse {
         return StockTable.selectAll()
             .where { StockTable.id eq stockId.value }

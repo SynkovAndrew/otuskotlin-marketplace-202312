@@ -1,11 +1,11 @@
 package com.otus.otuskotlin.stocktrack
 
 import com.otus.otuskotlin.stocktrack.model.ErrorDescription
-import com.otus.otuskotlin.stocktrack.model.Stock
 import com.otus.otuskotlin.stocktrack.stock.EnrichableStockRepository
 import com.otus.otuskotlin.stocktrack.stock.ErrorStockRepositoryResponse
 import com.otus.otuskotlin.stocktrack.stock.OkStockRepositoryResponse
 import com.otus.otuskotlin.stocktrack.stock.OkStocksRepositoryResponse
+import com.otus.otuskotlin.stocktrack.stock.Stock
 import com.otus.otuskotlin.stocktrack.stock.StockFilterRepositoryRequest
 import com.otus.otuskotlin.stocktrack.stock.StockIdRepositoryRequest
 import com.otus.otuskotlin.stocktrack.stock.StockRepositoryRequest

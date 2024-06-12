@@ -1,7 +1,5 @@
 package com.otus.otuskotlin.stocktrack.stock
 
-import com.otus.otuskotlin.stocktrack.model.Stock
-
 interface EnrichableStockRepository : StockRepository {
     fun enrich(stocks: Collection<Stock>): Collection<Stock>
 }

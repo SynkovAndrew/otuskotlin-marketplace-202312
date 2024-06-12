@@ -9,21 +9,10 @@ import com.otus.otuskotlin.stocktrack.plugins.configureAuthentication
 import com.otus.otuskotlin.stocktrack.plugins.configureSerialization
 import com.otus.otuskotlin.stocktrack.plugins.configureWeb
 import com.otus.otuskotlin.stocktrack.plugins.routing.configureStockRoutes
-import com.otus.otuskotlin.stocktrack.snapshot.StockSnapshot
-import com.otus.otuskotlin.stocktrack.snapshot.StockSnapshotRepository
-import com.otus.otuskotlin.stocktrack.stock.Stock
-import com.otus.otuskotlin.stocktrack.stock.StockRepository
-import com.otus.otuskotlin.stocktrack.stock.StockRepositoryRequest
 import com.otus.otuskotlin.stocktrack.stock.StubStockRepository
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import kotlinx.coroutines.runBlocking
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.util.UUID
-import kotlin.random.Random
-import kotlin.time.Duration
 
 fun main() {
     embeddedServer(Netty, port = 8090, host = "0.0.0.0", module = Application::modules)
