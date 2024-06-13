@@ -5,5 +5,5 @@ data class CassandraProperties(
     val port: Int = 9042,
     val user: String = "cassandra",
     val password: String = "cassandra",
-    val keyspace: String = "keyspace"
+    val keyspace: String = "test_keyspace"
 )

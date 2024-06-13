@@ -1,6 +1,7 @@
 package com.otus.otuskotlin.stocktrack
 
 import com.datastax.oss.driver.api.core.cql.AsyncResultSet
+import com.datastax.oss.driver.api.mapper.annotations.Dao
 import com.datastax.oss.driver.api.mapper.annotations.Delete
 import com.datastax.oss.driver.api.mapper.annotations.Insert
 import com.datastax.oss.driver.api.mapper.annotations.Select
@@ -8,6 +9,7 @@ import com.datastax.oss.driver.api.mapper.annotations.StatementAttributes
 import com.datastax.oss.driver.api.mapper.annotations.Update
 import java.util.concurrent.CompletionStage
 
+@Dao
 interface StockDao {
     @Insert
     @StatementAttributes(consistencyLevel = "QUORUM")

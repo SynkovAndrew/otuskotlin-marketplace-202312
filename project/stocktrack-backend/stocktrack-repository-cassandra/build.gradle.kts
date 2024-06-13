@@ -10,7 +10,7 @@ dependencies {
     implementation(libs.slf4j.api)
     implementation(libs.coroutines.jdk9)
     implementation(libs.bundles.cassandra)
-    //kapt(libs.cassandra.kapt)
+    kapt(libs.cassandra.kapt)
     implementation(libs.coroutines.core)
 
     testImplementation(project(":stocktrack-repository-core-test"))

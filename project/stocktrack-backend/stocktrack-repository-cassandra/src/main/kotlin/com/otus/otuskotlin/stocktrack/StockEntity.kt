@@ -9,7 +9,7 @@ import com.otus.otuskotlin.stocktrack.stock.Stock
 import com.otus.otuskotlin.stocktrack.stock.StockLock
 
 @Entity
-class StockEntity(
+data class StockEntity(
     @CqlName(COLUMN_ID)
     @PartitionKey
     val id: String,
