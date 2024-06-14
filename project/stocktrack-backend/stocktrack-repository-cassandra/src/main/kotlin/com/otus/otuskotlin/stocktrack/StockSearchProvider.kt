@@ -20,12 +20,12 @@ class StockSearchProvider(
         if (!filter.name.isNullOrBlank()) {
             select = select
                 .whereColumn(StockEntity.COLUMN_NAME)
-                .like(QueryBuilder.literal("%${filter.name}%"))
+                .isEqualTo(QueryBuilder.literal(filter.name))
         }
         if (filter.category != Stock.Category.NONE) {
             select = select
                 .whereColumn(StockEntity.COLUMN_CATEGORY)
-                .isEqualTo(QueryBuilder.literal(filter.category))
+                .isEqualTo(QueryBuilder.literal(filter.category.name))
         }
 
         val asyncFetcher = AsyncFetcher()

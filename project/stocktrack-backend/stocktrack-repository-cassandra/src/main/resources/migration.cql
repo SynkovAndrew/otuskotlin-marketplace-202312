@@ -12,3 +12,5 @@ CREATE TABLE IF NOT EXISTS test_keyspace.stock
     lock     text,
     PRIMARY KEY (id)
 );
+
+CREATE INDEX ON test_keyspace.stock (name);

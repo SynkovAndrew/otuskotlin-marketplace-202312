@@ -5,6 +5,7 @@ import com.datastax.oss.driver.api.core.cql.ResultSet
 import com.datastax.oss.driver.api.core.cql.Row
 import com.otus.otuskotlin.stocktrack.stock.BaseStockRepository
 import com.otus.otuskotlin.stocktrack.stock.OkStockRepositoryResponse
+import com.otus.otuskotlin.stocktrack.stock.OkStocksRepositoryResponse
 import com.otus.otuskotlin.stocktrack.stock.Stock
 import com.otus.otuskotlin.stocktrack.stock.StockFilterRepositoryRequest
 import com.otus.otuskotlin.stocktrack.stock.StockIdRepositoryRequest
@@ -93,6 +94,8 @@ class CassandraStockRepository(private val cassandraProperties: CassandraPropert
     }
 
     override suspend fun search(request: StockFilterRepositoryRequest): StocksRepositoryResponse {
-        TODO("Not yet implemented")
+       return OkStocksRepositoryResponse(
+            data = dao.search(request).await().map { it.toInternal() }
+        )
     }
 }

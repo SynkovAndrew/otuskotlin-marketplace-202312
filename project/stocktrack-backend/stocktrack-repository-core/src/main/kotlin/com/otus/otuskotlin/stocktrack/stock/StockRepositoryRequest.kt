@@ -14,6 +14,6 @@ data class StockIdRepositoryRequest(
 }
 
 data class StockFilterRepositoryRequest(
-    val name: String?,
-    val category: Stock.Category?
+    val name: String? = null,
+    val category: Stock.Category = Stock.Category.NONE
 )
