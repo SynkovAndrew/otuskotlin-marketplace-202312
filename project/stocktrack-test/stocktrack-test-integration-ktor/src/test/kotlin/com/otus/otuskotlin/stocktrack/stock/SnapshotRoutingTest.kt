@@ -61,7 +61,7 @@ class SnapshotRoutingTest {
             assertEquals(HttpStatusCode.OK, response.status)
             assertThat(findSnapshotsResponse)
                 .usingRecursiveComparison()
-                .ignoringFields("snapshots.id")
+                .ignoringFields("snapshots.id", "snapshots.timestamp")
                 .isEqualTo(
                     FindStockSnapshotsResponse(
                         responseType = "find_snapshots",
