@@ -6,7 +6,6 @@ import com.otus.otuskotlin.stocktrack.api.v1.models.ResponseResult
 import com.otus.otuskotlin.stocktrack.api.v1.models.StockCategory
 import com.otus.otuskotlin.stocktrack.api.v1.models.StockSnapshot
 import com.otus.otuskotlin.stocktrack.api.v1.models.UploadStockSnapshot
-import com.otus.otuskotlin.stocktrack.modules
 import com.otus.otuskotlin.stocktrack.testModules
 import io.ktor.client.call.*
 import io.ktor.client.request.*

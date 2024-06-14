@@ -40,6 +40,9 @@ class StockRoutingTest {
         testApplication {
             application { testModules() }
 
+            findAllStocks()
+                .forEach { deleteStock(it.id, it.lock!!) }
+
             val stock = storeStock("Gazprom", StockCategory.SHARE)
 
             val response = configuredHttpClient().post {
@@ -80,6 +83,8 @@ class StockRoutingTest {
         testApplication {
             application { testModules() }
 
+            findAllStocks()
+                .forEach { deleteStock(it.id, it.lock!!) }
 
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/find")
@@ -126,6 +131,8 @@ class StockRoutingTest {
         testApplication {
             application { testModules() }
 
+            findAllStocks()
+                .forEach { deleteStock(it.id, it.lock!!) }
 
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/create")
@@ -169,6 +176,8 @@ class StockRoutingTest {
         testApplication {
             application { testModules() }
 
+            findAllStocks()
+                .forEach { deleteStock(it.id, it.lock!!) }
 
             val stock = storeStock("Uzim Co", StockCategory.SHARE)
 
@@ -216,6 +225,8 @@ class StockRoutingTest {
         testApplication {
             application { testModules() }
 
+            findAllStocks()
+                .forEach { deleteStock(it.id, it.lock!!) }
 
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/update")
@@ -267,6 +278,8 @@ class StockRoutingTest {
         testApplication {
             application { testModules() }
 
+            findAllStocks()
+                .forEach { deleteStock(it.id, it.lock!!) }
 
             val stock = storeStock("Rosbank", StockCategory.BOND)
 
@@ -311,6 +324,8 @@ class StockRoutingTest {
         testApplication {
             application { testModules() }
 
+            findAllStocks()
+                .forEach { deleteStock(it.id, it.lock!!) }
 
             val stock = storeStock(UUID.randomUUID().toString(), StockCategory.BOND)
 
@@ -350,25 +365,5 @@ class StockRoutingTest {
                     )
                 )
         }
-    }
-
-    private suspend fun ApplicationTestBuilder.storeStock(name: String, category: StockCategory): StockResponseBody {
-        return configuredHttpClient()
-            .post {
-                url("/api/v1/stock/create")
-                contentType(ContentType.Application.Json)
-                setBody(
-                    CreateStockRequest(
-                        requestType = "create",
-                        debug = Debug(mode = DebugMode.PROD, stub = DebugStub.SUCCESS),
-                        body = CreateStockBody(
-                            name = name,
-                            category = category
-                        )
-                    )
-                )
-            }
-            .body<CreateStockResponse>()
-            .body
     }
 }
