@@ -7,6 +7,7 @@ import com.otus.otuskotlin.stocktrack.api.v1.models.StockCategory
 import com.otus.otuskotlin.stocktrack.api.v1.models.StockSnapshot
 import com.otus.otuskotlin.stocktrack.api.v1.models.UploadStockSnapshot
 import com.otus.otuskotlin.stocktrack.modules
+import com.otus.otuskotlin.stocktrack.testModules
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -23,7 +24,7 @@ class SnapshotRoutingTest {
     @Test
     fun `find stock snapshots successfully`() {
         testApplication {
-            application { modules() }
+            application { testModules() }
 
             val stock = storeStock("TestStock", StockCategory.SHARE)
             val snapshots = listOf(
