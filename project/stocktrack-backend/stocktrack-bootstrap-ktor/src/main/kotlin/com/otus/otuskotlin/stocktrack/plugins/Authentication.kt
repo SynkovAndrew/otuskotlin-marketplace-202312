@@ -1,8 +1,6 @@
 package com.otus.otuskotlin.stocktrack.plugins
 
 import com.auth0.jwk.UrlJwkProvider
-import com.auth0.jwt.JWT
-import com.auth0.jwt.algorithms.Algorithm
 import com.otus.otuskotlin.stocktrack.LoggerWrapper
 import com.otus.otuskotlin.stocktrack.logbackLoggerWrapper
 import io.ktor.http.*
@@ -12,9 +10,8 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import java.net.URI
-import java.net.URL
 
-fun Application.configureAuthentication() {
+fun Application.configureAuthentication(testModeEnabled: Boolean) {
     val logger: LoggerWrapper = logbackLoggerWrapper(this::class)
 
     install(Authentication) {
@@ -33,6 +30,7 @@ fun Application.configureAuthentication() {
             challenge { _, _ ->
                 call.respond(HttpStatusCode.Unauthorized, "Authorization token not provided or invalid")
             }
+            skipWhen { testModeEnabled }
         }
 
     }

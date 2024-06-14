@@ -46,7 +46,39 @@ fun Application.modules() {
         )
     )
 
-    configureAuthentication()
+    configureAuthentication(testModeEnabled = false)
+    configureSerialization()
+    configureStockRoutes(applicationSettings)
+    configureWeb()
+}
+
+fun Application.testModules() {
+    val postgreSqlProperties = PostgreSqlProperties()
+    val loggerProvider = LoggerProvider { logbackLoggerWrapper(it) }
+    val cacheStockRepository = CacheStockRepository()
+    val postgreSqlStockRepository = PostgreSqlStockRepository(properties = postgreSqlProperties)
+    val postgreSqlSnapshotRepository = PostgreSqlSnapshotRepository(properties = postgreSqlProperties)
+    val coreSettings = CoreSettings(
+        loggerProvider = loggerProvider,
+        prodStockRepository = postgreSqlStockRepository,
+        testStockRepository = cacheStockRepository,
+        stubStockRepository = StubStockRepository(),
+        stockSnapshotRepository = postgreSqlSnapshotRepository
+    )
+    val singleStockResponseProcessor = SingleStockResponseProcessor(coreSettings = coreSettings)
+    val searchStocksResponseProcessor = SearchStocksResponseProcessor(coreSettings = coreSettings)
+    val getStockSnapshotsProcessor = GetStockSnapshotsProcessor(coreSettings = coreSettings)
+    val postStockSnapshotsProcessor = PostStockSnapshotsProcessor(coreSettings = coreSettings)
+    val applicationSettings = KtorApplicationSettings(
+        coreSettings = coreSettings,
+        processors = mapOf(
+            SingleStockResponseContext::class to singleStockResponseProcessor,
+            SearchStocksResponseContext::class to searchStocksResponseProcessor,
+            GetStockSnapshotsContext::class to getStockSnapshotsProcessor,
+            PostStockSnapshotsContext::class to postStockSnapshotsProcessor,
+        )
+    )
+    configureAuthentication(testModeEnabled = true)
     configureSerialization()
     configureStockRoutes(applicationSettings)
     configureWeb()

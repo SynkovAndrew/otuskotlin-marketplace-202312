@@ -23,7 +23,7 @@ import com.otus.otuskotlin.stocktrack.api.v1.models.StockResponseBody
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockBody
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockResponse
-import com.otus.otuskotlin.stocktrack.modules
+import com.otus.otuskotlin.stocktrack.testModules
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -38,7 +38,7 @@ class StockRoutingTest {
     @Test
     fun `find stock successfully`() {
         testApplication {
-            application { modules() }
+            application { testModules() }
 
             val stock = storeStock("Gazprom", StockCategory.SHARE)
 
@@ -78,7 +78,8 @@ class StockRoutingTest {
     @Test
     fun `failed to find not existing stock`() {
         testApplication {
-            application { modules() }
+            application { testModules() }
+
 
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/find")
@@ -123,7 +124,8 @@ class StockRoutingTest {
     @Test
     fun `create stock successfully`() {
         testApplication {
-            application { modules() }
+            application { testModules() }
+
 
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/create")
@@ -165,7 +167,8 @@ class StockRoutingTest {
     @Test
     fun `update stock successfully`() {
         testApplication {
-            application { modules() }
+            application { testModules() }
+
 
             val stock = storeStock("Uzim Co", StockCategory.SHARE)
 
@@ -211,7 +214,8 @@ class StockRoutingTest {
     @Test
     fun `failed to update not existing stock`() {
         testApplication {
-            application { modules() }
+            application { testModules() }
+
 
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/update")
@@ -261,7 +265,8 @@ class StockRoutingTest {
     @Test
     fun `delete stock successfully`() {
         testApplication {
-            application { modules() }
+            application { testModules() }
+
 
             val stock = storeStock("Rosbank", StockCategory.BOND)
 
@@ -304,7 +309,8 @@ class StockRoutingTest {
     @Test
     fun `search stocks successfully`() {
         testApplication {
-            application { modules() }
+            application { testModules() }
+
 
             val stock = storeStock(UUID.randomUUID().toString(), StockCategory.BOND)
 
