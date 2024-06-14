@@ -14,7 +14,7 @@ import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.model.Command
 import com.otus.otuskotlin.stocktrack.model.ErrorDescription
 import com.otus.otuskotlin.stocktrack.stock.Stock
-import com.otus.otuskotlin.stocktrack.model.StockFilter
+import com.otus.otuskotlin.stocktrack.stock.StockFilter
 import java.time.OffsetDateTime
 import java.time.ZoneId
 

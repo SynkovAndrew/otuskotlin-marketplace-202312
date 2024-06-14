@@ -6,7 +6,7 @@ import com.otus.otuskotlin.stocktrack.model.ErrorDescription
 import com.otus.otuskotlin.stocktrack.model.RequestId
 import com.otus.otuskotlin.stocktrack.model.State
 import com.otus.otuskotlin.stocktrack.stock.Stock
-import com.otus.otuskotlin.stocktrack.model.StockFilter
+import com.otus.otuskotlin.stocktrack.stock.StockFilter
 import java.time.Instant
 import java.util.UUID
 
