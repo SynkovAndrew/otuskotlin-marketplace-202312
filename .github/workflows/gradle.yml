@@ -31,6 +31,9 @@ jobs:
     - name: Build & Test api mapper module
       run: ./gradlew :project:stocktrack-backend:stocktrack-api-v1-mapper:clean :project:stocktrack-backend:stocktrack-api-v1-mapper:classes :project:stocktrack-backend:stocktrack-api-v1-mapper:test
 
+    - name: Build & Run repository postgres tests
+      run: ./gradlew :project:stocktrack-backend:stocktrack-repository-postgresql:clean :project:stocktrack-backend:stocktrack-repository-postgresql:classes :project:stocktrack-backend:stocktrack-repository-postgresql:test
+
     - name: Build & Run e2e tests
       run: ./gradlew :project:stocktrack-test:stocktrack-test-e2e:clean :project:stocktrack-test:stocktrack-test-e2e:classes :project:stocktrack-test:stocktrack-test-e2e:test
 

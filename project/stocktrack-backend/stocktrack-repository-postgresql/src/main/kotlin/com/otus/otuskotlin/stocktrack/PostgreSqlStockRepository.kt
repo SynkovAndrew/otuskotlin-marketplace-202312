@@ -105,7 +105,7 @@ class PostgreSqlStockRepository(
                         buildList {
                             add(Op.TRUE)
                             request.name?.let { add(StockTable.name like "%$it%") }
-                            request.category?.takeIf { it != Stock.Category.NONE }
+                            request.category.takeIf { it != Stock.Category.NONE }
                                 ?.let { add(StockTable.category eq it.name) }
                         }.reduce { acc, op -> acc and op }
                     }
