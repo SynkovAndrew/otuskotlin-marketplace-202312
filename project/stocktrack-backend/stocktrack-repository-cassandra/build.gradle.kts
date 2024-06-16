@@ -1,6 +1,7 @@
 plugins {
     id("com.otus.otuskotlin.build.build-jvm")
     alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.docker.compose)
 }
 
 dependencies {
@@ -13,7 +14,6 @@ dependencies {
     kapt(libs.cassandra.kapt)
     implementation(libs.coroutines.core)
 
-    testImplementation(project(":stocktrack-repository-core-test"))
     testImplementation(kotlin("test"))
     testImplementation(libs.assertj)
     testImplementation(libs.coroutines.test)
@@ -25,4 +25,11 @@ tasks.test {
     testLogging {
         events("passed", "failed")
     }
+
+    dependsOn(tasks.composeUp)
+    finalizedBy(tasks.composeDown)
+}
+
+dockerCompose {
+    dockerComposeWorkingDirectory = project.file("./docker")
 }
