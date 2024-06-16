@@ -1,14 +1,14 @@
 version: '3.8'
 
 services:
-#  stocktrack-be:
-#    image: stocktrack-be
-#    ports:
-#      - "8080:8090"
-#    volumes:
-#      - ./volumes/stocktrack-be/logback.xml:/home/logback.xml
-#    networks:
-#      - elk
+  stocktrack-backend:
+    image: andrewsynkov/stocktrack-backend:latest
+    ports:
+      - "8090:8090"
+    volumes:
+      - ./volumes/stocktrack-be/logback.xml:/home/logback.xml
+    networks:
+      - elk
 
   keycloak:
     image: quay.io/keycloak/keycloak:24.0.1
@@ -122,10 +122,10 @@ services:
       timeout: 5s
       retries: 5
 
-  cassandra:
-    image: cassandra:latest
-    ports:
-      - "9042:9042"
+#  cassandra:
+#    image: cassandra:latest
+#    ports:
+#      - "9042:9042"
 
   liquibase:
     image: liquibase/liquibase

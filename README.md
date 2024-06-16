@@ -15,8 +15,21 @@ Modules:
    - **tests**:
      - ./gradlew :project:stocktrack-backend:stocktrack-repository-in-memory:test
      - ./gradlew :project:stocktrack-backend:stocktrack-repository-postgresql:test
-3. Framework
+3. Business
+   - adfsd
+4. Framework
    - **ktor**: [stocktrack-bootstrap-ktor](project%2Fstocktrack-backend%2Fstocktrack-bootstrap-ktor)
    - **tests**: ./gradlew :project:stocktrack-test:stocktrack-test-integration-ktor:test
-4. Monitoring
+5. Run all the services
+   - **backend**: docker-compose -f project/docker/docker-compose.yml up -d
+   - **keycloak**: 
+     - open http://localhost:8484/ and enter admin/admin
+     - switch to stocktrack realm
+     - go to Users and create one with credentials for next authentication
+   - **frontend**: 
+     - cd project/stocktrack-fe/vue-js-client-crud
+     - npm run serve
+     - open http://localhost:8080/ and enter just created user credentials
+     - you can see the list of all the stocks
+     - you can click on Snapshots "View" button and see value-time dependency
 

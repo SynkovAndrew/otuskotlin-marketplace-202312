@@ -28,10 +28,10 @@ services:
       timeout: 5s
       retries: 5
 
-  cassandra:
-    image: cassandra:latest
-    ports:
-      - "9042:9042"
+#  cassandra:
+#    image: cassandra:latest
+#    ports:
+#      - "9042:9042"
 
   liquibase:
     image: liquibase/liquibase
