@@ -19,9 +19,9 @@ fun Application.configureAuthentication(testModeEnabled: Boolean) {
             realm = "stocktrack"
             verifier(
                 UrlJwkProvider(
-                    URI("http://keycloak:8484/realms/stocktrack/protocol/openid-connect/certs").toURL()
+                    URI("keycloak/realms/stocktrack/protocol/openid-connect/certs").toURL()
                 ),
-                "http://keycloak:8484/realms/stocktrack",
+                "keycloak/realms/stocktrack",
             )
             validate { credential ->
                 logger.info("Validating JWT credential")

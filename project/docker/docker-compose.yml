@@ -9,6 +9,7 @@ services:
       - ./volumes/stocktrack-be/logback.xml:/home/logback.xml
     networks:
       - elk
+      - keycloak
 
   keycloak:
     image: quay.io/keycloak/keycloak:24.0.1
@@ -22,6 +23,8 @@ services:
       - --import-realm
     volumes:
       - ./volumes/keycloak:/opt/keycloak/data/import
+    networks:
+      - keycloak
 
   elasticsearch:
     container_name: elasticsearch
@@ -139,6 +142,8 @@ services:
 
 networks:
   elk:
+    driver: bridge
+  keycloak:
     driver: bridge
 
 volumes:
