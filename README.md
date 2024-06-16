@@ -13,4 +13,8 @@ Modules:
    - **tests**:
      - ./gradlew :project:stocktrack-backend:stocktrack-repository-in-memory:test
      - ./gradlew :project:stocktrack-backend:stocktrack-repository-postgresql:test
+3. Framework
+   - **ktor**: [stocktrack-bootstrap-ktor](project%2Fstocktrack-backend%2Fstocktrack-bootstrap-ktor)
+   - **tests**: ./gradlew :project:stocktrack-test:stocktrack-test-integration-ktor:test
+4. Monitoring
 
