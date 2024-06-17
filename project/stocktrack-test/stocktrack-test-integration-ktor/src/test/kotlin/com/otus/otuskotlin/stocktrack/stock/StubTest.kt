@@ -25,6 +25,7 @@ import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockBody
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockResponse
 import com.otus.otuskotlin.stocktrack.modules
+import com.otus.otuskotlin.stocktrack.testModules
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -38,7 +39,7 @@ class StubTest {
     @Test
     fun `create stock successfully`() {
         testApplication {
-            application { modules() }
+            application { testModules() }
 
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/create")
@@ -80,7 +81,8 @@ class StubTest {
     @Test
     fun `find stock successfully`() {
         testApplication {
-            application { modules() }
+                        application { testModules() }
+
 
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/find")
@@ -118,7 +120,7 @@ class StubTest {
     @Test
     fun `delete stock successfully`() {
         testApplication {
-            application { modules() }
+            application { testModules() }
 
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/delete")
@@ -156,7 +158,7 @@ class StubTest {
     @Test
     fun `update stock successfully`() {
         testApplication {
-            application { modules() }
+            application { testModules() }
 
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/update")
@@ -199,7 +201,7 @@ class StubTest {
     @Test
     fun `search stocks successfully`() {
         testApplication {
-            application { modules() }
+            application { testModules() }
 
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/search")
@@ -239,7 +241,7 @@ class StubTest {
     @Test
     fun `failed to create stock cause db error`() {
         testApplication {
-            application { modules() }
+            application { testModules() }
 
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/create")
@@ -288,7 +290,7 @@ class StubTest {
     @Test
     fun `failed to create stock cause stub not found`() {
         testApplication {
-            application { modules() }
+            application { testModules() }
 
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/create")

@@ -9,19 +9,27 @@ import com.otus.otuskotlin.stocktrack.api.v1.models.DeleteStockResponse
 import com.otus.otuskotlin.stocktrack.api.v1.models.FindStockBody
 import com.otus.otuskotlin.stocktrack.api.v1.models.FindStockRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.FindStockResponse
+import com.otus.otuskotlin.stocktrack.api.v1.models.FindStockSnapshotsRequest
+import com.otus.otuskotlin.stocktrack.api.v1.models.FindStockSnapshotsResponse
+import com.otus.otuskotlin.stocktrack.api.v1.models.PredictStockSnapshotsRequest
+import com.otus.otuskotlin.stocktrack.api.v1.models.PredictStockSnapshotsResponse
 import com.otus.otuskotlin.stocktrack.api.v1.models.Request
 import com.otus.otuskotlin.stocktrack.api.v1.models.Response
 import com.otus.otuskotlin.stocktrack.api.v1.models.SearchStocksRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockBody
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockResponse
+import com.otus.otuskotlin.stocktrack.api.v1.models.UploadStockSnapshotsRequest
+import com.otus.otuskotlin.stocktrack.api.v1.models.UploadStockSnapshotsResponse
 import com.otus.otuskotlin.stocktrack.context.Context
+import com.otus.otuskotlin.stocktrack.context.GetStockSnapshotsContext
+import com.otus.otuskotlin.stocktrack.context.PostStockSnapshotsContext
 import com.otus.otuskotlin.stocktrack.context.SearchStocksResponseContext
 import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.debug.DebugMapper
 import com.otus.otuskotlin.stocktrack.model.Command
-import com.otus.otuskotlin.stocktrack.model.Stock
-import com.otus.otuskotlin.stocktrack.model.StockLock
+import com.otus.otuskotlin.stocktrack.snapshot.fromTransportModel
+import com.otus.otuskotlin.stocktrack.snapshot.toTransportModel
 
 fun Request.fromTransportModel(): Context<*, *, *> {
     return when (this) {
@@ -54,6 +62,12 @@ fun Request.fromTransportModel(): Context<*, *, *> {
             request = filter.fromTransportModel(),
             debug = DebugMapper.fromTransportModel(debug)
         )
+
+        is FindStockSnapshotsRequest -> this.fromTransportModel()
+
+        is PredictStockSnapshotsRequest -> this.fromTransportModel()
+
+        is UploadStockSnapshotsRequest -> this.fromTransportModel()
 
         else -> throw IllegalArgumentException(
             "${this::class.simpleName} is not supported by SingleStockResponseContext"
@@ -92,6 +106,37 @@ fun SingleStockResponseContext.toTransportModel(): Response {
         )
 
         else -> throw IllegalArgumentException("Search command is handled with MultipleStockResponseContext")
+    }
+}
+
+fun GetStockSnapshotsContext.toTransportModel(): Response {
+    return when (command) {
+        Command.FIND_SNAPSHOTS -> FindStockSnapshotsResponse(
+            responseType = command.value,
+            result = state.toTransportModel(),
+            errors = errors.map { it.toTransportModel() },
+            snapshots = response.map { it.toTransportModel() },
+        )
+        Command.PREDICT_SNAPSHOTS -> PredictStockSnapshotsResponse(
+            responseType = command.value,
+            result = state.toTransportModel(),
+            errors = errors.map { it.toTransportModel() },
+            snapshots = response.map { it.toTransportModel() },
+        )
+
+        else -> error("not supported $this")
+    }
+}
+
+fun PostStockSnapshotsContext.toTransportModel(): Response {
+    return when (command) {
+        Command.UPLOAD_SNAPSHOTS -> UploadStockSnapshotsResponse(
+            responseType = command.value,
+            result = state.toTransportModel(),
+            errors = errors.map { it.toTransportModel() },
+        )
+
+        else -> error("not supported $this")
     }
 }
 

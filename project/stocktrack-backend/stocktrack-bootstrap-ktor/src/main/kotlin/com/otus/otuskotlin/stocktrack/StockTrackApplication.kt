@@ -1,10 +1,11 @@
 package com.otus.otuskotlin.stocktrack
 
 import com.otus.otuskotlin.stocktrack.configuration.KtorApplicationSettings
+import com.otus.otuskotlin.stocktrack.context.GetStockSnapshotsContext
+import com.otus.otuskotlin.stocktrack.context.PostStockSnapshotsContext
 import com.otus.otuskotlin.stocktrack.context.SearchStocksResponseContext
 import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.plugins.configureAuthentication
-import com.otus.otuskotlin.stocktrack.plugins.configureRouting
 import com.otus.otuskotlin.stocktrack.plugins.configureSerialization
 import com.otus.otuskotlin.stocktrack.plugins.configureWeb
 import com.otus.otuskotlin.stocktrack.plugins.routing.configureStockRoutes
@@ -19,27 +20,66 @@ fun main() {
 }
 
 fun Application.modules() {
+    val postgreSqlProperties = PostgreSqlProperties()
     val loggerProvider = LoggerProvider { logbackLoggerWrapper(it) }
     val cacheStockRepository = CacheStockRepository()
+    val postgreSqlStockRepository = PostgreSqlStockRepository(properties = postgreSqlProperties)
+    val postgreSqlSnapshotRepository = PostgreSqlSnapshotRepository(properties = postgreSqlProperties)
     val coreSettings = CoreSettings(
         loggerProvider = loggerProvider,
-        prodStockRepository = PostgreSqlStockRepository(properties = PostgreSqlProperties()),
+        prodStockRepository = postgreSqlStockRepository,
         testStockRepository = cacheStockRepository,
-        stubStockRepository = StubStockRepository()
+        stubStockRepository = StubStockRepository(),
+        stockSnapshotRepository = postgreSqlSnapshotRepository
     )
     val singleStockResponseProcessor = SingleStockResponseProcessor(coreSettings = coreSettings)
     val searchStocksResponseProcessor = SearchStocksResponseProcessor(coreSettings = coreSettings)
+    val getStockSnapshotsProcessor = GetStockSnapshotsProcessor(coreSettings = coreSettings)
+    val postStockSnapshotsProcessor = PostStockSnapshotsProcessor(coreSettings = coreSettings)
     val applicationSettings = KtorApplicationSettings(
         coreSettings = coreSettings,
         processors = mapOf(
             SingleStockResponseContext::class to singleStockResponseProcessor,
-            SearchStocksResponseContext::class to searchStocksResponseProcessor
+            SearchStocksResponseContext::class to searchStocksResponseProcessor,
+            GetStockSnapshotsContext::class to getStockSnapshotsProcessor,
+            PostStockSnapshotsContext::class to postStockSnapshotsProcessor,
         )
     )
 
-    configureAuthentication()
+    configureAuthentication(testModeEnabled = false)
     configureSerialization()
-    configureRouting()
+    configureStockRoutes(applicationSettings)
+    configureWeb()
+}
+
+fun Application.testModules() {
+    val postgreSqlProperties = PostgreSqlProperties()
+    val loggerProvider = LoggerProvider { logbackLoggerWrapper(it) }
+    val cacheStockRepository = CacheStockRepository()
+    val postgreSqlStockRepository = PostgreSqlStockRepository(properties = postgreSqlProperties)
+    val postgreSqlSnapshotRepository = PostgreSqlSnapshotRepository(properties = postgreSqlProperties)
+    val coreSettings = CoreSettings(
+        loggerProvider = loggerProvider,
+        prodStockRepository = postgreSqlStockRepository,
+        testStockRepository = cacheStockRepository,
+        stubStockRepository = StubStockRepository(),
+        stockSnapshotRepository = postgreSqlSnapshotRepository
+    )
+    val singleStockResponseProcessor = SingleStockResponseProcessor(coreSettings = coreSettings)
+    val searchStocksResponseProcessor = SearchStocksResponseProcessor(coreSettings = coreSettings)
+    val getStockSnapshotsProcessor = GetStockSnapshotsProcessor(coreSettings = coreSettings)
+    val postStockSnapshotsProcessor = PostStockSnapshotsProcessor(coreSettings = coreSettings)
+    val applicationSettings = KtorApplicationSettings(
+        coreSettings = coreSettings,
+        processors = mapOf(
+            SingleStockResponseContext::class to singleStockResponseProcessor,
+            SearchStocksResponseContext::class to searchStocksResponseProcessor,
+            GetStockSnapshotsContext::class to getStockSnapshotsProcessor,
+            PostStockSnapshotsContext::class to postStockSnapshotsProcessor,
+        )
+    )
+    configureAuthentication(testModeEnabled = true)
+    configureSerialization()
     configureStockRoutes(applicationSettings)
     configureWeb()
 }

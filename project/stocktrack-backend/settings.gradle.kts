@@ -2,9 +2,7 @@ rootProject.name = "stocktrack-backend"
 
 include(
     "stocktrack-bootstrap-ktor",
-    "stocktrack-bootstrap-spring",
     "stocktrack-api-v1-model-kotlin",
-    "stocktrack-api-v1-model-jackson",
     "stocktrack-api-v1-mapper",
     "stocktrack-log-v1-mapper",
     "stocktrack-core",
@@ -16,6 +14,7 @@ include(
     "stocktrack-repository-core-test",
     "stocktrack-repository-in-memory",
     "stocktrack-repository-postgresql",
+    "stocktrack-repository-cassandra",
     "stocktrack-repository-stub",
 )
 

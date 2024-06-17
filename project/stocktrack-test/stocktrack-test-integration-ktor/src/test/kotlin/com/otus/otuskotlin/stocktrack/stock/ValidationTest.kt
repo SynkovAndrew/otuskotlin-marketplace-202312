@@ -22,6 +22,7 @@ import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockBody
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockRequest
 import com.otus.otuskotlin.stocktrack.api.v1.models.UpdateStockResponse
 import com.otus.otuskotlin.stocktrack.modules
+import com.otus.otuskotlin.stocktrack.testModules
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -35,7 +36,7 @@ class ValidationTest {
     @Test
     fun `failed to find stock cause invalid id`() {
         testApplication {
-            application { modules() }
+            application { testModules() }
 
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/find")
@@ -80,7 +81,7 @@ class ValidationTest {
     @Test
     fun `failed to delete stock cause invalid id`() {
         testApplication {
-            application { modules() }
+            application { testModules() }
 
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/delete")
@@ -125,7 +126,7 @@ class ValidationTest {
     @Test
     fun `failed to create stock cause invalid name`() {
         testApplication {
-            application { modules() }
+            application { testModules() }
 
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/create")
@@ -170,7 +171,7 @@ class ValidationTest {
     @Test
     fun `failed to update stock cause invalid name`() {
         testApplication {
-            application { modules() }
+            application { testModules() }
 
             val response = configuredHttpClient().post {
                 url("/api/v1/stock/update")

@@ -1,14 +1,12 @@
 version: '3.8'
 
 services:
-  stocktrack-be:
-    image: stocktrack-be
-    ports:
-      - "8080:8090"
-    volumes:
-      - ./volumes/stocktrack-be/logback.xml:/home/logback.xml
-    networks:
-      - elk
+#  stocktrack-backend:
+#    image: andrewsynkov/stocktrack-backend:latest
+#    ports:
+#      - "8090:8090"
+#    volumes:
+#      - ./volumes/stocktrack-be/logback.xml:/home/logback.xml
 
   keycloak:
     image: quay.io/keycloak/keycloak:24.0.1
@@ -98,15 +96,43 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
 
-  kafdrop:
-    image: obsidiandynamics/kafdrop
-    restart: "no"
+#  kafdrop:
+#    image: obsidiandynamics/kafdrop
+#    restart: "no"
+#    ports:
+#      - "9000:9000"
+#    environment:
+#      KAFKA_BROKERCONNECT: "kafka:29092"
+#    depends_on:
+#      - "kafka"
+
+  psql:
+    image: postgres
     ports:
-      - "9000:9000"
+      - "5432:5432"
     environment:
-      KAFKA_BROKERCONNECT: "kafka:29092"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_USER: "user"
+      POSTGRES_DB: "stocktrack-db"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+#  cassandra:
+#    image: cassandra:latest
+#    ports:
+#      - "9042:9042"
+
+  liquibase:
+    image: liquibase/liquibase
+    volumes:
+      - ./volumes/liquibase:/liquibase/changelog
     depends_on:
-      - "kafka"
+      psql:
+        condition: service_healthy
+    command: [ "--defaults-file=/liquibase/changelog/liquibase.properties", "--search-path=/liquibase/changelog", "--url=jdbc:postgresql://psql:5432/stocktrack-db", "update" ]
 
 networks:
   elk:

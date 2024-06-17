@@ -1,6 +1,8 @@
 package com.otus.otuskotlin.stocktrack
 
 import com.otus.otuskotlin.stocktrack.context.Context
+import com.otus.otuskotlin.stocktrack.context.GetStockSnapshotsContext
+import com.otus.otuskotlin.stocktrack.context.PostStockSnapshotsContext
 import com.otus.otuskotlin.stocktrack.context.SearchStocksResponseContext
 import com.otus.otuskotlin.stocktrack.context.SingleStockResponseContext
 import com.otus.otuskotlin.stocktrack.model.ErrorDescription
@@ -33,6 +35,8 @@ class CommandBus(private val settings: ApplicationSettings) {
         when (context) {
             is SearchStocksResponseContext -> logger.info(message, context.toLog(context.command.name))
             is SingleStockResponseContext -> logger.info(message, context.toLog(context.command.name))
+            is GetStockSnapshotsContext -> logger.info(message, context.toLog(context.command.name))
+            is PostStockSnapshotsContext -> logger.info(message, context.toLog(context.command.name))
         }
     }
 }

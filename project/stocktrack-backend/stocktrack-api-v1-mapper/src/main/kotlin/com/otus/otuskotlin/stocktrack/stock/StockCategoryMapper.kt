@@ -2,7 +2,6 @@ package com.otus.otuskotlin.stocktrack.stock
 
 import com.otus.otuskotlin.stocktrack.Mapper
 import com.otus.otuskotlin.stocktrack.api.v1.models.StockCategory
-import com.otus.otuskotlin.stocktrack.model.Stock
 
 object StockCategoryMapper : Mapper<Stock.Category, StockCategory> {
     override fun toTransportModel(internalModel: Stock.Category): StockCategory {

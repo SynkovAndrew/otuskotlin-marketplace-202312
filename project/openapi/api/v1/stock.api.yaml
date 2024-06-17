@@ -101,6 +101,56 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SearchStocksResponse"
+  /api/v1/stock-snapshot/upload:
+    post:
+      tags:
+        - "stock-snapshot"
+      operationId: "uploadStockSnapshots"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UploadStockSnapshotsRequest"
+        required: true
+      responses:
+        "200":
+          description: "Success"
+  /api/v1/stock-snapshot/find:
+    post:
+      tags:
+        - "stock-snapshot"
+      operationId: "findStockSnapshots"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FindStockSnapshotsRequest"
+        required: true
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FindStockSnapshotsResponse"
+  /api/v1/stock-snapshot/predict:
+    post:
+      tags:
+        - "stock-snapshot"
+      operationId: "predictStockSnapshots"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PredictStockSnapshotsRequest"
+        required: true
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PredictStockSnapshotsResponse"
 components:
   schemas:
     Request:
@@ -121,6 +171,9 @@ components:
           update: "#/components/schemas/UpdateStockRequest"
           delete: "#/components/schemas/DeleteStockRequest"
           search: "#/components/schemas/SearchStocksRequest"
+          upload_snapshots: "#/components/schemas/UploadStockSnapshotsRequest"
+          find_snapshots: "#/components/schemas/FindStockSnapshotsRequest"
+          predict_snapshots: "#/components/schemas/PredictStockSnapshotsRequest"
     Response:
       type: "object"
       description: "Base interface for all responses"
@@ -147,6 +200,9 @@ components:
           update: "#/components/schemas/UpdateStockResponse"
           delete: "#/components/schemas/DeleteStockResponse"
           search: "#/components/schemas/SearchStocksResponse"
+          upload_snapshots: "#/components/schemas/UploadStockSnapshotsResponse"
+          find_snapshots: "#/components/schemas/FindStockSnapshotsResponse"
+          predict_snapshots: "#/components/schemas/PredictStockSnapshotsResponse"
     CreateStockRequest:
       allOf:
         - $ref: '#/components/schemas/Request'
@@ -217,3 +273,88 @@ components:
       allOf:
         - $ref: "#/components/schemas/Response"
         - $ref: "stock.schemas.yaml#/components/schemas/MultipleStockResponse"
+    StockSnapshot:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        stockId:
+          type: "string"
+        value:
+          type: number
+        timestamp:
+          type: string
+          format: 'date-time'
+      required:
+        - "id"
+        - "stockId"
+        - "value"
+        - "timestamp"
+    UploadStockSnapshot:
+      type: "object"
+      properties:
+        stockId:
+          type: "string"
+        value:
+          type: number
+        timestamp:
+          type: string
+          format: 'date-time'
+      required:
+        - "stockId"
+        - "value"
+        - "timestamp"
+    UploadStockSnapshotsRequest:
+      allOf:
+        - $ref: "#/components/schemas/Request"
+        - type: "object"
+          properties:
+            snapshots:
+              type: array
+              items:
+                $ref: "#/components/schemas/UploadStockSnapshot"
+      required:
+        - "snapshots"
+    FindStockSnapshotsRequest:
+      allOf:
+        - $ref: "#/components/schemas/Request"
+        - type: "object"
+          properties:
+            stockId:
+              type: string
+          required:
+            - "stockId"
+    FindStockSnapshotsResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            snapshots:
+              type: array
+              items:
+                $ref: "#/components/schemas/StockSnapshot"
+          required:
+            - "snapshots"
+    PredictStockSnapshotsRequest:
+      allOf:
+        - $ref: "#/components/schemas/Request"
+        - type: "object"
+          properties:
+            stockId:
+              type: string
+          required:
+            - "stockId"
+    PredictStockSnapshotsResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            snapshots:
+              type: array
+              items:
+                $ref: "#/components/schemas/StockSnapshot"
+          required:
+            - "snapshots"
+    UploadStockSnapshotsResponse:
+      allOf:
+        - $ref: "#/components/schemas/Response"

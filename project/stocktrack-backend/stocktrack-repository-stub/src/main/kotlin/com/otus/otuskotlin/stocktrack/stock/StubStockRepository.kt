@@ -1,8 +1,5 @@
 package com.otus.otuskotlin.stocktrack.stock
 
-import com.otus.otuskotlin.stocktrack.model.Stock
-import com.otus.otuskotlin.stocktrack.model.StockPermission
-
 class StubStockRepository : StockRepository {
     override suspend fun create(request: StockRepositoryRequest): StockRepositoryResponse {
         return OkStockRepositoryResponse(data = request.stock)

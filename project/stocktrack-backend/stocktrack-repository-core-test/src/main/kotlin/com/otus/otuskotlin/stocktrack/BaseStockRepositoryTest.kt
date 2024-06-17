@@ -1,11 +1,11 @@
 package com.otus.otuskotlin.stocktrack
 
 import com.otus.otuskotlin.stocktrack.model.ErrorDescription
-import com.otus.otuskotlin.stocktrack.model.Stock
 import com.otus.otuskotlin.stocktrack.stock.EnrichableStockRepository
 import com.otus.otuskotlin.stocktrack.stock.ErrorStockRepositoryResponse
 import com.otus.otuskotlin.stocktrack.stock.OkStockRepositoryResponse
 import com.otus.otuskotlin.stocktrack.stock.OkStocksRepositoryResponse
+import com.otus.otuskotlin.stocktrack.stock.Stock
 import com.otus.otuskotlin.stocktrack.stock.StockFilterRepositoryRequest
 import com.otus.otuskotlin.stocktrack.stock.StockIdRepositoryRequest
 import com.otus.otuskotlin.stocktrack.stock.StockRepositoryRequest
@@ -36,6 +36,7 @@ abstract class BaseStockRepositoryTest {
             assertIs<OkStockRepositoryResponse>(response)
             assertThat(response)
                 .usingRecursiveComparison()
+                .ignoringFields("data.lock")
                 .isEqualTo(
                     OkStockRepositoryResponse(
                         data = Stock(
@@ -51,6 +52,7 @@ abstract class BaseStockRepositoryTest {
 
             assertThat(found)
                 .usingRecursiveComparison()
+                .ignoringFields("data.lock")
                 .isEqualTo(
                     OkStockRepositoryResponse(
                         data = Stock(
@@ -90,6 +92,7 @@ abstract class BaseStockRepositoryTest {
             assertIs<OkStockRepositoryResponse>(updateResponse)
             assertThat(updateResponse)
                 .usingRecursiveComparison()
+                .ignoringFields("data.lock")
                 .isEqualTo(
                     OkStockRepositoryResponse(
                         data = Stock(
@@ -105,6 +108,7 @@ abstract class BaseStockRepositoryTest {
 
             assertThat(found)
                 .usingRecursiveComparison()
+                .ignoringFields("data.lock")
                 .isEqualTo(
                     OkStockRepositoryResponse(
                         data = Stock(
@@ -135,7 +139,7 @@ abstract class BaseStockRepositoryTest {
             assertIs<OkStockRepositoryResponse>(createResponse)
             val stockId = createResponse.data.id
 
-            val deleteResponse = repository.delete(StockIdRepositoryRequest(stockId = stockId))
+            val deleteResponse = repository.delete(StockIdRepositoryRequest(stockId = stockId, lock = createResponse.data.lock))
 
             assertIs<OkStockRepositoryResponse>(deleteResponse)
 
@@ -143,6 +147,7 @@ abstract class BaseStockRepositoryTest {
 
             assertThat(found)
                 .usingRecursiveComparison()
+                .ignoringFields("data.lock")
                 .isEqualTo(
                     ErrorStockRepositoryResponse(
                         errorDescription = ErrorDescription(
@@ -174,6 +179,7 @@ abstract class BaseStockRepositoryTest {
 
             assertThat(found)
                 .usingRecursiveComparison()
+                .ignoringFields("data.lock")
                 .isEqualTo(
                     OkStockRepositoryResponse(
                         data = Stock(
@@ -222,6 +228,7 @@ abstract class BaseStockRepositoryTest {
 
             assertThat(found)
                 .usingRecursiveComparison()
+                .ignoringFields("data.lock")
                 .isEqualTo(
                     OkStocksRepositoryResponse(
                         data = listOf(

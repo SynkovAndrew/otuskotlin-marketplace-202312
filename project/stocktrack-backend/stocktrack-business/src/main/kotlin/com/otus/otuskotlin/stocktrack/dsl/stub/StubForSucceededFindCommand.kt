@@ -7,8 +7,7 @@ import com.otus.otuskotlin.stocktrack.cor.ChainDsl
 import com.otus.otuskotlin.stocktrack.model.Command
 import com.otus.otuskotlin.stocktrack.model.Debug
 import com.otus.otuskotlin.stocktrack.model.State
-import com.otus.otuskotlin.stocktrack.model.Stock
-import java.util.*
+import com.otus.otuskotlin.stocktrack.stock.Stock
 
 fun ChainDsl<SingleStockResponseContext>.stubForSucceededFindCommand(
     coreSettings: CoreSettings

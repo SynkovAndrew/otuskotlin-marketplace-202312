@@ -2,7 +2,7 @@ package com.otus.otuskotlin.stocktrack.stock
 
 import com.otus.otuskotlin.stocktrack.Mapper
 import com.otus.otuskotlin.stocktrack.api.v1.models.StockPermission
-import com.otus.otuskotlin.stocktrack.model.StockPermission as InternalStockPermission
+import com.otus.otuskotlin.stocktrack.stock.StockPermission as InternalStockPermission
 
 object StockPermissionMapper : Mapper<InternalStockPermission, StockPermission> {
     override fun toTransportModel(internalModel: InternalStockPermission): StockPermission {

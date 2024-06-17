@@ -6,7 +6,6 @@ import com.otus.otuskotlin.stocktrack.api.v1.models.SearchStocksResponse
 import com.otus.otuskotlin.stocktrack.context.SearchStocksResponseContext
 import com.otus.otuskotlin.stocktrack.debug.DebugMapper
 import com.otus.otuskotlin.stocktrack.model.Command
-import com.otus.otuskotlin.stocktrack.model.StockFilter
 
 fun SearchStocksRequest.fromTransportModel(): SearchStocksResponseContext {
     return SearchStocksResponseContext(
