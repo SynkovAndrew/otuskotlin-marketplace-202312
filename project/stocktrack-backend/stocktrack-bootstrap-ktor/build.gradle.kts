@@ -27,6 +27,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.datetime)
 
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1")
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
     implementation("io.ktor:ktor-serialization-kotlinx-json")
     implementation("io.ktor:ktor-server-core-jvm")
@@ -46,6 +47,10 @@ buildJvm {
     mainClass = "com.otus.otuskotlin.stocktrack.StockTrackApplicationKt"
     jarName = "stocktrack-backend"
     dockerRepositoryOwner = "andrewsynkov"
+}
+
+application {
+    mainClass = "com.otus.otuskotlin.stocktrack.StockTrackApplicationKt"
 }
 
 tasks.test {

@@ -1,16 +1,12 @@
 version: '3.8'
 
 services:
-  stocktrack-backend:
-    image: andrewsynkov/stocktrack-backend:latest
-    ports:
-      - "8090:8090"
-    volumes:
-      - ./volumes/stocktrack-be/logback.xml:/home/logback.xml
-    environment:
-      - KEYCLOAK_URL=http://keycloak:8080
-    networks:
-      - elk
+#  stocktrack-backend:
+#    image: andrewsynkov/stocktrack-backend:latest
+#    ports:
+#      - "8090:8090"
+#    volumes:
+#      - ./volumes/stocktrack-be/logback.xml:/home/logback.xml
 
   keycloak:
     image: quay.io/keycloak/keycloak:24.0.1
@@ -100,15 +96,15 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
 
-  kafdrop:
-    image: obsidiandynamics/kafdrop
-    restart: "no"
-    ports:
-      - "9000:9000"
-    environment:
-      KAFKA_BROKERCONNECT: "kafka:29092"
-    depends_on:
-      - "kafka"
+#  kafdrop:
+#    image: obsidiandynamics/kafdrop
+#    restart: "no"
+#    ports:
+#      - "9000:9000"
+#    environment:
+#      KAFKA_BROKERCONNECT: "kafka:29092"
+#    depends_on:
+#      - "kafka"
 
   psql:
     image: postgres
@@ -137,7 +133,6 @@ services:
       psql:
         condition: service_healthy
     command: [ "--defaults-file=/liquibase/changelog/liquibase.properties", "--search-path=/liquibase/changelog", "--url=jdbc:postgresql://psql:5432/stocktrack-db", "update" ]
-
 
 networks:
   elk:
