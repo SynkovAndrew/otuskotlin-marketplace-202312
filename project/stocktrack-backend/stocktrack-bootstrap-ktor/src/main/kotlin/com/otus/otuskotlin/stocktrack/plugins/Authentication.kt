@@ -13,15 +13,16 @@ import java.net.URI
 
 fun Application.configureAuthentication(testModeEnabled: Boolean) {
     val logger: LoggerWrapper = logbackLoggerWrapper(this::class)
+    val keycloakUrl = System.getenv("KEYCLOAK_URL") ?: "http://localhost:8484"
 
     install(Authentication) {
         jwt("auth-jwt") {
             realm = "stocktrack"
             verifier(
                 UrlJwkProvider(
-                    URI("http://keycloak:8080/realms/stocktrack/protocol/openid-connect/certs").toURL()
+                    URI("${keycloakUrl}/realms/stocktrack/protocol/openid-connect/certs").toURL()
                 ),
-                "http://keycloak:8080/realms/stocktrack",
+                "${keycloakUrl}/realms/stocktrack",
             )
             validate { credential ->
                 logger.info("Validating JWT credential")

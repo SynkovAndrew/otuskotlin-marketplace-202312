@@ -7,9 +7,10 @@ services:
       - "8090:8090"
     volumes:
       - ./volumes/stocktrack-be/logback.xml:/home/logback.xml
+    environment:
+      - KEYCLOAK_URL=http://keycloak:8080
     networks:
       - elk
-      - keycloak
 
   keycloak:
     image: quay.io/keycloak/keycloak:24.0.1
@@ -23,8 +24,6 @@ services:
       - --import-realm
     volumes:
       - ./volumes/keycloak:/opt/keycloak/data/import
-    networks:
-      - keycloak
 
   elasticsearch:
     container_name: elasticsearch
@@ -142,8 +141,6 @@ services:
 
 networks:
   elk:
-    driver: bridge
-  keycloak:
     driver: bridge
 
 volumes:
